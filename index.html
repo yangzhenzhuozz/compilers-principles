@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>乔姆斯基体系(chomsky hierarchy)</h1>
+    <p>提起遍历原理,就不得不先说说文法。</p>
+    <blockquote>
+        <p>文法自然地描述了大多数程序设计语言构造的层次化语法结构</p>
+        <footer> <cite>-编译原理(龙书)-p26</cite></footer>
+    </blockquote>
+    <p>假设我们要描述这样一个东西:"一个加法的数学表达式由两个数字和加号运算符组成",我们可以用如下的一条文法规则描述:</p>
+    <math>
+        <mi>EXP</mi>
+        <mo>=></mo>
+        <mi>num</mi>
+        <mo>+</mo>
+        <mi>num</mi>
+    </math>
+    <p>上面式子中的EXP表示一个表达式,num表示一个数字,所以"1+2"、"5+6"这些内容都符合EXP的展开规则,如果我们再扩展一下:</p>
+    <ol>
+        <li>
+            <math>
+                <mi>EXP</mi>
+                <mo>=></mo>
+                <mi>EXP</mi>
+                <mo>+</mo>
+                <mi>EXP</mi>
+            </math>
+        </li>
+        <li>
+            <math>
+                <mi>EXP</mi>
+                <mo>=></mo>
+                <mo>(</mo>
+                <mi>EXP</mi>
+                <mo>)</mo>
+            </math>
+        </li>
+        <li>
+            <math>
+                <mi>EXP</mi>
+                <mo>=></mo>
+                <mi>NUM</mi>
+            </math>
+        </li>
+    </ol>
+    <p>那么对于"1+(2+3)"这样的内容也完全符合上述文法规则,这个内容会被解析成如下的一颗语法树:</p>
+    <svg style="height: 200PX;" id="图层_1" data-name="图层 1" xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 121.59 122.12">
+        <defs>
+            <style>
+                .cls-1,
+                .cls-3,
+                .cls-4 {
+                    isolation: isolate;
+                }
+
+                .cls-1,
+                .cls-4 {
+                    font-size: 12px;
+                    fill: #231815;
+                    font-family: ArialMT, Arial;
+                }
+
+                .cls-2 {
+                    fill: none;
+                    stroke: #231815;
+                    stroke-miterlimit: 10;
+                }
+
+                .cls-4 {
+                    letter-spacing: -0.04em;
+                }
+            </style>
+        </defs><text class="cls-1" transform="translate(43.51 118.23)">2</text><text class="cls-1"
+            transform="translate(35.26 99.02)">NUM</text>
+        <line class="cls-2" x1="75.58" y1="71.34" x2="75.58" y2="63.34" />
+        <line class="cls-2" x1="75.58" y1="46.05" x2="75.58" y2="38.05" /><text class="cls-1"
+            transform="translate(103.51 118.09)">3</text>
+        <line class="cls-2" x1="39.98" y1="21.78" x2="39.98" y2="12.78" />
+        <line class="cls-2" x1="106.28" y1="90.04" x2="106.28" y2="85.04" />
+        <line class="cls-2" x1="46.93" y1="90.04" x2="46.93" y2="85.04" />
+        <line class="cls-2" x1="46.28" y1="107.07" x2="46.28" y2="102.07" />
+        <line class="cls-2" x1="106.28" y1="107.07" x2="106.28" y2="102.07" /><text class="cls-1"
+            transform="translate(94.26 99.02)">NUM</text>
+        <g class="cls-3"><text class="cls-1" transform="translate(65.75 59.69)">EX</text><text class="cls-4"
+                transform="translate(81.76 59.69)">P</text></g>
+        <g class="cls-3"><text class="cls-1" transform="translate(95.75 82.02)">EX</text><text class="cls-4"
+                transform="translate(111.76 82.02)">P</text></g>
+        <g class="cls-3"><text class="cls-1" transform="translate(35.75 82.02)">EX</text><text class="cls-4"
+                transform="translate(51.76 82.02)">P</text></g><text class="cls-1"
+            transform="translate(8.25 71.06)">1</text><text class="cls-1" transform="translate(0 51.85)">NUM</text>
+        <line class="cls-2" x1="11.02" y1="42.87" x2="11.02" y2="37.87" />
+        <line class="cls-2" x1="11.02" y1="59.9" x2="11.02" y2="54.9" />
+        <g class="cls-3"><text class="cls-1" transform="translate(0.5 34.85)">EX</text><text class="cls-4"
+                transform="translate(16.51 34.85)">P</text></g>
+        <g class="cls-3"><text class="cls-1" transform="translate(65.75 34.85)">EX</text><text class="cls-4"
+                transform="translate(81.76 34.85)">P</text></g>
+        <g class="cls-3"><text class="cls-1" transform="translate(30.5 10.3)">EX</text><text class="cls-4"
+                transform="translate(46.51 10.3)">P</text></g>
+        <line class="cls-2" x1="65.01" y1="38.05" x2="54.15" y2="46.09" />
+        <line class="cls-2" x1="25.07" y1="12.78" x2="14.21" y2="20.81" />
+        <line class="cls-2" x1="86.15" y1="38.05" x2="97.01" y2="46.09" />
+        <line class="cls-2" x1="54.9" y1="12.78" x2="65.75" y2="20.81" />
+        <line class="cls-2" x1="65.01" y1="63.33" x2="54.15" y2="71.36" />
+        <line class="cls-2" x1="86.15" y1="63.33" x2="97.01" y2="71.36" /><text class="cls-1"
+            transform="translate(44.03 59.69)">(</text><text class="cls-1"
+            transform="translate(104.03 59.69)">)</text><text class="cls-1"
+            transform="translate(72.65 82.02)">+</text><text class="cls-1" transform="translate(36.35 34.85)">+</text>
+    </svg>
+    <p>接着上面用到的文法,再介绍几个名词:(以下内容参考wikiPedia的<q cite="https://en.wikipedia.org/wiki/Chomsky_hierarchy"><a
+                href="https://en.wikipedia.org/wiki/Chomsky_hierarchy">Chomsky
+                hierarchy</a></q>和<q><a href="https://en.wikipedia.org/wiki/Terminal_and_nonterminal_symbols">Terminal
+                and nonterminal symbols</a></q>)</p>
+    <ol>
+        <li>开始符号(start symbol):一个特意指定的符号,表示整个文法结构。在上面的例子中没有特意在指定S,但是可以理解,我们最终会把整颗语法树规约成EXP,所以EXP就是上述文法的</li>
+        <li>非终结符(non-terminal symbol):一个可以被推导(repalce)的符号。比如上面我们在解析"1+(2+3)"的时候把NUM推导成了2,把EXP推导成了(EXP+EXP)</li>
+        <li>终结符(terminal symbol):一个不允许被推导的符号。如上面解析过程中的'+'、'('、')'都是不允许推导的</li>
+        <li>产生式(production rule):指定了符号的推导规则。上面的两个文法定义,共4条规则都是产生式</li>
+    </ol>
+    <p>有了上述概念,我们可以模仿着写出java语言的if语句规则:(按照一些古老的习惯,我用大写字母表示非终结符,小写字母表示终结符,实际上这不是强制的)</p>
+    <ol>
+        <li>
+            <math>
+                <mi>STMT</mi>
+                <mo>=></mo>
+                <mi>if</mi>
+                <mo>(</mo>
+                <mi>EXP</mi>
+                <mo>)</mo>
+                <mi>STMT</mi>
+            </math>
+        </li>
+    </ol>
+    <p>上述规则可以描述这样的语句:</p>
+    <code>
+        <div>
+            if ( condition ) stmt
+        </div>
+    </code>
+    <p>甚至还可以表示if的嵌套:</p>
+    <code>
+        <div>
+            if ( condition )
+        </div>
+        <div>
+            &nbsp;&nbsp;if ( condition ) stmt
+        </div>
+    </code>
+    <p>因为if语句本身又是一个STMT</p>
+    <p>乔姆斯基体系将文法分为四个层级:0-型文法、1-型文法、2-型文法、3-型文法。对于0-型和1-型文法,我也没什么研究,简单了解一下即可,计算机编程语言主要使用的就是2-型文法(上下文无关文法)和3-型文法(正规文法)</p>
+    <ol>
+        <li>
+            <span>0-型文法:</span>
+            <p>Type-0 文法包括所有的形式文法。描述了所有可以被图灵机识别的语言。这些语言同时也被称为递归可枚举或图灵可识别的语言--
+                <q cite="https://en.wikipedia.org/wiki/Recursively_enumerable_language">
+                    <a href="https://en.wikipedia.org/wiki/Recursively_enumerable_language">
+                        recursively enumerable or Turing-recognizable languages
+                    </a>
+                </q>
+            </p>
+        </li>
+        <li>
+            <span>1-型文法</span>
+            <p>Type-1文法可以生成上下文相关语言,这种文法描述的语言可以使用线性有界自动机描述。--
+                <q cite="https://en.wikipedia.org/wiki/Context-sensitive_grammar">
+                    <a href="https://en.wikipedia.org/wiki/Context-sensitive_grammar">
+                        Context-sensitive grammar
+                    </a>
+                </q>
+            </p>
+            <ol>
+                <li>
+                    <math>
+                        <mi>α</mi>
+                        <mi>A</mi>
+                        <mi>β</mi>
+                        <mo>=></mo>
+                        <mi>α</mi>
+                        <mi>γ</mi>
+                        <mi>β</mi>
+                    </math>
+                </li>
+                <li>
+                    <math>
+                        <mi>θ</mi>
+                        <mi>A</mi>
+                        <mi>λ</mi>
+                        <mo>=></mo>
+                        <mi>α</mi>
+                        <mi>ξ</mi>
+                        <mi>β</mi>
+                    </math>
+                </li>
+            </ol>
+            <p>同样的一个符号A,当他前面是α且后面是β时,才把A替换成γ,要是A的前面是θ后面是λ,则将其替换成ξ(即非终结符的替换需要考虑这个非终结符所在的上下文)</p>
+        </li>
+        <li>
+            <span>2-型文法</span>
+            <p>Type-2文法可生成上下无关语言,他的非终结符替换不需要考虑。--
+                <q cite="https://en.wikipedia.org/wiki/Context-free_grammar">
+                    <a href="https://en.wikipedia.org/wiki/Context-free_grammar">
+                        Context-free_grammar
+                    </a>
+                </q>
+            </p>
+            <p>上下文无关文法的产生式规则如下:</p>
+            <math>
+                <mi>A</mi>
+                <mo>=></mo>
+                <mi>α</mi>
+            </math>
+            <p>一条即产生式规则的左侧有且仅有一个非终结符。我们可以发现这里不需要考虑这个非终结符的上下文,这为我们设计计算机编程语言提供了非常大的方便,比如C#中有这样一行代码</p>
+            <div>a * b</div>
+            <p>编译器可以立马识别到这是一个对象a和一个对象b进行了*操作,简单理解就是看到了符号*,那么他可以立即理解为*操作符。而这种语法在C/C++上,还需要考虑a是否为一种自定义类型,如果a是自定义类型的话,这行语句应当是声明一个指针。当然针对C/C++这种程度的上下文相关,我们可以对编译器做一些针对性调整,使其在输入阶段变为上下文无关。</p>
+        </li>
+        <li>
+            <span>3-型文法</span>
+            <p>Type-3文法也叫做正规文法,</p>
+        </li>
+    </ol>
+</body>
+
+</html>
