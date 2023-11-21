@@ -4,10 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>一个很无聊的课件</title>
 </head>
 
 <body>
+    <p>一个很无聊的课件,我写的时候都觉得无聊透顶,全是一堆抽象的东西</p>
     <h1>乔姆斯基体系(chomsky hierarchy)</h1>
     <p>提起遍历原理,就不得不先说说文法。</p>
     <blockquote>
@@ -121,7 +122,7 @@
     <ol>
         <li>开始符号(start symbol):一个特意指定的符号,表示整个文法结构。在上面的例子中没有特意在指定S,但是可以理解,我们最终会把整颗语法树规约成EXP,所以EXP就是上述文法的</li>
         <li>非终结符(non-terminal symbol):一个可以被推导(repalce)的符号。比如上面我们在解析"1+(2+3)"的时候把NUM推导成了2,把EXP推导成了(EXP+EXP)</li>
-        <li>终结符(terminal symbol):一个不允许被推导的符号。如上面解析过程中的'+'、'('、')'都是不允许推导的</li>
+        <li>终结符(terminal symbol):一个不允许被推导的符号。如上面解析过程中的'+'、'('、')'都是不允许推导的。在后面的内容中,将会用ε表示一个特殊的空终结符,这个符号表示什么内容都没有</li>
         <li>产生式(production rule):指定了符号的推导规则。上面的两个文法定义,共4条规则都是产生式</li>
     </ol>
     <p>有了上述概念,我们可以模仿着写出java语言的if语句规则:(按照一些古老的习惯,我用大写字母表示非终结符,小写字母表示终结符,实际上这不是强制的)</p>
@@ -218,13 +219,109 @@
             </math>
             <p>一条即产生式规则的左侧有且仅有一个非终结符。我们可以发现这里不需要考虑这个非终结符的上下文,这为我们设计计算机编程语言提供了非常大的方便,比如C#中有这样一行代码</p>
             <div>a * b</div>
-            <p>编译器可以立马识别到这是一个对象a和一个对象b进行了*操作,简单理解就是看到了符号*,那么他可以立即理解为*操作符。而这种语法在C/C++上,还需要考虑a是否为一种自定义类型,如果a是自定义类型的话,这行语句应当是声明一个指针。当然针对C/C++这种程度的上下文相关,我们可以对编译器做一些针对性调整,使其在输入阶段变为上下文无关。</p>
+            <p>编译器可以立马识别到这是一个对象a和一个对象b进行了*操作,简单理解就是看到了符号*,那么他可以立即理解为*操作符。而这种语法在C/C++上,还需要考虑a是否为一种自定义类型,如果a是自定义类型的话,这行语句应当是声明一个指针。当然针对C/C++这种程度的上下文相关,我们可以对编译器做一些针对性调整,使其在输入阶段变为上下文无关。
+            </p>
         </li>
         <li>
             <span>3-型文法</span>
-            <p>Type-3文法也叫做正规文法,</p>
+            <p>Type-3文法也叫做正规文法(regular grammar),正规文法也分为左正规文法和右正规文法,他们之间没有多大差异
+                <q cite="https://en.wikipedia.org/wiki/Regular_grammar">
+                    <a href="https://en.wikipedia.org/wiki/Regular_grammar">
+                        Regular_grammar
+                    </a>
+                </q>
+            </p>
+            <p>一个右正规文法的产生式必须是如下的形式:</p>
+            <ol>
+                <li>
+                    <math>
+                        <mi>A</mi>
+                        <mo>=></mo>
+                        <mi>a</mi>
+                    </math>
+                </li>
+                <li>
+                    <math>
+                        <mi>A</mi>
+                        <mo>=></mo>
+                        <mi>aB</mi>
+                    </math>
+                </li>
+                <li>
+                    <math>
+                        <mi>A</mi>
+                        <mo>=></mo>
+                        <mi>ε</mi>
+                    </math>
+                </li>
+            </ol>
+            <p>如果把第二条规则定义成
+                <math>
+                    <mi>A</mi>
+                    <mo>=></mo>
+                    <mi>Ba</mi>
+                </math>
+                ,那么这个文法就是左正规文法。正规文法要求一个非终结符①要么能替换成一个终结符,②要么能替换成一个终结符和右侧的一个非终结符(如果这个非终结符在左侧,就是左正规文法),③或者这个非终结符能推导出一个空终结符。3-型文法的表达能力和正则表达式(regular
+                expression)完全一致。比如我们写这样一个正则表达式"a*b",我们可以构造如下的3-型文法表示:
+            </p>
+            <ol>
+                <li><math>
+                        <mi>S</mi>
+                        <mo>=></mo>
+                        <mi>A</mi>
+                        <mi>b</mi>
+                    </math></li>
+                <li><math>
+                        <mi>A</mi>
+                        <mo>=></mo>
+                        <mi>a</mi>
+                    </math></li>
+                <li><math>
+                        <mi>A</mi>
+                        <mo>=></mo>
+                        <mi>a</mi>
+                        <mi>A</mi>
+                    </math></li>
+                <li><math>
+                        <mi>A</mi>
+                        <mo>=></mo>
+                        <mi>ε</mi>
+                    </math></li>
+            </ol>
+            <p>这也是3-型文法叫做正规文法的原因</p>
         </li>
     </ol>
+    <p>乔姆斯基体系的每一层文法表达能力都涵盖了下一层,也就是随着数字的增加,文法的表达能力逐渐减小:</p>
+    <svg style="height: 300PX;" id="图层_1" data-name="图层 1" xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 438.5 407.58">
+        <defs>
+            <style>
+                .cls-1 {
+                    fill: none;
+                    stroke: #231815;
+                    stroke-miterlimit: 10;
+                }
+
+                .cls-2 {
+                    font-size: 24px;
+                    fill: #231815;
+                    font-family: AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std;
+                }
+            </style>
+        </defs>
+        <ellipse class="cls-1" cx="219.25" cy="218.54" rx="218.75" ry="188.54" />
+        <ellipse class="cls-1" cx="219.25" cy="266.46" rx="157.29" ry="140.63" />
+        <ellipse class="cls-1" cx="219.25" cy="310.9" rx="110.76" ry="96.18" />
+        <ellipse class="cls-1" cx="219.25" cy="345.28" rx="56.6" ry="61.81" /><text class="cls-2"
+            transform="translate(164.21 78.89)">Recursively <tspan x="0" y="28.8">enumerable</tspan></text><text
+            class="cls-2" transform="translate(137.72 192.07)">Context-sensitive</text><text class="cls-2"
+            transform="translate(159.4 256.51)">Context-free</text><text class="cls-2"
+            transform="translate(183.41 346.96)">Regular</text><text class="cls-2"
+            transform="translate(126.65 21.12)">Chomsky hierarchy</text>
+    </svg>
+    <p>通过上面的说明,我们可以知道一件有趣的事:<em>永远不可能用正则表达式判断一个字符串是否为一个合法的正则表达式</em></p>
+    <h1>编译器结构</h1>
+    <p>前面说了这么多铺垫,都是为了打一下基础,一般可以把编译器的分析-综合模型粗略的分为前端和后端(参考第六章和第八章的开头)</p>
 </body>
 
 </html>
