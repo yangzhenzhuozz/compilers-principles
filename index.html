@@ -5,6 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>一个很无聊的课件</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+
+        td {
+            border: 1px solid;
+            padding: 0 1rem;
+        }
+    </style>
 </head>
 
 <body>
@@ -53,67 +63,53 @@
     </ol>
     <p>那么对于"1+(2+3)"这样的内容也完全符合上述文法规则,这个内容会被解析成如下的一颗语法树:</p>
     <svg style="height: 200PX;" id="图层_1" data-name="图层 1" xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 121.59 122.12">
-        <defs>
-            <style>
-                .cls-1,
-                .cls-3,
-                .cls-4 {
-                    isolation: isolate;
-                }
-
-                .cls-1,
-                .cls-4 {
-                    font-size: 12px;
-                    fill: #231815;
-                    font-family: ArialMT, Arial;
-                }
-
-                .cls-2 {
-                    fill: none;
-                    stroke: #231815;
-                    stroke-miterlimit: 10;
-                }
-
-                .cls-4 {
-                    letter-spacing: -0.04em;
-                }
-            </style>
-        </defs><text class="cls-1" transform="translate(43.51 118.23)">2</text><text class="cls-1"
-            transform="translate(35.26 99.02)">NUM</text>
-        <line class="cls-2" x1="75.58" y1="71.34" x2="75.58" y2="63.34" />
-        <line class="cls-2" x1="75.58" y1="46.05" x2="75.58" y2="38.05" /><text class="cls-1"
-            transform="translate(103.51 118.09)">3</text>
-        <line class="cls-2" x1="39.98" y1="21.78" x2="39.98" y2="12.78" />
-        <line class="cls-2" x1="106.28" y1="90.04" x2="106.28" y2="85.04" />
-        <line class="cls-2" x1="46.93" y1="90.04" x2="46.93" y2="85.04" />
-        <line class="cls-2" x1="46.28" y1="107.07" x2="46.28" y2="102.07" />
-        <line class="cls-2" x1="106.28" y1="107.07" x2="106.28" y2="102.07" /><text class="cls-1"
-            transform="translate(94.26 99.02)">NUM</text>
-        <g class="cls-3"><text class="cls-1" transform="translate(65.75 59.69)">EX</text><text class="cls-4"
-                transform="translate(81.76 59.69)">P</text></g>
-        <g class="cls-3"><text class="cls-1" transform="translate(95.75 82.02)">EX</text><text class="cls-4"
-                transform="translate(111.76 82.02)">P</text></g>
-        <g class="cls-3"><text class="cls-1" transform="translate(35.75 82.02)">EX</text><text class="cls-4"
-                transform="translate(51.76 82.02)">P</text></g><text class="cls-1"
-            transform="translate(8.25 71.06)">1</text><text class="cls-1" transform="translate(0 51.85)">NUM</text>
-        <line class="cls-2" x1="11.02" y1="42.87" x2="11.02" y2="37.87" />
-        <line class="cls-2" x1="11.02" y1="59.9" x2="11.02" y2="54.9" />
-        <g class="cls-3"><text class="cls-1" transform="translate(0.5 34.85)">EX</text><text class="cls-4"
-                transform="translate(16.51 34.85)">P</text></g>
-        <g class="cls-3"><text class="cls-1" transform="translate(65.75 34.85)">EX</text><text class="cls-4"
-                transform="translate(81.76 34.85)">P</text></g>
-        <g class="cls-3"><text class="cls-1" transform="translate(30.5 10.3)">EX</text><text class="cls-4"
-                transform="translate(46.51 10.3)">P</text></g>
-        <line class="cls-2" x1="65.01" y1="38.05" x2="54.15" y2="46.09" />
-        <line class="cls-2" x1="25.07" y1="12.78" x2="14.21" y2="20.81" />
-        <line class="cls-2" x1="86.15" y1="38.05" x2="97.01" y2="46.09" />
-        <line class="cls-2" x1="54.9" y1="12.78" x2="65.75" y2="20.81" />
-        <line class="cls-2" x1="65.01" y1="63.33" x2="54.15" y2="71.36" />
-        <line class="cls-2" x1="86.15" y1="63.33" x2="97.01" y2="71.36" /><text class="cls-1"
-            transform="translate(44.03 59.69)">(</text><text class="cls-1"
-            transform="translate(104.03 59.69)">)</text><text class="cls-1"
-            transform="translate(72.65 82.02)">+</text><text class="cls-1" transform="translate(36.35 34.85)">+</text>
+        viewBox="0 0 121.59 122.12"><text transform="translate(43.51 118.23)"
+            style="isolation:isolate;font-size:12px;fill:#231815;font-family:ArialMT, Arial">2</text><text
+            transform="translate(35.26 99.02)"
+            style="isolation:isolate;font-size:12px;fill:#231815;font-family:ArialMT, Arial">NUM</text>
+        <line x1="75.58" y1="71.34" x2="75.58" y2="63.34" style="fill:none;stroke:#231815;stroke-miterlimit:10" />
+        <line x1="75.58" y1="46.05" x2="75.58" y2="38.05" style="fill:none;stroke:#231815;stroke-miterlimit:10" /><text
+            transform="translate(103.51 118.09)"
+            style="isolation:isolate;font-size:12px;fill:#231815;font-family:ArialMT, Arial">3</text>
+        <line x1="39.98" y1="21.78" x2="39.98" y2="12.78" style="fill:none;stroke:#231815;stroke-miterlimit:10" />
+        <line x1="106.28" y1="90.04" x2="106.28" y2="85.04" style="fill:none;stroke:#231815;stroke-miterlimit:10" />
+        <line x1="46.93" y1="90.04" x2="46.93" y2="85.04" style="fill:none;stroke:#231815;stroke-miterlimit:10" />
+        <line x1="46.28" y1="107.07" x2="46.28" y2="102.07" style="fill:none;stroke:#231815;stroke-miterlimit:10" />
+        <line x1="106.28" y1="107.07" x2="106.28" y2="102.07" style="fill:none;stroke:#231815;stroke-miterlimit:10" />
+        <text transform="translate(94.26 99.02)"
+            style="isolation:isolate;font-size:12px;fill:#231815;font-family:ArialMT, Arial">NUM</text><text
+            transform="translate(65.75 59.69)"
+            style="isolation:isolate;font-size:12px;fill:#231815;font-family:ArialMT, Arial">EXP</text><text
+            transform="translate(95.75 82.02)"
+            style="isolation:isolate;font-size:12px;fill:#231815;font-family:ArialMT, Arial">EXP</text><text
+            transform="translate(35.75 82.02)"
+            style="isolation:isolate;font-size:12px;fill:#231815;font-family:ArialMT, Arial">EXP</text><text
+            transform="translate(8.25 71.06)"
+            style="isolation:isolate;font-size:12px;fill:#231815;font-family:ArialMT, Arial">1</text><text
+            transform="translate(0 51.85)"
+            style="isolation:isolate;font-size:12px;fill:#231815;font-family:ArialMT, Arial">NUM</text>
+        <line x1="11.02" y1="42.87" x2="11.02" y2="37.87" style="fill:none;stroke:#231815;stroke-miterlimit:10" />
+        <line x1="11.02" y1="59.9" x2="11.02" y2="54.9" style="fill:none;stroke:#231815;stroke-miterlimit:10" /><text
+            transform="translate(0.5 34.85)"
+            style="isolation:isolate;font-size:12px;fill:#231815;font-family:ArialMT, Arial">EXP</text><text
+            transform="translate(65.75 34.85)"
+            style="isolation:isolate;font-size:12px;fill:#231815;font-family:ArialMT, Arial">EXP</text><text
+            transform="translate(30.5 10.3)"
+            style="isolation:isolate;font-size:12px;fill:#231815;font-family:ArialMT, Arial">EXP</text>
+        <line x1="65.01" y1="38.05" x2="54.15" y2="46.09" style="fill:none;stroke:#231815;stroke-miterlimit:10" />
+        <line x1="25.07" y1="12.78" x2="14.21" y2="20.81" style="fill:none;stroke:#231815;stroke-miterlimit:10" />
+        <line x1="86.15" y1="38.05" x2="97.01" y2="46.09" style="fill:none;stroke:#231815;stroke-miterlimit:10" />
+        <line x1="54.9" y1="12.78" x2="65.75" y2="20.81" style="fill:none;stroke:#231815;stroke-miterlimit:10" />
+        <line x1="65.01" y1="63.33" x2="54.15" y2="71.36" style="fill:none;stroke:#231815;stroke-miterlimit:10" />
+        <line x1="86.15" y1="63.33" x2="97.01" y2="71.36" style="fill:none;stroke:#231815;stroke-miterlimit:10" /><text
+            transform="translate(44.03 59.69)"
+            style="isolation:isolate;font-size:12px;fill:#231815;font-family:ArialMT, Arial">(</text><text
+            transform="translate(104.03 59.69)"
+            style="isolation:isolate;font-size:12px;fill:#231815;font-family:ArialMT, Arial">)</text><text
+            transform="translate(72.65 82.02)"
+            style="isolation:isolate;font-size:12px;fill:#231815;font-family:ArialMT, Arial">+</text><text
+            transform="translate(36.35 34.85)"
+            style="isolation:isolate;font-size:12px;fill:#231815;font-family:ArialMT, Arial">+</text>
     </svg>
     <p>接着上面用到的文法,再介绍几个名词:(以下内容参考wikiPedia的<q cite="https://en.wikipedia.org/wiki/Chomsky_hierarchy"><a
                 href="https://en.wikipedia.org/wiki/Chomsky_hierarchy">Chomsky
@@ -293,35 +289,121 @@
     </ol>
     <p>乔姆斯基体系的每一层文法表达能力都涵盖了下一层,也就是随着数字的增加,文法的表达能力逐渐减小:</p>
     <svg style="height: 300PX;" id="图层_1" data-name="图层 1" xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 438.5 407.58">
-        <defs>
-            <style>
-                .cls-1 {
-                    fill: none;
-                    stroke: #231815;
-                    stroke-miterlimit: 10;
-                }
-
-                .cls-2 {
-                    font-size: 24px;
-                    fill: #231815;
-                    font-family: AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std;
-                }
-            </style>
-        </defs>
-        <ellipse class="cls-1" cx="219.25" cy="218.54" rx="218.75" ry="188.54" />
-        <ellipse class="cls-1" cx="219.25" cy="266.46" rx="157.29" ry="140.63" />
-        <ellipse class="cls-1" cx="219.25" cy="310.9" rx="110.76" ry="96.18" />
-        <ellipse class="cls-1" cx="219.25" cy="345.28" rx="56.6" ry="61.81" /><text class="cls-2"
-            transform="translate(164.21 78.89)">Recursively <tspan x="0" y="28.8">enumerable</tspan></text><text
-            class="cls-2" transform="translate(137.72 192.07)">Context-sensitive</text><text class="cls-2"
-            transform="translate(159.4 256.51)">Context-free</text><text class="cls-2"
-            transform="translate(183.41 346.96)">Regular</text><text class="cls-2"
-            transform="translate(126.65 21.12)">Chomsky hierarchy</text>
+        viewBox="0 0 438.5 407.07">
+        <ellipse cx="219.25" cy="218.02" rx="218.75" ry="188.54"
+            style="fill:none;stroke:#231815;stroke-miterlimit:10" />
+        <ellipse cx="219.25" cy="265.94" rx="157.29" ry="140.63"
+            style="fill:none;stroke:#231815;stroke-miterlimit:10" />
+        <ellipse cx="219.25" cy="310.38" rx="110.76" ry="96.18" style="fill:none;stroke:#231815;stroke-miterlimit:10" />
+        <ellipse cx="219.25" cy="344.76" rx="56.6" ry="61.81" style="fill:none;stroke:#231815;stroke-miterlimit:10" />
+        <g style="isolation:isolate"><text transform="translate(164.21 78.37)"
+                style="isolation:isolate;font-size:24px;fill:#231815;font-family:ArialMT, Arial">Recursively
+            </text><text transform="translate(164.21 107.17)"
+                style="isolation:isolate;font-size:24px;fill:#231815;font-family:ArialMT, Arial">enumerable</text></g>
+        <text transform="translate(137.72 191.55)"
+            style="isolation:isolate;font-size:24px;fill:#231815;font-family:ArialMT, Arial">Context-sensitive</text><text
+            transform="translate(159.4 255.99)"
+            style="isolation:isolate;font-size:24px;fill:#231815;font-family:ArialMT, Arial">Context-free</text><text
+            transform="translate(183.41 346.44)"
+            style="isolation:isolate;font-size:24px;fill:#231815;font-family:ArialMT, Arial">Regular</text><text
+            transform="translate(126.65 20.6)"
+            style="isolation:isolate;font-size:24px;fill:#231815;font-family:ArialMT, Arial">Chomsky hierarchy</text>
     </svg>
     <p>通过上面的说明,我们可以知道一件有趣的事:<em>永远不可能用正则表达式判断一个字符串是否为一个合法的正则表达式</em></p>
     <h1>编译器结构</h1>
-    <p>前面说了这么多铺垫,都是为了打一下基础,一般可以把编译器的分析-综合模型粗略的分为前端和后端(参考第六章和第八章的开头)</p>
+    <p>前面说了这么多铺垫,都是为了打一下基础。一般可以把编译器的分析-综合模型粗略的分为前端和后端(参考龙书第六章和第八章的开头)</p>
+    <div style="width: 600px;text-align: center;">
+        <svg id="图层_1" data-name="图层 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600.89 70.71"><text
+                transform="translate(31.58 16.55)"
+                style="font-size:12px;fill:#231815;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">词法分析</text>
+            <rect x="25.43" y="0.5" width="60.3" height="24.6" style="fill:none;stroke:#231815;stroke-miterlimit:10" />
+            <text transform="translate(120.31 16.55)"
+                style="font-size:12px;fill:#231815;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">文法分析</text>
+            <rect x="114.16" y="0.5" width="60.3" height="24.6" style="fill:none;stroke:#231815;stroke-miterlimit:10" />
+            <text transform="translate(209.04 16.55)"
+                style="font-size:12px;fill:#231815;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">语义检查</text>
+            <rect x="202.89" y="0.5" width="60.3" height="24.6" style="fill:none;stroke:#231815;stroke-miterlimit:10" />
+            <text transform="translate(297.6 16.55)"
+                style="font-size:12px;fill:#231815;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">中间代码生成</text>
+            <rect x="291.62" y="0.5" width="83.97" height="24.6"
+                style="fill:none;stroke:#231815;stroke-miterlimit:10" /><text transform="translate(522.41 16.55)"
+                style="font-size:12px;fill:#231815;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">目标代码生成</text>
+            <rect x="516.42" y="0.5" width="83.97" height="24.6"
+                style="fill:none;stroke:#231815;stroke-miterlimit:10" /><text transform="translate(410.01 16.55)"
+                style="font-size:12px;fill:#231815;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">中间代码优化</text>
+            <rect x="404.02" y="0.5" width="83.97" height="24.6"
+                style="fill:none;stroke:#231815;stroke-miterlimit:10" />
+            <line x1="88.73" y1="12.8" x2="102.3" y2="12.8" style="fill:none;stroke:#231815;stroke-miterlimit:10" />
+            <polygon points="100.32 15.7 111.16 12.8 100.32 9.89 100.32 15.7" style="fill:#231815" />
+            <line y1="12.8" x2="13.57" y2="12.8" style="fill:none;stroke:#231815;stroke-miterlimit:10" />
+            <polygon points="11.59 15.7 22.43 12.8 11.59 9.89 11.59 15.7" style="fill:#231815" />
+            <line x1="177.46" y1="12.8" x2="191.03" y2="12.8" style="fill:none;stroke:#231815;stroke-miterlimit:10" />
+            <polygon points="189.05 15.7 199.89 12.8 189.05 9.89 189.05 15.7" style="fill:#231815" />
+            <line x1="266.19" y1="12.8" x2="279.76" y2="12.8" style="fill:none;stroke:#231815;stroke-miterlimit:10" />
+            <polygon points="277.78 15.7 288.62 12.8 277.78 9.89 277.78 15.7" style="fill:#231815" />
+            <line x1="378.59" y1="12.8" x2="392.16" y2="12.8" style="fill:none;stroke:#231815;stroke-miterlimit:10" />
+            <polygon points="390.18 15.7 401.02 12.8 390.18 9.89 390.18 15.7" style="fill:#231815" />
+            <line x1="490.99" y1="12.8" x2="504.56" y2="12.8" style="fill:none;stroke:#231815;stroke-miterlimit:10" />
+            <polygon points="502.58 15.7 513.42 12.8 502.58 9.89 502.58 15.7" style="fill:#231815" />
+            <line x1="389.81" y1="33.43" x2="389.81" y2="70.71" style="fill:none;stroke:#231815;stroke-miterlimit:10" />
+            <line x1="4.33" y1="64.76" x2="377.95" y2="64.76" style="fill:none;stroke:#231815;stroke-miterlimit:10" />
+            <polygon points="375.96 67.67 386.81 64.76 375.96 61.86 375.96 67.67" style="fill:#231815" />
+            <line x1="598.87" y1="64.76" x2="401.67" y2="64.76" style="fill:none;stroke:#231815;stroke-miterlimit:10" />
+            <polygon points="403.65 61.86 392.81 64.76 403.65 67.67 403.65 61.86" style="fill:#231815" /><text
+                transform="translate(193.81 61.72)"
+                style="font-size:12px;fill:#231815;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">前端</text><text
+                transform="translate(483.84 61.72)"
+                style="font-size:12px;fill:#231815;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">后端</text>
+        </svg>
+        <span>编译器模型</span>
+    </div>
+    <p>所以我们可以一步一步的剖析这些流程。</p>
+    <h1>词法分析</h1>
+    <p>编译器的词法分析阶段可以用很多技术,当然很多编译器都是使用正规语言作为一个词法分析器,因为正则表达式比较容易编写。考虑一下开始我们说的加法,如果我们要解析"1+(2+3)"这个源码,那么我们需要把这个输入依次转换为:</p>
+    <table>
+        <tbody>
+            <tr>
+                <td>num</td>
+                <td>+</td>
+                <td>(</td>
+                <td>num</td>
+                <td>+</td>
+                <td>num</td>
+                <td>)</td>
+            </tr>
+        </tbody>
+    </table>
+    <p>那么我们可以编写如下的正则规则:</p>
+    <table>
+        <tbody>
+            <tr>
+                <td>num</td>
+                <td>[0-9]+</td>
+            </tr>
+            <tr>
+                <td>left bracket</td>
+                <td>'('</td>
+            </tr>
+            <tr>
+                <td>right bracket</td>
+                <td>')'</td>
+            </tr>
+            <tr>
+                <td>add operator</td>
+                <td>'+'</td>
+            </tr>
+        </tbody>
+    </table>
+    <p>所以首先需要做的就是实现我们自己的正则解析器。为了实现正则解析,可以借助两个工具NFA(non-deterministic finite automaton)和DFA(deterministic finite automaton)</p>
+    <h2>NFA</h2>
+    <p>NFA的定义很简单,满足如下几个条件即可</p>
+    <ol>
+        <li>有限的状态集合(finite的由来)</li>
+        <li>输入字母表</li>
+        <li>状态转换函数,定义了每一个状态对于字母表中字母的后继状态</li>
+        <li>一个开始和结束状态</li>
+    </ol>
+    <p>这么说是不是很抽象,举个例子其实就很简单明了了。</p>
 </body>
 
 </html>
