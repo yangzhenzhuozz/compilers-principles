@@ -419,6 +419,7 @@
     <p>需要特别注意的是:<em>ε表示一个空符号,如果ε出现在状态机的某条边上,表示可以无条件从前一个状态沿这条边到达后继状态</em></p>
     <div>
         <label>输入:</label><input value="aaaab"/>
+        <button onclick="demo1.start()">start</button>
     </div>
     <svg xmlns="http://www.w3.org/2000/svg" id="图层_1" data-name="图层 1" viewBox="0 0 625 189.22">
         <path
@@ -476,5 +477,9 @@
         <polygon points="34.16 105.4 45 102.5 34.16 99.59 34.16 105.4" />
     </svg>
 </body>
-<script type="text/javascript" src="./NFA-demo-1.js"></script>
+
+<script type="module">
+     import demo1 from './NFA-demo-1.js';
+     demo1.start();
+</script>
 </html>
