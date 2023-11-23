@@ -14,6 +14,10 @@
             border: 1px solid;
             padding: 0 1rem;
         }
+
+        em {
+            color: tomato;
+        }
     </style>
 </head>
 
@@ -118,7 +122,8 @@
     <ol>
         <li>开始符号(start symbol):一个特意指定的符号,表示整个文法结构。在上面的例子中没有特意在指定S,但是可以理解,我们最终会把整颗语法树规约成EXP,所以EXP就是上述文法的</li>
         <li>非终结符(non-terminal symbol):一个可以被推导(repalce)的符号。比如上面我们在解析"1+(2+3)"的时候把NUM推导成了2,把EXP推导成了(EXP+EXP)</li>
-        <li>终结符(terminal symbol):一个不允许被推导的符号。如上面解析过程中的'+'、'('、')'都是不允许推导的。在后面的内容中,将会用ε表示一个特殊的空终结符,这个符号表示什么内容都没有</li>
+        <li>终结符(terminal symbol):一个不允许被推导的符号。如上面解析过程中的'+'、'('、')'都是不允许推导的。<em>在后面的内容中,将会用ε表示一个特殊的空终结符,这个符号表示什么内容都没有</em>
+        </li>
         <li>产生式(production rule):指定了符号的推导规则。上面的两个文法定义,共4条规则都是产生式</li>
     </ol>
     <p>有了上述概念,我们可以模仿着写出java语言的if语句规则:(按照一些古老的习惯,我用大写字母表示非终结符,小写字母表示终结符,实际上这不是强制的)</p>
@@ -394,7 +399,8 @@
             </tr>
         </tbody>
     </table>
-    <p>所以首先需要做的就是实现我们自己的正则解析器。为了实现正则解析,可以借助两个工具NFA(non-deterministic finite automaton)和DFA(deterministic finite automaton)</p>
+    <p>所以首先需要做的就是实现我们自己的正则解析器。为了实现正则解析,可以借助两个工具NFA(non-deterministic finite automaton)和DFA(deterministic finite
+        automaton)</p>
     <h2>NFA</h2>
     <p>NFA的定义很简单,满足如下几个条件即可</p>
     <ol>
@@ -403,7 +409,72 @@
         <li>状态转换函数,定义了每一个状态对于字母表中字母的后继状态</li>
         <li>一个开始和结束状态</li>
     </ol>
-    <p>这么说是不是很抽象,举个例子其实就很简单明了了,假设我们有如下一个nfa。</p>
+    <p>这么说是不是很抽象,举个例子其实就很简单明了了,假设我们有如下一个nfa,我们说明一下NFA的工作机制。</p>
+    <ol>
+        <li>在最开始的时候,状态机总是处于start状态</li>
+        <li>状态机总是记录着当前处于那些状态(一个状态集)</li>
+        <li>如果当前状态集任意一条边(状态转移函数)能接受某个输入字母a,则将所有这些边的目标状态到一个集合中,并且使这个集合作为当前集合对于输入字母a的后继集合</li>
+        <li>如果最终状态机停止的时候,当前状态集中包含了end状态,则说明这个NFA接受的输入的字符串</li>
+    </ol>
+    <p>需要特别注意的是:<em>ε表示一个空符号,如果ε出现在状态机的某条边上,表示可以无条件从前一个状态沿这条边到达后继状态</em></p>
+    <div>
+        <label>输入:</label><input value="aaaab"/>
+    </div>
+    <svg xmlns="http://www.w3.org/2000/svg" id="图层_1" data-name="图层 1" viewBox="0 0 625 189.22">
+        <path
+            d="M847.19,193.05a21.5,21.5,0,1,1-21.5,21.5,21.52,21.52,0,0,1,21.5-21.5m0-1a22.5,22.5,0,1,0,22.5,22.5,22.5,22.5,0,0,0-22.5-22.5Z"
+            transform="translate(-247.19 -112.06)" />
+        <path d="M847.19,190.55a24,24,0,1,1-24,24,24,24,0,0,1,24-24m0-1a25,25,0,1,0,25,25,25,25,0,0,0-25-25Z"
+            transform="translate(-247.19 -112.06)" />
+        <circle cx="180" cy="102.5" r="25" style="fill:none;stroke:#000;stroke-miterlimit:10" />
+        <circle cx="285" cy="102.5" r="25" style="fill:none;stroke:#000;stroke-miterlimit:10" />
+        <circle cx="390" cy="102.5" r="25" style="fill:none;stroke:#000;stroke-miterlimit:10" />
+        <circle cx="495" cy="102.5" r="25" style="fill:none;stroke:#000;stroke-miterlimit:10" />
+        <circle cx="75" cy="102.5" r="25" style="fill:none;stroke:#000;stroke-miterlimit:10" />
+        <line x1="105" y1="102.5" x2="141.14" y2="102.5" style="fill:none;stroke:#000;stroke-miterlimit:10" />
+        <polygon points="139.16 105.4 150 102.5 139.16 99.59 139.16 105.4" />
+        <line x1="210" y1="102.5" x2="246.14" y2="102.5" style="fill:none;stroke:#000;stroke-miterlimit:10" />
+        <polygon points="244.16 105.4 255 102.5 244.16 99.59 244.16 105.4" />
+        <line x1="315" y1="102.5" x2="351.14" y2="102.5" style="fill:none;stroke:#000;stroke-miterlimit:10" />
+        <polygon points="349.16 105.4 360 102.5 349.16 99.59 349.16 105.4" />
+        <line x1="420" y1="102.5" x2="456.14" y2="102.5" style="fill:none;stroke:#000;stroke-miterlimit:10" />
+        <polygon points="454.16 105.4 465 102.5 454.16 99.59 454.16 105.4" />
+        <line x1="525" y1="102.5" x2="561.14" y2="102.5" style="fill:none;stroke:#000;stroke-miterlimit:10" />
+        <polygon points="559.16 105.4 570 102.5 559.16 99.59 559.16 105.4" />
+        <path d="M532.19,184.55c0-68.77-96.19-71.72-104.44-8.84" transform="translate(-247.19 -112.06)"
+            style="fill:none;stroke:#000;stroke-miterlimit:10" />
+        <polygon points="177.87 61.48 180 72.5 183.66 61.89 177.87 61.48" />
+        <path d="M322.19,244.55q153.49,74.31,307,3.78" transform="translate(-247.19 -112.06)"
+            style="fill:none;stroke:#000;stroke-miterlimit:10" />
+        <polygon points="381.33 139.62 390 132.5 378.93 134.33 381.33 139.62" /><text transform="translate(230 94.45)"
+            style="font-size:12px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">a</text><text
+            transform="translate(544.48 94.45)"
+            style="font-size:12px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">b</text><text
+            transform="translate(226.5 10.56)"
+            style="font-size:12px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">ε</text><text
+            transform="translate(331.5 94.45)"
+            style="font-size:12px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">ε</text><text
+            transform="translate(436.5 94.45)"
+            style="font-size:12px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">ε</text><text
+            transform="translate(121.5 94.45)"
+            style="font-size:12px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">ε</text><text
+            transform="translate(226.5 186.18)"
+            style="font-size:12px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">ε</text><text
+            transform="translate(60.16 108.13)"
+            style="font-size:18px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">start</text><text
+            transform="translate(175.84 108.13)"
+            style="font-size:18px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">1</text><text
+            transform="translate(280.84 108.13)"
+            style="font-size:18px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">2</text><text
+            transform="translate(385.84 108.13)"
+            style="font-size:18px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">3</text><text
+            transform="translate(490.84 108.13)"
+            style="font-size:18px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">4</text><text
+            transform="translate(586.76 108.13)"
+            style="font-size:18px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">end</text>
+        <line y1="102.5" x2="36.14" y2="102.5" style="fill:none;stroke:#000;stroke-miterlimit:10" />
+        <polygon points="34.16 105.4 45 102.5 34.16 99.59 34.16 105.4" />
+    </svg>
 </body>
-
+<script type="text/javascript" src="./NFA-demo-1.js"></script>
 </html>
