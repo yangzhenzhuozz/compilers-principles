@@ -417,69 +417,118 @@
         <li>如果最终状态机停止的时候,当前状态集中包含了end状态,则说明这个NFA接受的输入的字符串</li>
     </ol>
     <p>需要特别注意的是:<em>ε表示一个空符号,如果ε出现在状态机的某条边上,表示可以无条件从前一个状态沿这条边到达后继状态</em></p>
-    <div>
-        <label>输入:</label><input value="aaaab"/>
-        <button onclick="demo1.start()">start</button>
+    <p>在下面我做了动画演示</p>
+    <div id="NFA-1">
+        <template>
+            <svg id="NFA-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 625 189.22">
+                <g id="p_s_1">
+                    <line x1="105" y1="102.5" x2="141.14" y2="102.5"
+                        style="fill:none;stroke:#000;stroke-miterlimit:10" />
+                    <polygon points="139.16 105.4 150 102.5 139.16 99.59 139.16 105.4" />
+                </g>
+                <g id="p_1_2">
+                    <line x1="210" y1="102.5" x2="246.14" y2="102.5"
+                        style="fill:none;stroke:#000;stroke-miterlimit:10" />
+                    <polygon points="244.16 105.4 255 102.5 244.16 99.59 244.16 105.4" />
+                </g>
+                <g id="p_2_3">
+                    <line x1="315" y1="102.5" x2="351.14" y2="102.5"
+                        style="fill:none;stroke:#000;stroke-miterlimit:10" />
+                    <polygon points="349.16 105.4 360 102.5 349.16 99.59 349.16 105.4" />
+                </g>
+                <g id="p_3_4">
+                    <line x1="420" y1="102.5" x2="456.14" y2="102.5"
+                        style="fill:none;stroke:#000;stroke-miterlimit:10" />
+                    <polygon points="454.16 105.4 465 102.5 454.16 99.59 454.16 105.4" />
+                </g>
+                <g id="p_4_e">
+                    <line x1="525" y1="102.5" x2="561.14" y2="102.5"
+                        style="fill:none;stroke:#000;stroke-miterlimit:10" />
+                    <polygon points="559.16 105.4 570 102.5 559.16 99.59 559.16 105.4" />
+                </g>
+                <g id="p_2_1">
+                    <path d="M532.19,184.55c0-68.77-96.19-71.72-104.44-8.84" transform="translate(-247.19 -112.06)"
+                        style="fill:none;stroke:#000;stroke-miterlimit:10" />
+                    <polygon points="177.87 61.48 180 72.5 183.66 61.89 177.87 61.48" />
+                </g>
+                <g id="p_s_3">
+                    <path d="M322.19,244.55q153.49,74.31,307,3.78" transform="translate(-247.19 -112.06)"
+                        style="fill:none;stroke:#000;stroke-miterlimit:10" />
+                    <polygon points="381.33 139.62 390 132.5 378.93 134.33 381.33 139.62" />
+                </g><text transform="translate(230 94.45)"
+                    style="font-size:12px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">a</text><text
+                    transform="translate(544.48 94.45)"
+                    style="font-size:12px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">b</text><text
+                    transform="translate(226.5 10.56)"
+                    style="font-size:12px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">ε</text><text
+                    transform="translate(331.5 94.45)"
+                    style="font-size:12px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">ε</text><text
+                    transform="translate(436.5 94.45)"
+                    style="font-size:12px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">ε</text><text
+                    transform="translate(121.5 94.45)"
+                    style="font-size:12px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">ε</text><text
+                    transform="translate(226.5 186.18)"
+                    style="font-size:12px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">ε</text>
+                <g id="start">
+                    <circle cx="75" cy="102.5" r="25" style="fill:none;stroke:#000;stroke-miterlimit:10" /><text
+                        transform="translate(60.16 108.13)"
+                        style="font-size:18px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">start</text>
+                </g>
+                <g id="state1">
+                    <circle cx="180" cy="102.5" r="25" style="fill:none;stroke:#000;stroke-miterlimit:10" /><text
+                        transform="translate(175.84 108.13)"
+                        style="font-size:18px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">1</text>
+                </g>
+                <g id="state2">
+                    <circle cx="285" cy="102.5" r="25" style="fill:none;stroke:#000;stroke-miterlimit:10" /><text
+                        transform="translate(280.84 108.13)"
+                        style="font-size:18px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">2</text>
+                </g>
+                <g id="state3">
+                    <circle cx="390" cy="102.5" r="25" style="fill:none;stroke:#000;stroke-miterlimit:10" /><text
+                        transform="translate(385.84 108.13)"
+                        style="font-size:18px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">3</text>
+                </g>
+                <g id="state4">
+                    <circle cx="495" cy="102.5" r="25" style="fill:none;stroke:#000;stroke-miterlimit:10" /><text
+                        transform="translate(490.84 108.13)"
+                        style="font-size:18px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">4</text>
+                </g>
+                <g id="end">
+                    <path
+                        d="M847.19,193.05a21.5,21.5,0,1,1-21.5,21.5,21.52,21.52,0,0,1,21.5-21.5m0-1a22.5,22.5,0,1,0,22.5,22.5,22.5,22.5,0,0,0-22.5-22.5Z"
+                        transform="translate(-247.19 -112.06)" />
+                    <path
+                        d="M847.19,190.55a24,24,0,1,1-24,24,24,24,0,0,1,24-24m0-1a25,25,0,1,0,25,25,25,25,0,0,0-25-25Z"
+                        transform="translate(-247.19 -112.06)" /><text transform="translate(586.76 108.13)"
+                        style="font-size:18px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">end</text>
+                </g>
+                <g id="p_start">
+                    <line y1="102.5" x2="36.14" y2="102.5" style="fill:none;stroke:#000;stroke-miterlimit:10" />
+                    <animate attributeName="stroke-dasharray" values="10 5;" dur="3s" />
+                    <animate attributeName="stroke-dashoffset" values="200;0;" dur="3s" />
+                    <polygon points="34.16 105.4 45 102.5 34.16 99.59 34.16 105.4"/>
+                </g>
+            </svg>
+            <div>
+                <div>
+                    <span>当前状态集合:</span>
+                </div>
+                <div>
+                    <div>待输入字母:</div>
+                </div>
+                <label>输入:</label><input id="input" value="aaaab" />
+                <button id="start">start</button>
+                <button id="next">next</button>
+            </div>
+        </template>
     </div>
-    <svg xmlns="http://www.w3.org/2000/svg" id="图层_1" data-name="图层 1" viewBox="0 0 625 189.22">
-        <path
-            d="M847.19,193.05a21.5,21.5,0,1,1-21.5,21.5,21.52,21.52,0,0,1,21.5-21.5m0-1a22.5,22.5,0,1,0,22.5,22.5,22.5,22.5,0,0,0-22.5-22.5Z"
-            transform="translate(-247.19 -112.06)" />
-        <path d="M847.19,190.55a24,24,0,1,1-24,24,24,24,0,0,1,24-24m0-1a25,25,0,1,0,25,25,25,25,0,0,0-25-25Z"
-            transform="translate(-247.19 -112.06)" />
-        <circle cx="180" cy="102.5" r="25" style="fill:none;stroke:#000;stroke-miterlimit:10" />
-        <circle cx="285" cy="102.5" r="25" style="fill:none;stroke:#000;stroke-miterlimit:10" />
-        <circle cx="390" cy="102.5" r="25" style="fill:none;stroke:#000;stroke-miterlimit:10" />
-        <circle cx="495" cy="102.5" r="25" style="fill:none;stroke:#000;stroke-miterlimit:10" />
-        <circle cx="75" cy="102.5" r="25" style="fill:none;stroke:#000;stroke-miterlimit:10" />
-        <line x1="105" y1="102.5" x2="141.14" y2="102.5" style="fill:none;stroke:#000;stroke-miterlimit:10" />
-        <polygon points="139.16 105.4 150 102.5 139.16 99.59 139.16 105.4" />
-        <line x1="210" y1="102.5" x2="246.14" y2="102.5" style="fill:none;stroke:#000;stroke-miterlimit:10" />
-        <polygon points="244.16 105.4 255 102.5 244.16 99.59 244.16 105.4" />
-        <line x1="315" y1="102.5" x2="351.14" y2="102.5" style="fill:none;stroke:#000;stroke-miterlimit:10" />
-        <polygon points="349.16 105.4 360 102.5 349.16 99.59 349.16 105.4" />
-        <line x1="420" y1="102.5" x2="456.14" y2="102.5" style="fill:none;stroke:#000;stroke-miterlimit:10" />
-        <polygon points="454.16 105.4 465 102.5 454.16 99.59 454.16 105.4" />
-        <line x1="525" y1="102.5" x2="561.14" y2="102.5" style="fill:none;stroke:#000;stroke-miterlimit:10" />
-        <polygon points="559.16 105.4 570 102.5 559.16 99.59 559.16 105.4" />
-        <path d="M532.19,184.55c0-68.77-96.19-71.72-104.44-8.84" transform="translate(-247.19 -112.06)"
-            style="fill:none;stroke:#000;stroke-miterlimit:10" />
-        <polygon points="177.87 61.48 180 72.5 183.66 61.89 177.87 61.48" />
-        <path d="M322.19,244.55q153.49,74.31,307,3.78" transform="translate(-247.19 -112.06)"
-            style="fill:none;stroke:#000;stroke-miterlimit:10" />
-        <polygon points="381.33 139.62 390 132.5 378.93 134.33 381.33 139.62" /><text transform="translate(230 94.45)"
-            style="font-size:12px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">a</text><text
-            transform="translate(544.48 94.45)"
-            style="font-size:12px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">b</text><text
-            transform="translate(226.5 10.56)"
-            style="font-size:12px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">ε</text><text
-            transform="translate(331.5 94.45)"
-            style="font-size:12px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">ε</text><text
-            transform="translate(436.5 94.45)"
-            style="font-size:12px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">ε</text><text
-            transform="translate(121.5 94.45)"
-            style="font-size:12px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">ε</text><text
-            transform="translate(226.5 186.18)"
-            style="font-size:12px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">ε</text><text
-            transform="translate(60.16 108.13)"
-            style="font-size:18px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">start</text><text
-            transform="translate(175.84 108.13)"
-            style="font-size:18px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">1</text><text
-            transform="translate(280.84 108.13)"
-            style="font-size:18px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">2</text><text
-            transform="translate(385.84 108.13)"
-            style="font-size:18px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">3</text><text
-            transform="translate(490.84 108.13)"
-            style="font-size:18px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">4</text><text
-            transform="translate(586.76 108.13)"
-            style="font-size:18px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">end</text>
-        <line y1="102.5" x2="36.14" y2="102.5" style="fill:none;stroke:#000;stroke-miterlimit:10" />
-        <polygon points="34.16 105.4 45 102.5 34.16 99.59 34.16 105.4" />
-    </svg>
+    <h1>克林闭包(epsilon closure)</h1>
+    <p>克林闭包在计算机科学中也扮演着重要的角色,不管是做正则引擎还是后面会说的上下文无关文法分析器,以及在关系数据库中计算一个关系R的候选码的时候,都会用到这个概念。各种百科说的不是人话,一个比较简单的东西被数学家们一定义就看不懂了
+    </p>
 </body>
 
-<script type="module">
-     import demo1 from './NFA-demo-1.js';
-     demo1.start();
+<script type="module" src="./js/NFA-1.js">
 </script>
+
 </html>
