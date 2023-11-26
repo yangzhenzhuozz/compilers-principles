@@ -18,6 +18,11 @@
         em {
             color: tomato;
         }
+
+        .legend {
+            display: inline-block;
+            font-size: small;
+        }
     </style>
 </head>
 
@@ -66,8 +71,8 @@
         </li>
     </ol>
     <p>那么对于"1+(2+3)"这样的内容也完全符合上述文法规则,这个内容会被解析成如下的一颗语法树:</p>
-    <svg style="height: 200PX;" id="图层_1" data-name="图层 1" xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 121.59 122.12"><text transform="translate(43.51 118.23)"
+    <svg style="height: 200PX;" data-name="图层 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 121.59 122.12"><text
+            transform="translate(43.51 118.23)"
             style="isolation:isolate;font-size:12px;fill:#231815;font-family:ArialMT, Arial">2</text><text
             transform="translate(35.26 99.02)"
             style="isolation:isolate;font-size:12px;fill:#231815;font-family:ArialMT, Arial">NUM</text>
@@ -225,8 +230,8 @@
         </li>
         <li>
             <span>3-型文法</span>
-            <p>Type-3文法也叫做正规文法(regular grammar),正规文法也分为左正规文法和右正规文法,他们之间没有多大差异
-                <q cite="https://en.wikipedia.org/wiki/Regular_grammar">
+            <p>Type-3文法也叫做正规文法(regular grammar),正规文法也分为左正规文法和右正规文法,他们之间没有多大差异。参考--<q
+                    cite="https://en.wikipedia.org/wiki/Regular_grammar">
                     <a href="https://en.wikipedia.org/wiki/Regular_grammar">
                         Regular_grammar
                     </a>
@@ -293,8 +298,7 @@
         </li>
     </ol>
     <p>乔姆斯基体系的每一层文法表达能力都涵盖了下一层,也就是随着数字的增加,文法的表达能力逐渐减小:</p>
-    <svg style="height: 300PX;" id="图层_1" data-name="图层 1" xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 438.5 407.07">
+    <svg style="height: 300PX;" data-name="图层 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 438.5 407.07">
         <ellipse cx="219.25" cy="218.02" rx="218.75" ry="188.54"
             style="fill:none;stroke:#231815;stroke-miterlimit:10" />
         <ellipse cx="219.25" cy="265.94" rx="157.29" ry="140.63"
@@ -318,7 +322,7 @@
     <h1>编译器结构</h1>
     <p>前面说了这么多铺垫,都是为了打一下基础。一般可以把编译器的分析-综合模型粗略的分为前端和后端(参考龙书第六章和第八章的开头)</p>
     <div style="width: 600px;text-align: center;">
-        <svg id="图层_1" data-name="图层 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600.89 70.71"><text
+        <svg data-name="图层 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600.89 70.71"><text
                 transform="translate(31.58 16.55)"
                 style="font-size:12px;fill:#231815;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">词法分析</text>
             <rect x="25.43" y="0.5" width="60.3" height="24.6" style="fill:none;stroke:#231815;stroke-miterlimit:10" />
@@ -360,7 +364,7 @@
                 transform="translate(483.84 61.72)"
                 style="font-size:12px;fill:#231815;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">后端</text>
         </svg>
-        <span>编译器模型</span>
+        <span class="legend">编译器模型</span>
     </div>
     <p>所以我们可以一步一步的剖析这些流程。</p>
     <h1>词法分析</h1>
@@ -420,7 +424,7 @@
     <p>在下面我做了动画演示,处理字母序列'aab'和'b'的情况</p>
     <div id="NFA-1">
         <template>
-            <svg id="NFA-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 625 189.22">
+            <svg id="NFA-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 625 189.22" style="height: 300px;">
                 <defs>
                     <style>
                         .cls-1 {
@@ -513,22 +517,406 @@
                     <span>当前状态集: </span><span id="now"></span><br />
                     <span>当前可接受字母: </span><span id="letters"></span><br />
                     <span>处理字母: </span><span id="letter" style="color: red;"></span><br />
-                    <button id="aab">aab</button>
-                    <button id="b">b</button>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td><span>aab</span></td>
+                                <td><button id="aab">run</button></td>
+                            </tr>
+                            <tr>
+                                <td><span>b</span></td>
+                                <td><button id="b">run</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </template>
     </div>
-    <p>通过上面动画,我们可以发现这个nfa和正则表达式"a*b"是完全等价的,实际上任何基本正则表达式都是能完全转化为NFA的,他们的表达能力一致。(没有加上开发者自己的扩展功能,比如匹配到单词"boom"就在屏幕放一个烟花,或者其他特殊语法,基本正则简称BRE,被扩展过的叫做ERE,这里我就不多说了)
+    <p>通过上面动画,我们可以发现这个nfa和正则表达式"a*b"是完全等价的,实际上任何基本正则表达式都是能完全转化为NFA的,他们的表达能力一致。基本正则是指没有加上开发者自己的扩展功能,比如匹配到单词"boom"就在屏幕放一个烟花,或者其他特殊语法。实际上一些扩展功能,比如分组匹配在nfa中也是存在的,在NFA转换成DFA的过程中会丢失一些信息使得类似分组匹配这些功能失效。基本正则简称BRE,被扩展过的叫做ERE。参考--
+        <q cite="https://en.wikipedia.org/wiki/Regular_expression#Standards">
+            <a href="https://en.wikipedia.org/wiki/Regular_expression#Standards">Regular expression</a>
+        </q>
     </p>
+    <p><em>这里我强调一下,对于BRE和ERE的标准定义我实在没精力去考古了,所以这里我只说一下我对BRE的理解,应该大差不差</em></p>
+    <p>基本正则表达式只包含如下三种结构</p>
+    <ol>
+        <li>连接,如:abc就表示"a连接b得到的一个表达式再连接c",也就是解析这个式子之后得到的结构应该是这样的(ab)c</li>
+        <li>并,如:a|b</li>
+        <li>克林闭包,如:a*</li>
+    </ol>
+    <p>而类似a+这种语法是ERE里面才有的。</p>
     <h1>克林闭包(Kleene closure)</h1>
     <p>
-        <a target="_blank" href="https://en.wikipedia.org/wiki/Kleene_star">克林闭包</a>
+        <a href="https://en.wikipedia.org/wiki/Kleene_star">克林闭包</a>
         在计算机科学中也扮演着重要的角色,不管是做正则引擎还是后面会说的上下文无关文法分析器,以及在关系数据库中计算一个关系R的候选码的时候,都会用到这个概念。
     </p>
-    <p>假设我们有一个状态集合s,我们不断地遍历这个集合中的每个元素(状态集合的元素就是一个状态),如果当前元素可以通过ε边到达一个新的目标状态t(这个目标没有出现在s中),我们就把新的状态t添加到集合s中。不停地遍历,直到没有任何新元素可以被添加到集合s了,我们就可以说最终的这个状态集合s是原来最开始状态集合的克林闭包。可以结合上面的NFA动画理解。</p>
+    <h2>某个状态集合s的克林闭包的计算方法:</h2>
+    closure(s)
+    <ol>
+        <li>for s 中的每一个项(状态)</li>
+        <ol>
+            <li>检测以该状态i为起点的所有ε边的目标状态t,如果t不存在于s,则将t添加到s中</li>
+        </ol>
+    </ol>
+    <h1>正则表达式到NFA的转换</h1>
+    <p>为什么要将正则表达式转换为NFA呢?<em>因为直接编写正则表达式的处理程序是比较困难的,借助NFA这种状态机的思想,我们就可以比较简单的通过状态转换实现正则表达式的功能。</em>有的编程语言在用正则表达式的时候会有一个编译步骤,比如java的Pattern.compile,编译过程一般就是将用户输入的正则表达式编译成状态机(这句话我不负法律责任,我凭经验猜的,所以前面加了"一般"两个字)</p>
+    <p>前面已经提过,正则表达式和NFA的能力一致,所以存在将正则转换为NFA的方法。在本教程里面,我们只考虑基本正则表达式到NFA的转换。需要注意的是:<em>我在下面做的转换可能存在一些冗余,比如两个子表达式连接的时候,前一个子串的end状态和后一个子串的start状态也可以合并,所以我这种转换方法不是唯一解决方案。</em>
+    </p>
+    <ol>
+        <li>
+            <p>对于任何一个正则,我们可以构造这样一个NFA</p>
+            <svg data-name="图层 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 270.5 51" style="height: 60px;">
+                <defs>
+                </defs>
+                <style>
+                    @scope {
+                        .cls-1 {
+                            fill: none;
+                        }
+
+                        .cls-1,
+                        .cls-4 {
+                            stroke: #231815;
+                            stroke-miterlimit: 10;
+                        }
+
+                        .cls-2 {
+                            font-size: 12px;
+                            font-family: AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std;
+                        }
+
+                        .cls-2,
+                        .cls-3 {
+                            fill: #231815;
+                        }
+
+                        .cls-4 {
+                            fill: #fff;
+                        }
+                    }
+                </style>
+                <circle class="cls-1" cx="70" cy="25.5" r="25" />
+                <text class="cls-2" transform="translate(60.11 29.26)">start</text>
+                <circle class="cls-1" cx="230" cy="25.5" r="25" />
+                <circle class="cls-1" cx="230" cy="25.5" r="23" />
+                <text class="cls-2" transform="translate(221.17 29.26)">end</text>
+                <line class="cls-1" y1="25.5" x2="31.14" y2="25.5" />
+                <polygon class="cls-3" points="29.16 28.41 40 25.5 29.16 22.59 29.16 28.41" />
+                <line class="cls-1" x1="100" y1="25.5" x2="191.14" y2="25.5" />
+                <polygon class="cls-3" points="189.16 28.41 200 25.5 189.16 22.59 189.16 28.41" />
+                <rect class="cls-4" x="120" y="10.5" width="60" height="30" rx="5" />
+                <text class="cls-2" transform="translate(126 30.69)">子表达式</text>
+            </svg>
+        </li>
+        <li>
+            <p>对于单个字母a,构造这样一个NFA</p>
+            <svg data-name="图层 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 195.5 51" style="height: 60px;">
+                <defs>
+
+                </defs>
+                <style>
+                    @scope {
+                        .cls-1 {
+                            fill: none;
+                            stroke: #231815;
+                            stroke-miterlimit: 10;
+                        }
+
+                        .cls-2 {
+                            font-size: 12px;
+                            font-family: AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std;
+                        }
+
+                        .cls-2,
+                        .cls-3 {
+                            fill: #231815;
+                        }
+                    }
+                </style>
+                <circle class="cls-1" cx="70" cy="25.5" r="25" />
+                <text class="cls-2" transform="translate(60.11 29.26)">start</text>
+                <circle class="cls-1" cx="170" cy="25.5" r="25" />
+                <circle class="cls-1" cx="170" cy="25.5" r="23" />
+                <text class="cls-2" transform="translate(161.17 29.26)">end</text>
+                <line class="cls-1" y1="25.5" x2="31.14" y2="25.5" />
+                <polygon class="cls-3" points="29.16 28.41 40 25.5 29.16 22.59 29.16 28.41" />
+                <line class="cls-1" x1="100" y1="25.5" x2="131.14" y2="25.5" />
+                <polygon class="cls-3" points="129.16 28.41 140 25.5 129.16 22.59 129.16 28.41" />
+                <text class="cls-2" transform="translate(117.5 17.45)">a</text>
+            </svg>
+        </li>
+        <li>
+            <p>子表达式α连接β时,构造这样一个NFA</p>
+            <svg data-name="图层 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 515.5 51" style="height: 60px;">
+                <defs>
+
+                </defs>
+                <style>
+                    @scope {
+                        .cls-1 {
+                            fill: none;
+                        }
+
+                        .cls-1,
+                        .cls-4 {
+                            stroke: #231815;
+                            stroke-miterlimit: 10;
+                        }
+
+                        .cls-2,
+                        .cls-5 {
+                            font-size: 12px;
+                        }
+
+                        .cls-2,
+                        .cls-3,
+                        .cls-5 {
+                            fill: #231815;
+                        }
+
+                        .cls-2 {
+                            font-family: AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std;
+                        }
+
+                        .cls-4 {
+                            fill: #fff;
+                        }
+
+                        .cls-5 {
+                            font-family: DengXian;
+                        }
+                    }
+                </style>
+                <circle class="cls-1" cx="70" cy="25.5" r="25" />
+                <text class="cls-2" transform="translate(60.11 29.26)">start</text>
+                <circle class="cls-1" cx="230" cy="25.5" r="25" />
+                <text class="cls-2" transform="translate(221.17 29.26)">end</text>
+                <line class="cls-1" y1="25.5" x2="31.14" y2="25.5" />
+                <polygon class="cls-3" points="29.16 28.41 40 25.5 29.16 22.59 29.16 28.41" />
+                <line class="cls-1" x1="100" y1="25.5" x2="191.14" y2="25.5" />
+                <polygon class="cls-3" points="189.16 28.41 200 25.5 189.16 22.59 189.16 28.41" />
+                <rect class="cls-4" x="120" y="10.5" width="60" height="30" rx="5" />
+                <text class="cls-5" transform="translate(122.42 28.85)">子表达式α</text>
+                <circle class="cls-1" cx="330" cy="25.5" r="25" />
+                <text class="cls-2" transform="translate(320.11 29.26)">start</text>
+                <circle class="cls-1" cx="490" cy="25.5" r="25" />
+                <circle class="cls-1" cx="490" cy="25.5" r="23" />
+                <text class="cls-2" transform="translate(481.17 29.26)">end</text>
+                <line class="cls-1" x1="260" y1="25.5" x2="291.14" y2="25.5" />
+                <polygon class="cls-3" points="289.16 28.41 300 25.5 289.16 22.59 289.16 28.41" />
+                <line class="cls-1" x1="360" y1="25.5" x2="451.14" y2="25.5" />
+                <polygon class="cls-3" points="449.16 28.41 460 25.5 449.16 22.59 449.16 28.41" />
+                <rect class="cls-4" x="380" y="10.5" width="60" height="30" rx="5" />
+                <text class="cls-5" transform="translate(382.42 28.85)">子表达式β</text>
+                <text class="cls-5" transform="translate(277.37 17.46)">ε</text>
+            </svg>
+            <p>我们把表达式α的结束状态和表达式β的开始状态用一条ε边连接得到一个新的状态机,然后以α的开始状态作为新状态机的开始,以β的结束状态作为新状态机的结束状态。</p>
+        </li>
+        <li>
+            <p>两个子表达式α、β并联的时候(α|β),构造这样一个NFA</p>
+            <svg style="height: 150px;" data-name="图层 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 486.31 106">
+                <defs>
+
+                </defs>
+                <style>
+                    @scope {
+
+                        .cls-1,
+                        .cls-3 {
+                            fill: none;
+                        }
+
+                        .cls-1,
+                        .cls-7 {
+                            stroke: #231815;
+                        }
+
+                        .cls-1,
+                        .cls-3,
+                        .cls-7 {
+                            stroke-miterlimit: 10;
+                        }
+
+                        .cls-2,
+                        .cls-4,
+                        .cls-8,
+                        .cls-9 {
+                            font-size: 12px;
+                        }
+
+                        .cls-2,
+                        .cls-6,
+                        .cls-8 {
+                            fill: #231815;
+                        }
+
+                        .cls-2,
+                        .cls-4 {
+                            font-family: AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std;
+                        }
+
+                        .cls-3 {
+                            stroke: #e60012;
+                        }
+
+                        .cls-4,
+                        .cls-5,
+                        .cls-9 {
+                            fill: #e60012;
+                        }
+
+                        .cls-7 {
+                            fill: #fff;
+                        }
+
+                        .cls-8,
+                        .cls-9 {
+                            font-family: DengXian;
+                        }
+                    }
+                </style>
+                <circle class="cls-1" cx="182.8" cy="25.5" r="25" />
+                <text class="cls-2" transform="translate(172.91 29.26)">start</text>
+                <circle class="cls-3" cx="70" cy="53" r="25" />
+                <text class="cls-4" transform="translate(60.11 56.76)">start</text>
+                <circle class="cls-1" cx="342.8" cy="25.5" r="25" />
+                <text class="cls-2" transform="translate(333.98 29.26)">end</text>
+                <line class="cls-3" x1="98.03" y1="48" x2="144.61" y2="28.87" />
+                <polygon class="cls-5" points="143.88 32.31 152.8 25.5 141.67 26.93 143.88 32.31" />
+                <line class="cls-1" x1="212.8" y1="25.5" x2="303.94" y2="25.5" />
+                <polygon class="cls-6" points="301.96 28.41 312.8 25.5 301.96 22.59 301.96 28.41" />
+                <rect class="cls-7" x="232.8" y="10.5" width="60" height="30" rx="5" />
+                <text class="cls-8" transform="translate(235.22 28.85)">子表达式α</text>
+                <line class="cls-3" x1="372.8" y1="25.5" x2="419.29" y2="44.63" />
+                <polygon class="cls-5" points="416.35 46.56 427.48 48 418.56 41.19 416.35 46.56" />
+                <line class="cls-3" y1="53" x2="31.14" y2="53" />
+                <polygon class="cls-5" points="29.16 55.91 40 53 29.16 50.09 29.16 55.91" />
+                <text class="cls-9" transform="translate(397.51 32.08)">ε</text>
+                <text class="cls-9" transform="translate(122.79 32.08)">ε</text>
+                <text class="cls-9" transform="translate(122.79 64.58)">ε</text>
+                <circle class="cls-1" cx="182.8" cy="80.5" r="25" />
+                <text class="cls-2" transform="translate(172.91 84.26)">start</text>
+                <circle class="cls-1" cx="342.8" cy="80.5" r="25" />
+                <text class="cls-2" transform="translate(333.98 84.26)">end</text>
+                <circle class="cls-3" cx="460.81" cy="53" r="25" />
+                <circle class="cls-3" cx="460.81" cy="53" r="23" />
+                <text class="cls-4" transform="translate(451.99 56.76)">end</text>
+                <line class="cls-3" x1="98.03" y1="58" x2="144.61" y2="77.13" />
+                <polygon class="cls-5" points="141.67 79.07 152.8 80.5 143.88 73.69 141.67 79.07" />
+                <line class="cls-1" x1="212.8" y1="80.5" x2="303.94" y2="80.5" />
+                <polygon class="cls-6" points="301.96 83.41 312.8 80.5 301.96 77.59 301.96 83.41" />
+                <rect class="cls-7" x="232.8" y="65.5" width="60" height="30" rx="5" />
+                <text class="cls-8" transform="translate(235.22 83.85)">子表达式α</text>
+                <line class="cls-3" x1="372.8" y1="80.5" x2="419.29" y2="61.37" />
+                <polygon class="cls-5" points="418.56 64.81 427.48 58 416.35 59.44 418.56 64.81" />
+                <text class="cls-9" transform="translate(397.51 64.58)">ε</text>
+            </svg>
+            <p>我们创建了一个新的start状态和end状态作为新状态机的开始、结束状态(红色),然后从新start创建两条ε边,分别连接到原来子串的start状态。从原来两个子串的end状态各创建一条ε边连接到新end状态
+            </p>
+        </li>
+        <li>
+            <p>求子表达式α克林闭包(α*)的时候,构造这样一个NFA</p>
+            <svg style="height: 300px;" data-name="图层 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 455.5 208.9">
+                <defs>
+
+                </defs>
+                <style>
+                    @scope {
+
+                        .cls-1,
+                        .cls-3 {
+                            fill: none;
+                        }
+
+                        .cls-1,
+                        .cls-6 {
+                            stroke: #231815;
+                        }
+
+                        .cls-1,
+                        .cls-3,
+                        .cls-6 {
+                            stroke-miterlimit: 10;
+                        }
+
+                        .cls-2,
+                        .cls-4,
+                        .cls-7,
+                        .cls-9 {
+                            isolation: isolate;
+                            font-size: 12px;
+                        }
+
+                        .cls-2,
+                        .cls-5,
+                        .cls-7 {
+                            fill: #231815;
+                        }
+
+                        .cls-2,
+                        .cls-4 {
+                            font-family: ArialMT, Arial;
+                        }
+
+                        .cls-3 {
+                            stroke: #d71718;
+                        }
+
+                        .cls-4,
+                        .cls-8,
+                        .cls-9 {
+                            fill: #d71718;
+                        }
+
+                        .cls-6 {
+                            fill: #fff;
+                        }
+
+                        .cls-7,
+                        .cls-9 {
+                            font-family: DengXian;
+                        }
+                    }
+                </style>
+                <circle class="cls-1" cx="170" cy="87.97" r="25" />
+                <text class="cls-2" transform="translate(160.11 91.72)">start</text>
+                <circle class="cls-3" cx="70" cy="87.97" r="25" />
+                <text class="cls-4" transform="translate(60.11 91.72)">start</text>
+                <circle class="cls-1" cx="330" cy="87.97" r="25" />
+                <text class="cls-2" transform="translate(321.17 91.72)">end</text>
+                <line class="cls-1" x1="200" y1="87.97" x2="291.14" y2="87.97" />
+                <polygon class="cls-5" points="289.16 90.87 300 87.97 289.16 85.06 289.16 90.87" />
+                <rect class="cls-6" x="220" y="72.97" width="60" height="30" rx="5" />
+                <text class="cls-7" transform="translate(222.42 91.3)">子表达式α</text>
+                <line class="cls-3" y1="87.97" x2="31.14" y2="87.97" />
+                <polygon class="cls-8" points="29.16 90.87 40 87.97 29.16 85.06 29.16 90.87" />
+                <line class="cls-3" x1="100" y1="87.97" x2="131.14" y2="87.97" />
+                <polygon class="cls-8" points="129.16 90.87 140 87.97 129.16 85.06 129.16 90.87" />
+                <line class="cls-3" x1="360" y1="87.97" x2="391.14" y2="87.97" />
+                <polygon class="cls-8" points="389.16 90.87 400 87.97 389.16 85.06 389.16 90.87" />
+                <text class="cls-9" transform="translate(377.37 79.93)">ε</text>
+                <text class="cls-9" transform="translate(117.37 79.93)">ε</text>
+                <text class="cls-9" transform="translate(244.66 205.86)">ε</text>
+                <text class="cls-9" transform="translate(248.14 9.7)">ε</text>
+                <circle class="cls-3" cx="430" cy="87.97" r="25" />
+                <circle class="cls-3" cx="430" cy="87.97" r="23" />
+                <text class="cls-4" transform="translate(421.17 91.72)">end</text>
+                <path class="cls-3" d="M298.61,170.13c68.28,95.2,279.29,97.53,354.58,7"
+                    transform="translate(-228.61 -52.16)" />
+                <polygon class="cls-8" points="425.6 128.29 430 117.97 421.03 124.71 425.6 128.29" />
+                <path class="cls-3" d="M558.61,110.13c0-50.56-142.12-53.47-158.47-8.73"
+                    transform="translate(-228.61 -52.16)" />
+                <polygon class="cls-8" points="169.22 46.77 170 57.97 174.92 47.88 169.22 46.77" />
+            </svg>
+            <p>
+                我们创建了一个新的start状态和end状态作为新状态机的开始、结束状态(红色),然后从新start创建两条ε边,分别连接到原子串的start和新的end状态。从原子串的end状态创建两条ε边,分别连接到原来子串的start状态和新end状态
+            </p>
+        </li>
+    </ol>
+    <p>通过上述几种基本的正则规则,我们可以实现一些扩展正则功能,比如"a+bc"这个正则表达式识别的是"以一个或者多个a开头,后面再连接bc两个字母",我们可以用"aa*bc"这个基本正则表达式描述</p>
     <h1>DFA</h1>
-    <p>NFA在运行的时候,我们需要不断的计算闭包,这个过程比较消耗内存和CPU,所以存在一个简化NFA处理机制的方法,把NFA转换为DFA(deterministic finite automaton)</p>
+    <p>NFA在运行的时候,我们需要不断的计算闭包,这个过程比较消耗内存和CPU,看上面demo中的NFA运行示意图,我们进入start状态或者输入一个字母a之后,还得不断地搜索当前集合能通过ε边达到的新状态。存在一个简化NFA处理机制的方法,我们可以把NFA转换为DFA(deterministic finite automaton)。需要注意的是:<em>在NFA转换为DFA的过程中,其实并没有简化运算,在转换完成之后,速度将会直接起飞。</em></p>
 </body>
 
 <script type="module" src="./js/NFA-1.js">
