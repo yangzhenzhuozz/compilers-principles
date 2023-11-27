@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>一个很无聊的课件</title>
+    <title>编译器的实现原理</title>
     <style>
         table {
             border-collapse: collapse;
@@ -27,9 +27,9 @@
 </head>
 
 <body>
-    <p>一个很无聊的课件,我写的时候都觉得无聊透顶,全是一堆抽象的东西</p>
+    <p>小心,这是一堆抽象的东西</p>
     <h1>乔姆斯基体系(chomsky hierarchy)</h1>
-    <p>提起遍历原理,就不得不先说说文法。</p>
+    <p>提起编译原理,就不得不先说说文法。</p>
     <blockquote>
         <p>文法自然地描述了大多数程序设计语言构造的层次化语法结构</p>
         <footer> <cite>-编译原理(龙书)-p26</cite></footer>
@@ -513,23 +513,22 @@
                 </g>
             </svg>
             <div>
-                <div>
-                    <span>当前状态集: </span><span id="now"></span><br />
-                    <span>当前可接受字母: </span><span id="letters"></span><br />
-                    <span>处理字母: </span><span id="letter" style="color: red;"></span><br />
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td><span>aab</span></td>
-                                <td><button id="aab">run</button></td>
-                            </tr>
-                            <tr>
-                                <td><span>b</span></td>
-                                <td><button id="b">run</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <span>这里有上面NFA处理两个字符串的示意图,可以点击下一步观看</span><br />
+                <table>
+                    <tbody>
+                        <tr>
+                            <td><span>aab</span></td>
+                            <td><button id="aab">下一步</button></td>
+                        </tr>
+                        <tr>
+                            <td><span>b</span></td>
+                            <td><button id="b">下一步</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <span>当前状态集: </span><span id="now"></span><br />
+                <span>当前可接受字母: </span><span id="letters"></span><br />
+                <span>处理字母: </span><span id="letter" style="color: red;"></span><br />
             </div>
         </template>
     </div>
@@ -560,7 +559,8 @@
         </ol>
     </ol>
     <h1>正则表达式到NFA的转换</h1>
-    <p>为什么要将正则表达式转换为NFA呢?<em>因为直接编写正则表达式的处理程序是比较困难的,借助NFA这种状态机的思想,我们就可以比较简单的通过状态转换实现正则表达式的功能。</em>有的编程语言在用正则表达式的时候会有一个编译步骤,比如java的Pattern.compile,编译过程一般就是将用户输入的正则表达式编译成状态机(这句话我不负法律责任,我凭经验猜的,所以前面加了"一般"两个字)</p>
+    <p>为什么要将正则表达式转换为NFA呢?<em>因为直接编写正则表达式的处理程序是比较困难的,借助NFA这种状态机的思想,我们就可以比较简单的通过状态转换实现正则表达式的功能。</em>有的编程语言在用正则表达式的时候会有一个编译步骤,比如java的Pattern.compile,编译过程一般就是将用户输入的正则表达式编译成状态机(这句话我不负法律责任,我凭经验猜的,所以前面加了"一般"两个字)
+    </p>
     <p>前面已经提过,正则表达式和NFA的能力一致,所以存在将正则转换为NFA的方法。在本教程里面,我们只考虑基本正则表达式到NFA的转换。需要注意的是:<em>我在下面做的转换可能存在一些冗余,比如两个子表达式连接的时候,前一个子串的end状态和后一个子串的start状态也可以合并,所以我这种转换方法不是唯一解决方案。</em>
     </p>
     <ol>
@@ -916,7 +916,25 @@
     </ol>
     <p>通过上述几种基本的正则规则,我们可以实现一些扩展正则功能,比如"a+bc"这个正则表达式识别的是"以一个或者多个a开头,后面再连接bc两个字母",我们可以用"aa*bc"这个基本正则表达式描述</p>
     <h1>DFA</h1>
-    <p>NFA在运行的时候,我们需要不断的计算闭包,这个过程比较消耗内存和CPU,看上面demo中的NFA运行示意图,我们进入start状态或者输入一个字母a之后,还得不断地搜索当前集合能通过ε边达到的新状态。存在一个简化NFA处理机制的方法,我们可以把NFA转换为DFA(deterministic finite automaton)。需要注意的是:<em>在NFA转换为DFA的过程中,其实并没有简化运算,在转换完成之后,速度将会直接起飞。</em></p>
+    <p>NFA在运行的时候,我们需要不断的计算闭包,这个过程比较消耗内存和CPU,看上面demo中的NFA运行示意图,我们进入start状态或者输入一个字母a之后,还得不断地搜索当前集合能通过ε边达到的新状态。存在一个简化NFA处理机制的方法,我们可以把NFA转换为DFA(deterministic
+        finite automaton)。需要注意的是:<em>在NFA转换为DFA的过程中,其实并没有简化运算,但是在转换完成之后,速度将会直接起飞。</em></p>
+    <p>当前NFA转换成DFA的过程也很简单,我们只要按照如下步骤循环进行就可以了</p>
+    <ol>
+        <li>首先给closure(start)作为DFA的唯一状态,然后令当前状态集(now)为closure(start)</li>
+        <li>扫描当前状态集中所有的非ε边,设该边为字母a
+            <ol>
+                <li>将所有a指向的后继状态添加到next状态集中</li>
+                <li>检查clouser(next)是否已经存在于DFA中
+                    <ul>
+                        <li>如果closure(next)没有存在于DFA,则将closure(next)添加到DFA中。并在now创建一条边a指向closure(next)</li>
+                        <li>如果closure(next)已经存在于DFA,则直接now创建一条边a指向closure(next)</li>
+                    </ul>
+                </li>
+            </ol>
+        </li>
+        <li>不断地重复步骤2,直到没有任何新状态集出现</li>
+    </ol>
+    <p>在这里我制作了将上面"a*b"对应的NFA转换成DFA的动画,可以点击下一步观看</p>
 </body>
 
 <script type="module" src="./js/NFA-1.js">

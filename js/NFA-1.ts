@@ -4,22 +4,6 @@ let slot = document.querySelector('#NFA-1') as HTMLDivElement;
 let root = slot.attachShadow({ mode: "open" });
 root.appendChild((slot.querySelector('template') as HTMLTemplateElement).content.cloneNode(true));//使style被隔离
 
-//注册箭头和state点击事件
-for (let item of (root.querySelectorAll('.arrow') as NodeListOf<SVGElement>)) {
-    item.onclick = (e) => {
-        arrowMotion(e.currentTarget as SVGElement, 300);
-    };
-}
-for (let item of (root.querySelectorAll('.state') as NodeListOf<SVGElement>)) {
-    item.onclick = (e) => {
-        if (Boolean(Number((e.currentTarget as SVGAElement).getAttribute('hasLighted')))) {
-            dark(e.currentTarget as SVGElement);
-        } else {
-            light(e.currentTarget as SVGElement);
-        }
-    };
-}
-
 function arrowmotionTools(ids: string[], dur: number) {
     for (let id of ids) {
         arrowMotion(root.querySelector(`#${id}`) as SVGAElement, dur);
@@ -54,7 +38,8 @@ function drakAll() {
         'state5'
     ]);
 }
-
+let aad_buuton = root.querySelector('button[id=aab]') as HTMLButtonElement;
+let b_button = root.querySelector('button[id=b]') as HTMLButtonElement;
 class Automaton_aab {
     private dur = 500;
     private Multiplying = 4;
@@ -107,26 +92,30 @@ class Automaton_aab {
         this.letters.innerText = [].join();
         this.letters.style.border = '';
     }
-    public run() {
-        console.log(this.status);
+    public async run() {
+        aad_buuton.disabled = true;
+        b_button.disabled = true;
         switch (this.status) {
             case -1:
-                this.to_start();
+                await this.to_start();
                 this.status++;
                 break;
             case 0:
-                this.accept_a();
+                await this.accept_a();
                 this.status++;
                 break;
             case 1:
-                this.accept_a();
+                await this.accept_a();
                 this.status++;
                 break;
             case 2:
-                this.accept_b();
+                await this.accept_b();
                 this.status = -1;
                 break;
         }
+        console.log('解除禁用');
+        b_button.disabled = false;
+        aad_buuton.disabled = false;
     }
 }
 class Automaton_b {
@@ -165,25 +154,29 @@ class Automaton_b {
         this.letters.innerText = [].join();
         this.letters.style.border = '';
     }
-    public run() {
+    public async run() {
+        aad_buuton.disabled = true;
+        b_button.disabled = true;
         console.log(this.status);
         switch (this.status) {
             case -1:
-                this.to_start();
+                await this.to_start();
                 this.status++;
                 break;
             case 0:
-                this.accept_b();
+                await this.accept_b();
                 this.status = -1;
                 break;
         }
+        b_button.disabled = false;
+        aad_buuton.disabled = false;
     }
 }
 let automaton_aab = new Automaton_aab();
 let automaton_b = new Automaton_b();
-(root.querySelector('button[id=aab]') as HTMLButtonElement).onclick = () => {
+aad_buuton.onclick = () => {
     automaton_aab.run();
 };
-(root.querySelector('button[id=b]') as HTMLButtonElement).onclick = () => {
+b_button.onclick = () => {
     automaton_b.run();
 };
