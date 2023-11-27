@@ -920,19 +920,23 @@
         finite automaton)。需要注意的是:<em>在NFA转换为DFA的过程中,其实并没有简化运算,但是在转换完成之后,速度将会直接起飞。</em></p>
     <p>当前NFA转换成DFA的过程也很简单,我们只要按照如下步骤循环进行就可以了</p>
     <ol>
-        <li>首先给closure(start)作为DFA的唯一状态,然后令当前状态集(now)为closure(start)</li>
-        <li>扫描当前状态集中所有的非ε边,设该边为字母a
+        <li>首先给closure(start)作为DFA的唯一状态,然后将closure(start)添加到待扫描状态集列表(new_stateset_list)中</li>
+        <li>for(new_stateset_list中的每个状态集now)
             <ol>
-                <li>将所有a指向的后继状态添加到next状态集中</li>
-                <li>检查clouser(next)是否已经存在于DFA中
-                    <ul>
-                        <li>如果closure(next)没有存在于DFA,则将closure(next)添加到DFA中。并在now创建一条边a指向closure(next)</li>
-                        <li>如果closure(next)已经存在于DFA,则直接now创建一条边a指向closure(next)</li>
-                    </ul>
+                <li>for(now中所有非ε边,设该边为字母a)
+                    <ol>
+                        <li>将所有a指向的后继状态添加到next状态集中</li>
+                        <li>检查clouser(next)是否已经存在于DFA中
+                            <ul>
+                                <li>如果closure(next)没有存在于DFA,则将closure(next)分别添加到DFA和待扫描状态集列表中。并在now创建一条边a指向closure(next)</li>
+                                <li>如果closure(next)已经存在于DFA,则直接now创建一条边a指向closure(next)</li>
+                            </ul>
+                        </li>
+                    </ol>
                 </li>
             </ol>
         </li>
-        <li>不断地重复步骤2,直到没有任何新状态集出现</li>
+        <li>直到new_stateset_list没有任何新增状态集,程序结束</li>
     </ol>
     <p>在这里我制作了将上面"a*b"对应的NFA转换成DFA的动画,可以点击下一步观看</p>
 </body>
