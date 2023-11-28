@@ -56,9 +56,9 @@ export function delay(t: number): Promise<void> {
     });
 }
 
-export function KleenClosure(status: number[], matrix: number[][]): number[] {
+export function KleenClosure(state: number[], matrix: number[][]): number[] {
     let ret = [] as number[];
-    ret.push(...status);
+    ret.push(...state);
     for (let i = 0; i < ret.length; i++) {
         let now = ret[i];
         if (matrix[now].length != 0) {
@@ -70,4 +70,21 @@ export function KleenClosure(status: number[], matrix: number[][]): number[] {
         }
     }
     return ret;
+}
+
+export function arrowmotionTools(root: ShadowRoot, ids: string[], dur: number) {
+    for (let id of ids) {
+        arrowMotion(root.querySelector(`#${id}`) as SVGAElement, dur);
+        light(root.querySelector(`#${id}`) as SVGAElement);
+    }
+}
+export function LightTools(root: ShadowRoot, ids: string[]) {
+    for (let id of ids) {
+        light(root.querySelector(`#${id}`) as SVGAElement);
+    }
+}
+export function DarkTools(root: ShadowRoot, ids: string[]) {
+    for (let id of ids) {
+        dark(root.querySelector(`#${id}`) as SVGAElement);
+    }
 }
