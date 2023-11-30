@@ -40,11 +40,11 @@ export function light(root: SVGElement) {
 
 export function dark(root: SVGElement) {
     root.setAttribute('hasLighted', '0');
-    for (let item of (root.querySelectorAll(':not(text),:not(polygon)') as NodeListOf<SVGElement>)) {
-        item.style.stroke = '';
+    for (let item of (root.querySelectorAll(':not(text):not(polygon)') as NodeListOf<SVGElement>)) {
+        item.style.stroke = '#000';
     }
     for (let item of (root.querySelectorAll('text,polygon') as NodeListOf<SVGElement>)) {
-        item.style.fill = '';
+        item.style.fill = '#000';
     }
 }
 

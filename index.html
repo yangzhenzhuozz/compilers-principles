@@ -545,12 +545,12 @@
         <li>克林闭包,如:a*</li>
     </ol>
     <p>而类似a+这种语法是ERE里面才有的。</p>
-    <h1>克林闭包(Kleene closure)</h1>
+    <h2>克林闭包(Kleene closure)</h2>
     <p>
         <a href="https://en.wikipedia.org/wiki/Kleene_star">克林闭包</a>
         在计算机科学中也扮演着重要的角色,不管是做正则引擎还是后面会说的上下文无关文法分析器,以及在关系数据库中计算一个关系R的候选码的时候,都会用到这个概念。
     </p>
-    <h2>某个状态集合s的克林闭包的计算方法:</h2>
+    <h3>某个状态集合s的克林闭包的计算方法:</h3>
     closure(s)
     <ol>
         <li>将s中的所有状态添加到待扫描列表(new_state_list)中</li>
@@ -566,7 +566,7 @@
             </ol>
         </ol>
     </ol>
-    <h1>正则表达式到NFA的转换</h1>
+    <h2>正则表达式到NFA的转换</h2>
     <p>为什么要将正则表达式转换为NFA呢?<em>因为直接编写正则表达式的处理程序是比较困难的,借助NFA这种状态机的思想,我们就可以比较简单的通过状态转换实现正则表达式的功能。</em>有的编程语言在用正则表达式的时候会有一个编译步骤,比如java的Pattern.compile,编译过程一般就是将用户输入的正则表达式编译成状态机(这句话我不负法律责任,我凭经验猜的,所以前面加了"一般"两个字)
     </p>
     <p>前面已经提过,正则表达式和NFA的能力一致,所以存在将正则转换为NFA的方法。在本教程里面,我们只考虑基本正则表达式到NFA的转换。需要注意的是:<em>我在下面做的转换可能存在一些冗余,比如两个子表达式连接的时候,前一个子串的end状态和后一个子串的start状态也可以合并,所以我这种转换方法不是唯一解决方案。</em>
@@ -923,14 +923,17 @@
         </li>
     </ol>
     <p>通过上述几种基本的正则规则,我们可以实现一些扩展正则功能,比如"a+bc"这个正则表达式识别的是"以一个或者多个a开头,后面再连接bc两个字母",我们可以用"aa*bc"这个基本正则表达式描述</p>
-    <h1>DFA</h1>
+    <h2>DFA</h2>
     <p>NFA在运行的时候,我们需要不断的计算闭包,这个过程比较消耗内存和CPU,看上面demo中的NFA运行示意图,我们进入start状态或者输入一个字母a之后,还得不断地搜索当前集合能通过ε边达到的新状态。存在一个简化NFA处理机制的方法,我们可以把NFA转换为DFA(deterministic
         finite automaton)。需要注意的是:<em>在NFA转换为DFA的过程中,其实并没有简化运算,但是在转换完成之后,速度将会直接起飞。</em></p>
     <p>当前NFA转换成DFA的过程也很简单,我们只要按照如下步骤循环进行就可以了</p>
     <div id="NFA-2-DFA">
         <template>
+            <style>
+            </style>
             <ol>
-                <li>首先将closure(start)作为DFA的唯一状态,然后将closure(start)添加到待扫描状态集列表(new_stateset_list)中</li>
+                <li>首先将closure(start)作为DFA的唯一状态,然后将closure(start)添加到待扫描状态集列表(new_stateset_list)中
+                </li>
                 <li>for(new_stateset_list中的每个状态集now)
                     <ol>
                         <li>for(now中所有非ε边,设该边为字母a)
@@ -949,262 +952,293 @@
                 </li>
                 <li>直到new_stateset_list没有任何新增状态集,程序结束</li>
             </ol>
-            <p>在这里我制作了将上面"a*b"对应的NFA转换成DFA的动画,可以点击下一步观看</p>
+            <p>在这里我制作了将上面"a*b"对应的NFA转换成DFA的动画,可以点击下一步观看<button id="next">next</button></p>
             <svg style="height: 600px;" data-name="图层 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 802.07 495.12">
                 <g id="p_0_1" data-name="p 0 1">
-                    <line x1="105" y1="102.24" x2="141.14" y2="102.24"
-                        style="fill:none;stroke:#000;stroke-miterlimit:10" />
+                    <line style="fill: none;stroke: #000;stroke-miterlimit: 10;" x1="105" y1="102.24" x2="141.14"
+                        y2="102.24" pathLength="100" />
                     <polygon points="139.16 105.14 150 102.24 139.16 99.33 139.16 105.14" />
                 </g>
                 <g id="p_1_2" data-name="p 1 2">
-                    <line x1="210" y1="102.24" x2="246.14" y2="102.24"
-                        style="fill:none;stroke:#000;stroke-miterlimit:10" />
+                    <line style="fill: none;stroke: #000;stroke-miterlimit: 10;" x1="210" y1="102.24" x2="246.14"
+                        y2="102.24" pathLength="100" />
                     <polygon points="244.16 105.14 255 102.24 244.16 99.33 244.16 105.14" />
                 </g>
                 <g id="p_2_3" data-name="p 2 3">
-                    <line x1="315" y1="102.24" x2="351.14" y2="102.24"
-                        style="fill:none;stroke:#000;stroke-miterlimit:10" />
+                    <line style="fill: none;stroke: #000;stroke-miterlimit: 10;" x1="315" y1="102.24" x2="351.14"
+                        y2="102.24" pathLength="100" />
                     <polygon points="349.16 105.14 360 102.24 349.16 99.33 349.16 105.14" />
                 </g>
                 <g id="p_3_4" data-name="p 3 4">
-                    <line x1="420" y1="102.24" x2="456.14" y2="102.24"
-                        style="fill:none;stroke:#000;stroke-miterlimit:10" />
+                    <line style="fill: none;stroke: #000;stroke-miterlimit: 10;" x1="420" y1="102.24" x2="456.14"
+                        y2="102.24" pathLength="100" />
                     <polygon points="454.16 105.14 465 102.24 454.16 99.33 454.16 105.14" />
                 </g>
                 <g id="p_4_5" data-name="p 4 5">
-                    <line x1="525" y1="102.24" x2="561.14" y2="102.24"
-                        style="fill:none;stroke:#000;stroke-miterlimit:10" />
+                    <line style="fill: none;stroke: #000;stroke-miterlimit: 10;" x1="525" y1="102.24" x2="561.14"
+                        y2="102.24" pathLength="100" />
                     <polygon points="559.16 105.14 570 102.24 559.16 99.33 559.16 105.14" />
                 </g>
                 <g id="p_2_1" data-name="p 2 1">
-                    <path d="M306.52,93.57c0-68.77-96.19-71.72-104.44-8.85" transform="translate(-21.52 -21.33)"
-                        style="fill:none;stroke:#000;stroke-miterlimit:10" />
+                    <path style="fill: none;stroke: #000;stroke-miterlimit: 10;"
+                        d="M306.52,93.57c0-68.77-96.19-71.72-104.44-8.85" transform="translate(-21.52 -21.33)"
+                        pathLength="100" />
                     <polygon points="177.87 61.22 180 72.24 183.66 61.63 177.87 61.22" />
                 </g>
                 <g id="p_0_3" data-name="p 0 3">
-                    <path d="M96.52,153.57q153.5,74.3,307,3.78" transform="translate(-21.52 -21.33)"
-                        style="fill:none;stroke:#000;stroke-miterlimit:10" />
+                    <path style="fill: none;stroke: #000;stroke-miterlimit: 10;" d="M96.52,153.57q153.5,74.3,307,3.78"
+                        transform="translate(-21.52 -21.33)" pathLength="100" />
                     <polygon points="381.33 139.36 390 132.24 378.93 134.07 381.33 139.36" />
                 </g>
-                <text transform="translate(230 94.19)"
-                    style="isolation:isolate;font-size:12px;font-family:ArialMT, Arial">a</text>
-                <text transform="translate(544.48 94.19)"
-                    style="isolation:isolate;font-size:12px;font-family:ArialMT, Arial">b</text>
-                <text transform="translate(226.5 10.3)"
-                    style="isolation:isolate;font-size:12px;font-family:ArialMT, Arial">ε</text>
-                <text transform="translate(331.5 94.19)"
-                    style="isolation:isolate;font-size:12px;font-family:ArialMT, Arial">ε</text>
-                <text transform="translate(436.5 94.19)"
-                    style="isolation:isolate;font-size:12px;font-family:ArialMT, Arial">ε</text>
-                <text transform="translate(121.5 94.19)"
-                    style="isolation:isolate;font-size:12px;font-family:ArialMT, Arial">ε</text>
-                <text transform="translate(226.5 185.92)"
-                    style="isolation:isolate;font-size:12px;font-family:ArialMT, Arial">ε</text>
+                <text style="isolation: isolate;font-family: ArialMT, Arial;font-size: 12px;"
+                    transform="translate(230 94.19)">a</text>
+                <text style="isolation: isolate;font-family: ArialMT, Arial;font-size: 12px;"
+                    transform="translate(544.48 94.19)">b</text>
+                <text style="isolation: isolate;font-family: ArialMT, Arial;font-size: 12px;"
+                    transform="translate(226.5 10.3)">ε</text>
+                <text style="isolation: isolate;font-family: ArialMT, Arial;font-size: 12px;"
+                    transform="translate(331.5 94.19)">ε</text>
+                <text style="isolation: isolate;font-family: ArialMT, Arial;font-size: 12px;"
+                    transform="translate(436.5 94.19)">ε</text>
+                <text style="isolation: isolate;font-family: ArialMT, Arial;font-size: 12px;"
+                    transform="translate(121.5 94.19)">ε</text>
+                <text style="isolation: isolate;font-family: ArialMT, Arial;font-size: 12px;"
+                    transform="translate(226.5 185.92)">ε</text>
                 <g id="state0">
-                    <circle cx="75" cy="102.24" r="25" style="fill:none;stroke:#000;stroke-miterlimit:10" />
-                    <text transform="translate(60.16 107.87)"
-                        style="isolation:isolate;font-size:18px;font-family:ArialMT, Arial">start</text>
-                </g>
-                <g id="state0-2" data-name="state0">
-                    <circle cx="571.49" cy="325.47" r="25" style="fill:none;stroke:#000;stroke-miterlimit:10" />
-                    <text transform="translate(556.65 331.1)"
-                        style="isolation:isolate;font-size:18px;font-family:ArialMT, Arial">start</text>
+                    <circle style="fill: none;stroke: #000;stroke-miterlimit: 10;" cx="75" cy="102.24" r="25" />
+                    <text style="isolation: isolate;font-family: ArialMT, Arial;font-size: 18px;"
+                        transform="translate(60.16 107.87)">start</text>
                 </g>
                 <g id="state1">
-                    <circle cx="180" cy="102.24" r="25" style="fill:none;stroke:#000;stroke-miterlimit:10" />
-                    <text transform="translate(175.84 107.87)"
-                        style="isolation:isolate;font-size:18px;font-family:ArialMT, Arial">1</text>
-                </g>
-                <g id="state1-2" data-name="state1">
-                    <circle cx="739.89" cy="289.48" r="25" style="fill:none;stroke:#000;stroke-miterlimit:10" />
-                    <text transform="translate(735.73 295.11)"
-                        style="isolation:isolate;font-size:18px;font-family:ArialMT, Arial">1</text>
+                    <circle style="fill: none;stroke: #000;stroke-miterlimit: 10;" cx="180" cy="102.24" r="25" />
+                    <text style="isolation: isolate;font-family: ArialMT, Arial;font-size: 18px;"
+                        transform="translate(175.84 107.87)">1</text>
                 </g>
                 <g id="state2">
-                    <circle cx="285" cy="102.24" r="25" style="fill:none;stroke:#000;stroke-miterlimit:10" />
-                    <text transform="translate(280.84 107.87)"
-                        style="isolation:isolate;font-size:18px;font-family:ArialMT, Arial">2</text>
+                    <circle style="fill: none;stroke: #000;stroke-miterlimit: 10;" cx="285" cy="102.24" r="25" />
+                    <text style="isolation: isolate;font-family: ArialMT, Arial;font-size: 18px;"
+                        transform="translate(280.84 107.87)">2</text>
                 </g>
                 <g id="state3">
-                    <circle cx="390" cy="102.24" r="25" style="fill:none;stroke:#000;stroke-miterlimit:10" />
-                    <text transform="translate(385.84 107.87)"
-                        style="isolation:isolate;font-size:18px;font-family:ArialMT, Arial">3</text>
+                    <circle style="fill: none;stroke: #000;stroke-miterlimit: 10;" cx="390" cy="102.24" r="25" />
+                    <text style="isolation: isolate;font-family: ArialMT, Arial;font-size: 18px;"
+                        transform="translate(385.84 107.87)">3</text>
                 </g>
                 <g id="state4">
-                    <circle cx="495" cy="102.24" r="25" style="fill:none;stroke:#000;stroke-miterlimit:10" />
-                    <text transform="translate(490.84 107.87)"
-                        style="isolation:isolate;font-size:18px;font-family:ArialMT, Arial">4</text>
+                    <circle style="fill: none;stroke: #000;stroke-miterlimit: 10;" cx="495" cy="102.24" r="25" />
+                    <text style="isolation: isolate;font-family: ArialMT, Arial;font-size: 18px;"
+                        transform="translate(490.84 107.87)">4</text>
                 </g>
                 <g id="state5">
-                    <path
+                    <path style="fill: none;stroke: #000;stroke-miterlimit: 10;"
                         d="M621.52,102.07a21.5,21.5,0,1,1-21.5,21.5h0a21.52,21.52,0,0,1,21.5-21.5m0-1a22.5,22.5,0,1,0,22.5,22.5h0A22.5,22.5,0,0,0,621.52,101.07Z"
                         transform="translate(-21.52 -21.33)" />
-                    <path
+                    <path style="fill: none;stroke: #000;stroke-miterlimit: 10;"
                         d="M621.52,99.57a24,24,0,1,1-24,24,24,24,0,0,1,24-24m0-1a25,25,0,1,0,25,25A25,25,0,0,0,621.52,98.57Z"
                         transform="translate(-21.52 -21.33)" />
-                    <text transform="translate(586.76 107.87)"
-                        style="isolation:isolate;font-size:18px;font-family:ArialMT, Arial">end</text>
-                </g>
-                <g id="state5-2" data-name="state5">
-                    <path
-                        d="M694.53,444.09a21.5,21.5,0,1,1-21.5,21.5h0a21.52,21.52,0,0,1,21.5-21.5m0-1a22.5,22.5,0,1,0,22.5,22.5h0A22.5,22.5,0,0,0,694.53,443.09Z"
-                        transform="translate(-21.52 -21.33)" />
-                    <path
-                        d="M694.53,441.59a24,24,0,1,1-24,24,24,24,0,0,1,24-24m0-1a25,25,0,1,0,25,25A25,25,0,0,0,694.53,440.59Z"
-                        transform="translate(-21.52 -21.33)" />
-                    <text transform="translate(659.77 449.88)"
-                        style="isolation:isolate;font-size:18px;font-family:ArialMT, Arial">end</text>
+                    <text style="isolation: isolate;font-family: ArialMT, Arial;font-size: 18px;"
+                        transform="translate(586.76 107.87)">end</text>
                 </g>
                 <g id="p_0_0" data-name="p 0 0">
-                    <line y1="102.24" x2="36.14" y2="102.24" style="fill:none;stroke:#000;stroke-miterlimit:10" />
+                    <line style="fill: none;stroke: #000;stroke-miterlimit: 10;" y1="102.24" x2="36.14" y2="102.24" />
                     <polygon points="34.16 105.14 45 102.24 34.16 99.33 34.16 105.14" />
                 </g>
-                <ellipse cx="133.65" cy="370.26" rx="94.2" ry="67.26"
-                    style="fill:none;stroke:#000;stroke-miterlimit:10" />
-                <g id="state0-3" data-name="state0">
-                    <circle cx="106.15" cy="342.76" r="25" style="fill:none;stroke:#000;stroke-miterlimit:10" />
-                    <text transform="translate(91.31 348.39)"
-                        style="isolation:isolate;font-size:18px;font-family:ArialMT, Arial">start</text>
+                <g id="closure_s" style="display: none;">
+                    <ellipse style="fill: none;stroke: #000;stroke-miterlimit: 10;" cx="133.65" cy="370.26" rx="94.2"
+                        ry="67.26" />
+                    <g id="state0-2" data-name="state0">
+                        <circle style="fill: none;stroke: #000;stroke-miterlimit: 10;" cx="106.15" cy="342.76" r="25" />
+                        <text style="isolation: isolate;font-family: ArialMT, Arial;font-size: 18px;"
+                            transform="translate(91.31 348.39)">start</text>
+                    </g>
+                    <g id="state1-2" data-name="state1">
+                        <circle style="fill: none;stroke: #000;stroke-miterlimit: 10;" cx="161.15" cy="342.76" r="25" />
+                        <text style="isolation: isolate;font-family: ArialMT, Arial;font-size: 18px;"
+                            transform="translate(156.99 348.39)">1</text>
+                    </g>
+                    <g id="state3-2" data-name="state3">
+                        <circle style="fill: none;stroke: #000;stroke-miterlimit: 10;" cx="106.15" cy="397.76" r="25" />
+                        <text style="isolation: isolate;font-family: ArialMT, Arial;font-size: 18px;"
+                            transform="translate(101.99 403.39)">3</text>
+                    </g>
+                    <g id="state4-2" data-name="state4">
+                        <circle style="fill: none;stroke: #000;stroke-miterlimit: 10;" cx="161.15" cy="397.76" r="25" />
+                        <text style="isolation: isolate;font-family: ArialMT, Arial;font-size: 18px;"
+                            transform="translate(156.99 403.39)">4</text>
+                    </g>
                 </g>
-                <g id="state1-3" data-name="state1">
-                    <circle cx="161.15" cy="342.76" r="25" style="fill:none;stroke:#000;stroke-miterlimit:10" />
-                    <text transform="translate(156.99 348.39)"
-                        style="isolation:isolate;font-size:18px;font-family:ArialMT, Arial">1</text>
+                <g id="state2-2" data-name="state2" style="display: none;">
+                    <circle style="fill: none;stroke: #000;stroke-miterlimit: 10;" cx="312.74" cy="305.89" r="25" />
+                    <text style="isolation: isolate;font-family: ArialMT, Arial;font-size: 18px;"
+                        transform="translate(308.58 311.52)">2</text>
                 </g>
-                <g id="state3-2" data-name="state3">
-                    <circle cx="106.15" cy="397.76" r="25" style="fill:none;stroke:#000;stroke-miterlimit:10" />
-                    <text transform="translate(101.99 403.39)"
-                        style="isolation:isolate;font-size:18px;font-family:ArialMT, Arial">3</text>
+                <g id="closure_1234" style="display: none;">
+                    <g id="state1-3" data-name="state1">
+                        <circle style="fill: none;stroke: #000;stroke-miterlimit: 10;" cx="312.74" cy="250.89" r="25" />
+                        <text style="isolation: isolate;font-family: ArialMT, Arial;font-size: 18px;"
+                            transform="translate(308.58 256.52)">1</text>
+                    </g>
+                    <g id="state3-3" data-name="state3">
+                        <circle style="fill: none;stroke: #000;stroke-miterlimit: 10;" cx="367.74" cy="250.89" r="25" />
+                        <text style="isolation: isolate;font-family: ArialMT, Arial;font-size: 18px;"
+                            transform="translate(363.58 256.52)">3</text>
+                    </g>
+                    <g id="state4-3" data-name="state4">
+                        <circle style="fill: none;stroke: #000;stroke-miterlimit: 10;" cx="367.74" cy="305.89" r="25" />
+                        <text style="isolation: isolate;font-family: ArialMT, Arial;font-size: 18px;"
+                            transform="translate(363.58 311.52)">4</text>
+                    </g>
+                    <ellipse style="fill: none;stroke: #000;stroke-miterlimit: 10;" cx="340.24" cy="279.28" rx="74.18"
+                        ry="66.56" />
                 </g>
-                <g id="state4-2" data-name="state4">
-                    <circle cx="161.15" cy="397.76" r="25" style="fill:none;stroke:#000;stroke-miterlimit:10" />
-                    <text transform="translate(156.99 403.39)"
-                        style="isolation:isolate;font-size:18px;font-family:ArialMT, Arial">4</text>
-                </g>
-                <g id="state2-2" data-name="state2">
-                    <circle cx="312.74" cy="253.89" r="25" style="fill:none;stroke:#000;stroke-miterlimit:10" />
-                    <text transform="translate(308.58 259.52)"
-                        style="isolation:isolate;font-size:18px;font-family:ArialMT, Arial">2</text>
-                </g>
-                <g id="state3-3" data-name="state3">
-                    <circle cx="367.74" cy="253.89" r="25" style="fill:none;stroke:#000;stroke-miterlimit:10" />
-                    <text transform="translate(363.58 259.52)"
-                        style="isolation:isolate;font-size:18px;font-family:ArialMT, Arial">3</text>
-                </g>
-                <g id="state4-3" data-name="state4">
-                    <circle cx="340.24" cy="299.28" r="25" style="fill:none;stroke:#000;stroke-miterlimit:10" />
-                    <text transform="translate(336.08 304.91)"
-                        style="isolation:isolate;font-size:18px;font-family:ArialMT, Arial">4</text>
-                </g>
-                <ellipse cx="340.24" cy="276.59" rx="74.18" ry="63.87"
-                    style="fill:none;stroke:#000;stroke-miterlimit:10" />
-                <g id="state5-3" data-name="state5">
+                <g id="state5-2" data-name="state5" style="display: none;">
                     <path
                         d="M351.28,459.73a21.5,21.5,0,1,1-21.5,21.5h0a21.52,21.52,0,0,1,21.5-21.5m0-1a22.5,22.5,0,1,0,22.5,22.5h0A22.5,22.5,0,0,0,351.28,458.73Z"
                         transform="translate(-21.52 -21.33)" />
                     <path
                         d="M351.28,457.23a24,24,0,1,1-24,24,24,24,0,0,1,24-24m0-1a25,25,0,1,0,25,25A25,25,0,0,0,351.28,456.23Z"
                         transform="translate(-21.52 -21.33)" />
-                    <text transform="translate(316.51 465.53)"
-                        style="isolation:isolate;font-size:18px;font-family:ArialMT, Arial">end</text>
+                    <text style="isolation: isolate;font-family: ArialMT, Arial;font-size: 18px;"
+                        transform="translate(316.51 465.53)">end</text>
                 </g>
-                <ellipse cx="329.75" cy="459.9" rx="48.39" ry="34.72"
-                    style="fill:none;stroke:#000;stroke-miterlimit:10" />
-                <line x1="215.75" y1="324.28" x2="254.37" y2="303.48"
-                    style="fill:none;stroke:#000;stroke-miterlimit:10" />
-                <polygon points="254 306.98 262.17 299.28 251.24 301.86 254 306.98" />
-                <line x1="336.3" y1="348.39" x2="332.1" y2="410.2" style="fill:none;stroke:#000;stroke-miterlimit:10" />
-                <polygon points="329.34 408.03 331.5 419.04 335.13 408.42 329.34 408.03" />
-                <line x1="228.5" y1="403.61" x2="273.74" y2="430.39"
-                    style="fill:none;stroke:#000;stroke-miterlimit:10" />
-                <polygon points="270.55 431.88 281.36 434.9 273.51 426.88 270.55 431.88" />
-                <path d="M441.52,291.21c79-39.27,18.22-104.89-31.55-63.24" transform="translate(-21.52 -21.33)"
-                    style="fill:none;stroke:#000;stroke-miterlimit:10" />
-                <polygon points="388.02 203.25 382 212.72 391.95 207.53 388.02 203.25" />
-                <text transform="translate(236.46 303.01)"
-                    style="font-size:12px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">a</text>
-                <text transform="translate(254.93 411.64)"
-                    style="font-size:12px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">b</text>
-                <text transform="translate(345.22 386.39)"
-                    style="font-size:12px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">b</text>
-                <text transform="translate(458.05 201.96)"
-                    style="font-size:12px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">a</text>
-                <line x1="601.63" y1="317.76" x2="697.9" y2="291.79"
-                    style="fill:none;stroke:#000;stroke-miterlimit:10" />
-                <polygon points="696.74 295.11 706.45 289.48 695.23 289.5 696.74 295.11" />
-                <line x1="596.39" y1="348.39" x2="650.46" y2="412.48"
-                    style="fill:none;stroke:#000;stroke-miterlimit:10" />
-                <polygon points="646.96 412.84 656.17 419.25 651.4 409.09 646.96 412.84" />
-                <line x1="729.96" y1="318.5" x2="686.8" y2="408.08"
-                    style="fill:none;stroke:#000;stroke-miterlimit:10" />
-                <polygon points="685.04 405.04 682.95 416.06 690.27 407.56 685.04 405.04" />
-                <path d="M794.94,308.37c31.58-14,23-50.75-10.68-33.06" transform="translate(-21.52 -21.33)"
-                    style="fill:none;stroke:#000;stroke-miterlimit:10" />
-                <polygon points="762.98 250.54 755.17 258.6 765.97 255.53 762.98 250.54" />
-                <text transform="translate(656.07 295.11)"
-                    style="font-size:12px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">a</text>
-                <text transform="translate(611.76 390.5)"
-                    style="font-size:12px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">b</text>
-                <text transform="translate(714.89 367.28)"
-                    style="font-size:12px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">b</text>
-                <text transform="translate(797.06 254.35)"
-                    style="font-size:12px;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">a</text>
+                <g id="closure_e" style="display: none;">
+                    <ellipse style="fill: none;stroke: #000;stroke-miterlimit: 10;" cx="329.75" cy="459.9" rx="48.39"
+                        ry="34.72" />
+                </g>
+
+                <g id="DFA_0_1" style="display: none;">
+                    <line style="fill: none;stroke: #000;stroke-miterlimit: 10;" x1="215.75" y1="324.28" x2="254.37"
+                        y2="303.48" />
+                    <polygon points="254 306.98 262.17 299.28 251.24 301.86 254 306.98" />
+                    <text style="font-size: 12px;font-family: AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std;"
+                        transform="translate(236.46 303.01)">a</text>
+                </g>
+                <g id="DFA_0_2" style="display: none;">
+                    <line style="fill: none;stroke: #000;stroke-miterlimit: 10;" x1="228.5" y1="403.61" x2="273.74"
+                        y2="430.39" />
+                    <polygon points="270.55 431.88 281.36 434.9 273.51 426.88 270.55 431.88" />
+                    <text style="font-size: 12px;font-family: AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std;"
+                        transform="translate(254.93 411.64)">b</text>
+                </g>
+                <g id="DFA_1_1" style="display: none;">
+                    <path style="fill: none;stroke: #000;stroke-miterlimit: 10;"
+                        d="M441.52,291.21c79-39.27,18.22-104.89-31.55-63.24" transform="translate(-21.52 -21.33)" />
+                    <polygon points="388.02 203.25 382 212.72 391.95 207.53 388.02 203.25" />
+                    <text style="font-size: 12px;font-family: AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std;"
+                        transform="translate(458.05 201.96)">a</text>
+                </g>
+                <g id="DFA_1_2" style="display: none;">
+                    <line style="fill: none;stroke: #000;stroke-miterlimit: 10;" x1="336.3" y1="348.39" x2="332.1"
+                        y2="410.2" />
+                    <polygon points="329.34 408.03 331.5 419.04 335.13 408.42 329.34 408.03" />
+                    <text style="font-size: 12px;font-family: AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std;"
+                        transform="translate(345.22 386.39)">b</text>
+                </g>
+                <g id="DFA" style="display: none;">
+                    <g id="DFA_S0">
+                        <circle style="fill: none;stroke: #000;stroke-miterlimit: 10;" cx="571.49" cy="325.47" r="25" />
+                        <text style="isolation: isolate;font-family: ArialMT, Arial;font-size: 18px;"
+                            transform="translate(556.65 331.1)">start</text>
+                    </g>
+                    <g id="DFA_S1">
+                        <circle style="fill: none;stroke: #000;stroke-miterlimit: 10;" cx="739.89" cy="289.48" r="25" />
+                        <text style="isolation: isolate;font-family: ArialMT, Arial;font-size: 18px;"
+                            transform="translate(735.73 295.11)">1</text>
+                    </g>
+                    <g id="DFA_S2">
+                        <path
+                            d="M694.53,444.09a21.5,21.5,0,1,1-21.5,21.5h0a21.52,21.52,0,0,1,21.5-21.5m0-1a22.5,22.5,0,1,0,22.5,22.5h0A22.5,22.5,0,0,0,694.53,443.09Z"
+                            transform="translate(-21.52 -21.33)" />
+                        <path
+                            d="M694.53,441.59a24,24,0,1,1-24,24,24,24,0,0,1,24-24m0-1a25,25,0,1,0,25,25A25,25,0,0,0,694.53,440.59Z"
+                            transform="translate(-21.52 -21.33)" />
+                        <text style="isolation: isolate;font-family: ArialMT, Arial;font-size: 18px;"
+                            transform="translate(659.77 449.88)">end</text>
+                    </g>
+                    <line style="fill: none;stroke: #000;stroke-miterlimit: 10;" x1="601.63" y1="317.76" x2="697.9"
+                        y2="291.79" />
+                    <polygon points="696.74 295.11 706.45 289.48 695.23 289.5 696.74 295.11" />
+                    <line style="fill: none;stroke: #000;stroke-miterlimit: 10;" x1="596.39" y1="348.39" x2="650.46"
+                        y2="412.48" />
+                    <polygon points="646.96 412.84 656.17 419.25 651.4 409.09 646.96 412.84" />
+                    <line style="fill: none;stroke: #000;stroke-miterlimit: 10;" x1="729.96" y1="318.5" x2="686.8"
+                        y2="408.08" />
+                    <polygon points="685.04 405.04 682.95 416.06 690.27 407.56 685.04 405.04" />
+                    <path style="fill: none;stroke: #000;stroke-miterlimit: 10;"
+                        d="M794.94,308.37c31.58-14,23-50.75-10.68-33.06" transform="translate(-21.52 -21.33)" />
+                    <polygon points="762.98 250.54 755.17 258.6 765.97 255.53 762.98 250.54" />
+                    <text style="font-size: 12px;font-family: AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std;"
+                        transform="translate(656.07 295.11)">a</text>
+                    <text style="font-size: 12px;font-family: AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std;"
+                        transform="translate(611.76 390.5)">b</text>
+                    <text style="font-size: 12px;font-family: AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std;"
+                        transform="translate(714.89 367.28)">b</text>
+                    <text style="font-size: 12px;font-family: AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std;"
+                        transform="translate(797.06 254.35)">a</text>
+                </g>
             </svg>
-            <br />
-            得把这幅图的pathLength设置成100才行
-            <br />
-            <button id="next">next</button>
-            <p>可以看到,将NFA转换为DFA之后,大幅度的减少了状态数量,而且不再有任何ε边。并且NFA存在这样一种可能,从某个状态s出发,可能有两条一样的字母a边跳转到不同后继状态n1和n2。</p>
-            <svg style="height: 200px;" data-name="图层 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 156 134.77">
-                <defs>
-
-                </defs>
-                <style>
-                    @scope {
-
-                        .cls-1,
-                        .cls-3 {
-                            isolation: isolate;
-                            font-family: ArialMT, Arial;
-                        }
-
-                        .cls-1 {
-                            font-size: 12px;
-                        }
-
-                        .cls-2 {
-                            fill: none;
-                            stroke: #000;
-                            stroke-miterlimit: 10;
-                        }
-
-                        .cls-3 {
-                            font-size: 18px;
-                        }
-                    }
-                </style>
-                <text class="cls-1" transform="translate(73.85 36.48)">a</text><text class="cls-1"
-                    transform="translate(74.28 86.95)">a</text>
-                <g id="state1">
-                    <circle class="cls-2" cx="25.5" cy="67.39" r="25" /><text class="cls-3"
-                        transform="translate(21.34 73.02)">1</text>
-                </g>
-                <g id="state2">
-                    <circle class="cls-2" cx="130.5" cy="25.5" r="25" /><text class="cls-3"
-                        transform="translate(126.34 31.13)">2</text>
-                </g>
-                <g id="state2-2" data-name="state2">
-                    <circle class="cls-2" cx="130.5" cy="109.27" r="25" /><text class="cls-3"
-                        transform="translate(126.34 114.9)">3</text>
-                </g>
-                <line class="cls-2" x1="51.53" y1="52.02" x2="92.37" y2="34.61" />
-                <polygon points="91.69 38.05 100.52 31.13 89.41 32.71 91.69 38.05" />
-                <line class="cls-2" x1="52.32" y1="79.79" x2="93.24" y2="98.31" />
-                <polygon points="90.24 100.14 101.31 101.96 92.63 94.84 90.24 100.14" />
-            </svg>
-            <p>其实之前的例子中也出现过同一个状态有多个不同的ε边指向不同的目标状态,ε边和字母a是类似的,只不过ε多了一个"允许无条件跳转"的语义</p>
         </template>
     </div>
+    <p>可以看到,将NFA转换为DFA之后,大幅度的减少了状态数量,而且不再有任何ε边。并且NFA存在这样一种可能,从某个状态s出发,可能有两条一样的字母a边跳转到不同后继状态n1和n2。</p>
+    <svg style="height: 200px;" data-name="图层 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 156 134.77">
+        <defs>
+
+        </defs>
+        <style>
+            @scope {
+
+                .cls-1,
+                .cls-3 {
+                    isolation: isolate;
+                    font-family: ArialMT, Arial;
+                }
+
+                .cls-1 {
+                    font-size: 12px;
+                }
+
+                .cls-2 {
+                    fill: none;
+                    stroke: #000;
+                    stroke-miterlimit: 10;
+                }
+
+                .cls-3 {
+                    font-size: 18px;
+                }
+            }
+        </style>
+        <text class="cls-1" transform="translate(73.85 36.48)">a</text><text class="cls-1"
+            transform="translate(74.28 86.95)">a</text>
+        <g>
+            <circle class="cls-2" cx="25.5" cy="67.39" r="25" /><text class="cls-3"
+                transform="translate(21.34 73.02)">1</text>
+        </g>
+        <g>
+            <circle class="cls-2" cx="130.5" cy="25.5" r="25" /><text class="cls-3"
+                transform="translate(126.34 31.13)">2</text>
+        </g>
+        <g>
+            <circle class="cls-2" cx="130.5" cy="109.27" r="25" /><text class="cls-3"
+                transform="translate(126.34 114.9)">3</text>
+        </g>
+        <line class="cls-2" x1="51.53" y1="52.02" x2="92.37" y2="34.61" />
+        <polygon points="91.69 38.05 100.52 31.13 89.41 32.71 91.69 38.05" />
+        <line class="cls-2" x1="52.32" y1="79.79" x2="93.24" y2="98.31" />
+        <polygon points="90.24 100.14 101.31 101.96 92.63 94.84 90.24 100.14" />
+    </svg>
+    <p>其实之前的例子中也出现过同一个状态有多个不同的ε边指向不同的目标状态,ε边和字母a是类似的,只不过ε多了一个"允许无条件跳转"的语义</p>
+    <h2>词法分析小结:</h2>
+    <p>一个正则引擎不一定是用NFA或者DFA运行的,因为DFA速度快,消耗内存小,但是会丢弃一些信息(比如分组信息),所以目前主流的正则实现都是采用NFA方法工作。NFA在匹配的时候必须走所有的可能路径(也可以把这个理解为一种回溯),所以很多NFA在实现的时候当遇到了end状态就直接结束,而DFA则没有这种顾虑,所以可以用这种方法大概的测试一下当前工具使用NFA还是DFA。用"nfa|nfa
+        not"这个正则表达式去测试串"nfa not",一般的NFA引擎会解析到nfa就结束。
+    </p>
+    <p>比如在浏览器控制台执行这行代码,输入如下</p>
+    > /nfa|nfa not/.exec('nfa not')[0]<br />
+    > 'nfa'
+    <p>至此我们已经知道正则引擎是怎么工作的了,可以很轻松的根据已有正则编写出一个状态机运行。但是还有一个问题,正则表达式的表达能力是3型文法,但是正则表达本身是一个2型文法才能描述的语言。所以后续我们将会学习编译器前端的灵魂部分:文法分析
+    </p>
+    <h1>文本分析</h1>
+    <p>第二个坑,龙书对first集计算方法没有讲的很清楚。还有LR(1)后面为什么不用求follow集,因为后面一个一定是非终结符</p>
 </body>
 
 <script type="module" src="./js/NFA-1.js">
