@@ -15,6 +15,7 @@
             padding: 0 1rem;
         }
 
+        .emphasize,
         em {
             color: tomato;
         }
@@ -131,7 +132,7 @@
         </li>
         <li>产生式(production rule):指定了符号的推导规则。上面的两个文法定义,共4条规则都是产生式</li>
     </ol>
-    <p>有了上述概念,我们可以模仿着写出java语言的if语句规则:(按照一些古老的习惯,我用大写字母表示非终结符,小写字母表示终结符,实际上这不是强制的)</p>
+    <p>有了上述概念,我们可以模仿着写出java语言的if语句规则:(按照一些习惯,我用大写字母表示非终结符,小写字母表示终结符,希腊字母表示一个串,实际上这不是强制的)</p>
     <ol>
         <li>
             <math>
@@ -503,8 +504,10 @@
                 </g>
                 <g class="state" id="state5">
                     <path
-                        d="M600,81a21.5,21.5,0,1,1-21.5,21.5A21.52,21.52,0,0,1,600,81m0-1a22.5,22.5,0,1,0,22.5,22.5A22.5,22.5,0,0,0,600,80Z" style="stroke-width:0;"/>
-                    <path style="stroke-width:0;" d="M600,78.5a24,24,0,1,1-24,24,24,24,0,0,1,24-24m0-1a25,25,0,1,0,25,25,25,25,0,0,0-25-25Z" />
+                        d="M600,81a21.5,21.5,0,1,1-21.5,21.5A21.52,21.52,0,0,1,600,81m0-1a22.5,22.5,0,1,0,22.5,22.5A22.5,22.5,0,0,0,600,80Z"
+                        style="stroke-width:0;" />
+                    <path style="stroke-width:0;"
+                        d="M600,78.5a24,24,0,1,1-24,24,24,24,0,0,1,24-24m0-1a25,25,0,1,0,25,25,25,25,0,0,0-25-25Z" />
                     <text class="cls-3" transform="translate(586.76 108.13)">end</text>
                 </g>
                 <g class="arrow" id="p_0_0">
@@ -952,7 +955,7 @@
                 </li>
                 <li>直到new_stateset_list没有任何新增状态集,程序结束</li>
             </ol>
-            <p>在这里我制作了将上面"a*b"对应的NFA转换成DFA的动画,可以点击下一步观看<button id="next">next</button></p>
+            <p>将"a*b"对应的NFA转换成DFA的动画,点击下一步观看:<button id="next">下一步</button></p>
             <svg style="height: 600px;" data-name="图层 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 802.07 495.12">
                 <g id="p_0_1" data-name="p 0 1">
                     <line style="fill: none;stroke: #000;stroke-miterlimit: 10;" x1="105" y1="102.24" x2="141.14"
@@ -1237,8 +1240,247 @@
     > 'nfa'
     <p>至此我们已经知道正则引擎是怎么工作的了,可以很轻松的根据已有正则编写出一个状态机运行。但是还有一个问题,正则表达式的表达能力是3型文法,但是正则表达本身是一个2型文法才能描述的语言。所以后续我们将会学习编译器前端的灵魂部分:文法分析
     </p>
-    <h1>文本分析</h1>
+    <h1>文法分析</h1>
     <p>第二个坑,龙书对first集计算方法没有讲的很清楚。还有LR(1)后面为什么不用求follow集,因为后面一个一定是非终结符</p>
+    <p>文法分析是编译器前端最核心的功能,通常会把编译器的词法分析模块叫做lex(Lexical Analyzer
+        Generator),文法分析模块叫做parser,lex将源码变成一个个的token,parser把这些token变成一个AST(abstract syntax
+        tree)。在这里我们只讲解2-型文法(上下文无关分发)的parser工作原理</p>
+    <h2>first集</h2>
+    <p>first(α)表示串α的首个非终结符的集合,比如first(abc)={a},一旦给定一个文法G,则我们就能计算出任何一个串的first集(这个串的所有token必须是文法范文内的终结符、非终结符或者ε),first集的规则如下:
+    </p>
+    <em>这里和龙书的定义稍微有一点点差别,是按照我的理解对龙书的定义进行了一些拙劣的加工</em>
+    <p>计算first(α),其中<math>
+            <mi>α</mi>
+            <mo>=</mo>
+            <msub>
+                <mi>X</mi>
+                <mn>1</mn>
+            </msub>
+            <msub>
+                <mi>X</mi>
+                <mn>2</mn>
+            </msub>
+            <mi>...</mi>
+            <msub>
+                <mi>X</mi>
+                <mn>n</mn>
+            </msub>
+        </math>,我们先创建一个空集合作为结果集:ret={},然后从n=1开始依次处理每个符号,假设当前处理的符号下标为i</p>
+    <ol>
+        <li>如果<math>
+                <msub>
+                    <mi>X</mi>
+                    <mi>i</mi>
+                </msub>
+            </math>是一个非ε终结符,则将<math>
+                <msub>
+                    <mi>X</mi>
+                    <mi>i</mi>
+                </msub>
+            </math>添加到ret,并终止计算</li>
+        <li>如果<math>
+                <msub>
+                    <mi>X</mi>
+                    <mi>i</mi>
+                </msub>
+            </math>是ε,进行如下检查
+            <ul>
+                <li>i等于n(也就是最后一个符号还是ε),将ε添加到ret</li>
+                <li>i不等于n(还没到最后一个符号),不做任何动作</li>
+            </ul>
+        </li>
+        <li>如果<math>
+                <msub>
+                    <mi>X</mi>
+                    <mi>i</mi>
+                </msub>
+            </math>是一个终结符,则对所有以<math>
+                <msub>
+                    <mi>X</mi>
+                    <mi>i</mi>
+                </msub>
+            </math>开头的产生式<math>
+                <msub>
+                    <mi>X</mi>
+                    <mi>i</mi>
+                </msub>
+                <mo>=></mo>
+                <msub>
+                    <mi>β</mi>
+                    <mi>1</mi>
+                </msub>
+            </math>一直到<math>
+                <msub>
+                    <mi>X</mi>
+                    <mi>i</mi>
+                </msub>
+                <mo>=></mo>
+                <msub>
+                    <mi>β</mi>
+                    <mi>n</mi>
+                </msub>
+            </math>计算<math>
+                <mi>first</mi>
+                <mo>(</mo>
+                <msub>
+                    <mi>β</mi>
+                    <mi>j</mi>
+                </msub>
+                <mo>)</mo>
+            </math>,我们把所有的计算结果合并到一个临时集合tmp中,然后检查tmp中是否有ε
+            <ul>
+                <li>没有ε,则将temp合并到ret中,并终止计算</li>
+                <li>有ε,则进行如下检查
+                    <ul>
+                        <li>i等于n(也就是最后一个符号还包含ε),把temp合并到ret中(此时tmp包含了ε)</li>
+                        <li>i不等于n(还没到最后一个符号),从tmp移除ε之后再合并到ret中</li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ol>
+    <p>假设我们有如下的文法:</p>
+    <ol>
+        <li><math>
+                <mi>S</mi>
+                <mo>=></mo>
+                <mi>E</mi>
+            </math></li>
+        <li><math>
+                <mi>E</mi>
+                <mo>=></mo>
+                <mi>a</mi>
+            </math></li>
+        <li><math>
+                <mi>E</mi>
+                <mo>=></mo>
+                <mi>F</mi>
+                <mi>b</mi>
+            </math></li>
+        <li><math>
+                <mi>F</mi>
+                <mo>=></mo>
+                <mi>ε</mi>
+            </math></li>
+    </ol>
+    <p>则first(S)={a,b}</p>
+    <p>龙书的算法大致如上,但是有一点没有说的很清楚,所以我特别补充一下:<em>在计算first的过程中,遇到递归产生式的处理方法。</em>假设我们有如下文法:
+    </p>
+    <ol>
+        <li><math>
+                <mi>S</mi>
+                <mo>=></mo>
+                <mi>A</mi>
+                <mi>B</mi>
+            </math></li>
+        <li><math>
+                <mi>A</mi>
+                <mo>=></mo>
+                <mi>S</mi>
+                <mi>a</mi>
+            </math></li>
+        <li><math>
+                <mi>A</mi>
+                <mo>=></mo>
+                <mi>ε</mi>
+            </math></li>
+        <li><math>
+                <mi>B</mi>
+                <mo>=></mo>
+                <mi>S</mi>
+                <mi>b</mi>
+            </math></li>
+    </ol>
+    <p>我们在计算first(S)的时候,需要求first(AB),因为<math>
+            <mi>A</mi>
+            <mo>=></mo>
+            <mi>S</mi>
+            <mi>a</mi>
+        </math>,如果我们单纯的继续展开S,就会进入无限展开,永远都得不到结果。实际上龙书默认我们已经懂了,但是可能部分读者并没有懂的一个知识点:</p>
+    <P>(PS:这个定理不是龙书说的,是我编出来的)我把这个称为<span
+            class="emphasize">直接推导定理</span>。先定义一下直接推导路径:<em>在符号替换流程中,每个产生式只被使用一次的替换路径叫做直接推导路径。</em>如下的两种推导路径:
+    </p>
+    <ol>
+        <li><math>
+                <mi>S</mi>
+                <mover>
+                    <mo>=></mo>
+                    <mo>产生式1替换S</mo>
+                </mover>
+                <mrow>
+                    <mi>A</mi>
+                    <mi>B</mi>
+                </mrow>
+                <mover>
+                    <mo>=></mo>
+                    <mo>产生式2替换A</mo>
+                </mover>
+                <mrow>
+                    <mi>S</mi>
+                    <mi>a</mi>
+                    <mi>B</mi>
+                </mrow>
+                <mover>
+                    <mo>=></mo>
+                    <mo>产生式4替换B</mo>
+                </mover>
+                <mrow>
+                    <mi>S</mi>
+                    <mi>a</mi>
+                    <mi>S</mi>
+                    <mi>b</mi>
+                </mrow>
+            </math></li>
+        <li><math>
+                <mi>S</mi>
+                <mover>
+                    <mo>=></mo>
+                    <mo>产生式1替换S</mo>
+                </mover>
+                <mrow>
+                    <mi>A</mi>
+                    <mi>B</mi>
+                </mrow>
+                <mover>
+                    <mo>=></mo>
+                    <mo>产生式2替换A</mo>
+                </mover>
+                <mrow>
+                    <mi>S</mi>
+                    <mi>a</mi>
+                    <mi>B</mi>
+                </mrow>
+                <mover>
+                    <mo>=></mo>
+                    <mo>产生式1替换S</mo>
+                </mover>
+                <mrow>
+                    <mi>A</mi>
+                    <mi>B</mi>
+                    <mi>a</mi>
+                    <mi>B</mi>
+                </mrow>
+            </math></li>
+    </ol>
+    <p>第一种推导叫做直接推导,第二中就叫做递归推导,因为之前已经用过一次产生式1了,后面的替换中,我们又用产生式1替换,这样可以无穷无止地替换下去。</p>
+    <p>知道了直接推导和递归推导的概念之后,就可以说一下直接推导定理了:</p>
+    <ul>
+        <li class="emphasize">递归推导对first(X)不会对结果产生任何影响</li>
+    </ul>
+    <p>所以为了解决递归求解first的问题,我们需要先定义一个辅助函数have_epsilon(α),这个函数用于判断,串α的first集合是否包含ε,计算步骤和first及其相似,但是为通用的first函数提供了基础。计算流程如下:
+    </p>
+    <ol>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ol>
+    <p>有了have_epsilon,我们就可以对first流程做一些轻微的改动,使他能完全处理有递归的文法,改进后的first计算流程如下:</p>
+    <ol>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ol>
+    <h1>待续,先睡觉...</h1>
 </body>
 
 <script type="module" src="./js/NFA-1.js">
