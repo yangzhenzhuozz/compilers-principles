@@ -1740,7 +1740,7 @@
     <h2>有了first集和follow集的计算方法,此时我们已经能根据文法写出很多编程语言的编译器前端了,接下来我将介绍LL(k)文法分析器的工作流程。
     </h2>
     <h2>
-        目前一些编程语言是作者手写递归下降文法解析器,比如GCC、Go(GCC开始是用bison生成的LALR自顶向上分析器,后来改手写了),<em>(忘了OpenJDK是不是了)</em>。有的前端用的是LR(k)自底向上分析器,比如MySQL的SQL解析器、Linux的Bash
+        目前一些编程语言是作者手写递归下降文法解析器,比如GCC、Go(GCC开始是用bison生成的LALR自顶向上分析器,后来改手写了<em>忘了OpenJDK是不是了)</em>。有的前端用的是LR(k)自底向上分析器,比如MySQL的SQL解析器、Linux的Bash
         shell就是用bison生成的LALR分析器--
         <q cite="https://en.wikipedia.org/wiki/GNU_Bison#Use"><a href="https://en.wikipedia.org/wiki/GNU_Bison#Use">GNU
                 Bison</a></q>
