@@ -20,6 +20,10 @@
             color: tomato;
         }
 
+        .stress {
+            color: red;
+        }
+
         .legend {
             display: inline-block;
             font-size: small;
@@ -1318,7 +1322,7 @@
                 <mo>=></mo>
                 <msub>
                     <mi>β</mi>
-                    <mi>n</mi>
+                    <mi>h</mi>
                 </msub>
             </math>计算<math>
                 <mi>first</mi>
@@ -1365,7 +1369,7 @@
             </math></li>
     </ol>
     <p>则first(S)={a,b}</p>
-    <p>龙书的算法大致如上,但是有一点没有说的很清楚,所以我特别补充一下:<em>在计算first的过程中,遇到递归产生式的处理方法。</em>假设我们有如下文法:
+    <p>龙书的算法大致如上,但是有一点没有说的很清楚,所以我特别补充一下:<em class="stress">在计算first的过程中,遇到递归产生式的处理方法。</em>假设我们有如下文法:
     </p>
     <ol>
         <li><math>
@@ -1470,18 +1474,279 @@
     </ul>
     <p>所以为了解决递归求解first的问题,我们需要先定义一个辅助函数have_epsilon(α),这个函数用于判断,串α的first集合是否包含ε,计算步骤和first及其相似,但是为通用的first函数提供了基础。计算流程如下:
     </p>
+    <p>计算have_epsilon(α),其中<math>
+            <mi>α</mi>
+            <mo>=</mo>
+            <msub>
+                <mi>X</mi>
+                <mn>1</mn>
+            </msub>
+            <msub>
+                <mi>X</mi>
+                <mn>2</mn>
+            </msub>
+            <mi>...</mi>
+            <msub>
+                <mi>X</mi>
+                <mn>n</mn>
+            </msub>
+        </math>,我们从n=1开始依次处理每个符号,假设当前处理的符号下标为i</p>
     <ol>
-        <li></li>
-        <li></li>
-        <li></li>
+        <li>如果<math>
+                <msub>
+                    <mi>X</mi>
+                    <mi>i</mi>
+                </msub>
+            </math>是ε,则进行如下判断:
+            <ul>
+                <li>i等于n(也就是最后一个符号还是ε),返回true</li>
+                <li>i不等于n(没有到最后一个符号),不做任何动作,进行下一个符号的处理</li>
+            </ul>
+        </li>
+        <li>如果<math>
+                <msub>
+                    <mi>X</mi>
+                    <mi>i</mi>
+                </msub>
+            </math>是一个终结符,不做任何动作,进行下一个符号的处理</li>
+        <li>如果<math>
+                <msub>
+                    <mi>X</mi>
+                    <mi>i</mi>
+                </msub>
+            </math>是一个终结符,则对所有以<math>
+                <msub>
+                    <mi>X</mi>
+                    <mi>i</mi>
+                </msub>
+            </math>开头的产生式<math>
+                <msub>
+                    <mi>X</mi>
+                    <mi>i</mi>
+                </msub>
+                <mo>=></mo>
+                <msub>
+                    <mi>β</mi>
+                    <mi>1</mi>
+                </msub>
+            </math>一直到<math>
+                <msub>
+                    <mi>X</mi>
+                    <mi>i</mi>
+                </msub>
+                <mo>=></mo>
+                <msub>
+                    <mi>β</mi>
+                    <mi>h</mi>
+                </msub>
+            </math><em>(如果<math>
+                    <msub>
+                        <mi>β</mi>
+                        <mi>j</mi>
+                    </msub>
+                </math>对应的产生式已经被展开过,则我们应该跳过<math>
+                    <msub>
+                        <mi>β</mi>
+                        <mi>j</mi>
+                    </msub>
+                </math>,否则我们要标记<math>
+                    <msub>
+                        <mi>β</mi>
+                        <mi>j</mi>
+                    </msub>
+                </math>对应的产生式被展开①)</em>,计算<math>
+                <mi>have_epsilon</mi>
+                <mo>(</mo>
+                <msub>
+                    <mi>β</mi>
+                    <mi>j</mi>
+                </msub>
+                <mo>)</mo>
+            </math>,并且我们对每个
+            <math>
+                <mi>have_epsilon</mi>
+                <mo>(</mo>
+                <msub>
+                    <mi>β</mi>
+                    <mi>j</mi>
+                </msub>
+                <mo>)</mo>
+            </math>的返回值做判断<em>(在递归调用之后,也就是得到<math>
+                    <mi>have_epsilon</mi>
+                    <mo>(</mo>
+                    <msub>
+                        <mi>β</mi>
+                        <mi>j</mi>
+                    </msub>
+                    <mo>)</mo>
+                </math>的返回值之后,我们要移除①处做的标记)</em>
+            <ul>
+                <li>如果
+                    <math>
+                        <mi>have_epsilon</mi>
+                        <mo>(</mo>
+                        <msub>
+                            <mi>β</mi>
+                            <mi>j</mi>
+                        </msub>
+                        <mo>)</mo>
+                        <mo>==</mo>
+                        <mn>true</mn>
+                    </math>
+                    ,则又进行如下检查
+                    <ul>
+                        <li>i等于n(也就是最后一个符号还是ε),返回true</li>
+                        <li>i不等于n(没有到最后一个符号),不做任何动作,进行下一个符号的处理(此时已经在内层循环中了,还在处理 <math>
+                                <mi>have_epsilon</mi>
+                                <mo>(</mo>
+                                <msub>
+                                    <mi>β</mi>
+                                    <mi>j</mi>
+                                </msub>
+                                <mo>)</mo>
+                            </math>呢)</li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li>如果处理到i=n还没有得到true,则直接返回false</li>
     </ol>
     <p>有了have_epsilon,我们就可以对first流程做一些轻微的改动,使他能完全处理有递归的文法,改进后的first计算流程如下:</p>
     <ol>
-        <li></li>
-        <li></li>
-        <li></li>
+        <li>如果<math>
+                <msub>
+                    <mi>X</mi>
+                    <mi>i</mi>
+                </msub>
+            </math>是一个非ε终结符,则将<math>
+                <msub>
+                    <mi>X</mi>
+                    <mi>i</mi>
+                </msub>
+            </math>添加到ret,并终止计算</li>
+        <li>如果<math>
+                <msub>
+                    <mi>X</mi>
+                    <mi>i</mi>
+                </msub>
+            </math>是ε,进行如下检查
+            <ul>
+                <li>i等于n(也就是最后一个符号还是ε),将ε添加到ret</li>
+                <li>i不等于n(还没到最后一个符号),不做任何动作</li>
+            </ul>
+        </li>
+        <li>如果<math>
+                <msub>
+                    <mi>X</mi>
+                    <mi>i</mi>
+                </msub>
+            </math>是一个终结符,则对所有以<math>
+                <msub>
+                    <mi>X</mi>
+                    <mi>i</mi>
+                </msub>
+            </math>开头的产生式<math>
+                <msub>
+                    <mi>X</mi>
+                    <mi>i</mi>
+                </msub>
+                <mo>=></mo>
+                <msub>
+                    <mi>β</mi>
+                    <mi>1</mi>
+                </msub>
+            </math>一直到<math>
+                <msub>
+                    <mi>X</mi>
+                    <mi>i</mi>
+                </msub>
+                <mo>=></mo>
+                <msub>
+                    <mi>β</mi>
+                    <mi>h</mi>
+                </msub>
+            </math><em>(如果<math>
+                    <msub>
+                        <mi>β</mi>
+                        <mi>j</mi>
+                    </msub>
+                </math>对应的产生式已经被展开过,则我们应该跳过<math>
+                    <msub>
+                        <mi>β</mi>
+                        <mi>j</mi>
+                    </msub>
+                </math>,否则我们要标记<math>
+                    <msub>
+                        <mi>β</mi>
+                        <mi>j</mi>
+                    </msub>
+                </math>对应的产生式被展开①<span class="stress"> 特别提醒:这里的标记和have_epsilon是两个不同的标记</span>)</em>,先计算<math>
+                <mi>have_epsilon</mi>
+                <mo>(</mo>
+                <msub>
+                    <mi>β</mi>
+                    <mi>j</mi>
+                </msub>
+                <mo>)</mo>
+            </math>,然后计算
+            <math>
+                <mi>first</mi>
+                <mo>(</mo>
+                <msub>
+                    <mi>β</mi>
+                    <mi>j</mi>
+                </msub>
+                <mo>)</mo>
+            </math>,我们把所有的计算结果移除掉ε后合并到ret中,<em>(在递归调用之后,也就是得到<math>
+                    <mi>first</mi>
+                    <mo>(</mo>
+                    <msub>
+                        <mi>β</mi>
+                        <mi>j</mi>
+                    </msub>
+                    <mo>)</mo>
+                </math>的返回值之后,我们要移除①处做的标记)</em>,然后检查<math>
+                <mi>have_epsilon</mi>
+                <mo>(</mo>
+                <msub>
+                    <mi>β</mi>
+                    <mi>j</mi>
+                </msub>
+                <mo>)</mo>
+            </math>的计算结果
+            <ul>
+                <li>如果结果为false,则终止计算</li>
+                <li>如果结果为true,则进行如下检查
+                    <ul>
+                        <li>i等于n(也就是最后一个符号还包含ε),把ε添加到ret中</li>
+                        <li>i不等于n(还没到最后一个符号),不做任何动作,进行下一个符号的处理(此时已经在内层循环中了,还在处理 <math>
+                                <mi>have_epsilon</mi>
+                                <mo>(</mo>
+                                <msub>
+                                    <mi>β</mi>
+                                    <mi>j</mi>
+                                </msub>
+                                <mo>)</mo>
+                            </math>呢)</li>
+                </li>
+            </ul>
+        </li>
+        </ul>
+        </li>
     </ol>
-    <h1>待续,先睡觉...</h1>
+    <p>至此,first集的计算方法已经完整了</p>
+    <h2>follow集</h2>
+    <h1>...</h1>
+    <h2>有了first集和follow集的计算方法,此时我们已经能根据文法写出很多编程语言的编译器前端了,接下来我将介绍LL(k)文法分析器的工作流程。
+    </h2>
+    <h2>
+        目前一些编程语言是作者手写递归下降文法解析器,比如GCC、Go(GCC开始是用bison生成的LALR自顶向上分析器,后来改手写了),<em>(忘了OpenJDK是不是了)</em>。有的前端用的是LR(k)自底向上分析器,比如MySQL的SQL解析器、Linux的Bash
+        shell就是用bison生成的LALR分析器--
+        <q cite="https://en.wikipedia.org/wiki/GNU_Bison#Use"><a href="https://en.wikipedia.org/wiki/GNU_Bison#Use">GNU
+                Bison</a></q>
+                ,其实从GCC和Go改用手写文法解析器可以看出,做一个编译器前端并不是那么难。我个人认为他们改成手写解析器的一个原因是因为Bison不太方便扩展,如果要加一些定制功能,可能用bison更不容易开发,比如一些错误代码的提示和兼容,尤其是MySQL,如果一段很长的SQL报错,那个错误提示真的让人头大。而且为什么手写文法解析器都采用LL分析模式,而不用LR分析模式,我觉得是因为LR的分析模式状态数量太多了,人脑想不过来。
+    </h2>
+    <h2>待续,先睡觉...</h2>
 </body>
 
 <script type="module" src="./js/NFA-1.js">
