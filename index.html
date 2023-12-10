@@ -1736,7 +1736,45 @@
     </ol>
     <p>至此,first集的计算方法已经完整了</p>
     <h2>follow集</h2>
-    <h1>...</h1>
+    <p>相对于first集,follow集是指一个<em>非终结符</em>的后继符号,比如下面的文法:</p>
+    <ol>
+        <li><math>
+                <mi>S</mi>
+                <mo>=></mo>
+                <mi>A</mi>
+                <mi>B</mi>
+            </math></li>
+        <li><math>
+                <mi>A</mi>
+                <mo>=></mo>
+                <mi>S</mi>
+                <mi>a</mi>
+            </math></li>
+        <li><math>
+                <mi>A</mi>
+                <mo>=></mo>
+                <mi>ε</mi>
+            </math></li>
+        <li><math>
+                <mi>B</mi>
+                <mo>=></mo>
+                <mi>S</mi>
+                <mi>b</mi>
+            </math></li>
+    </ol>
+    <p>我们可以计算follow(S),follow(A),follow(B),但是如果计算follow(a)或者follow(ε)是没什么意义的。对于follow集,我们可以应用下面的程序进行计算</p>
+    <ol>
+        <li>follow(S)={$},这里的S指整个文法的起始符号,$是一个特殊定义的终结符,表示输入源码的结束标志,这里应该很好理解,整个文法已经解析完成,此时应该接受一个结束标记</li>
+        <li>如果存在一个产生式A=>αBβ,那么FIRST(β)中除ε之外的所有符号都在follow(B)中。也就是我们扫描所有的产生式,如果非终结符B不在产生式的末尾,我们就从B后面截断这个产生式,然后计算裁剪出来符号串的first集并移除ε后添加到follow集。接下来我们检查这个first是否包含了ε
+            <ul>
+                <li>如果包含ε,则计算follow(A),并且将follow(A)的结果添加到follow(B)中</li>
+            </ul>
+        </li>
+        <li>如果存在一个产生式A=>αB,那么follow(A)中的所有符号都在follow(B)中</li>
+    </ol>
+    <P>如果我们仔细观察上述规则2的ε检查和规则3,可以发现他们说的是同一件事情<em>first()={ε} (这里计算的是一个空串first集)</em></P>
+    <h2>LL(k)文法分析器</h2>
+    <p>LL是left to right,leftmost derivation的缩写,括号中的K指的是我们需要从源码中提前读取K个符号就能进行文法分析工作</p>
     <h2>有了first集和follow集的计算方法,此时我们已经能根据文法写出很多编程语言的编译器前端了,接下来我将介绍LL(k)文法分析器的工作流程。
     </h2>
     <h2>
@@ -1744,7 +1782,7 @@
         shell就是用bison生成的LALR分析器--
         <q cite="https://en.wikipedia.org/wiki/GNU_Bison#Use"><a href="https://en.wikipedia.org/wiki/GNU_Bison#Use">GNU
                 Bison</a></q>
-                ,其实从GCC和Go改用手写文法解析器可以看出,做一个编译器前端并不是那么难。我个人认为他们改成手写解析器的一个原因是因为Bison不太方便扩展,如果要加一些定制功能,可能用bison更不容易开发,比如一些错误代码的提示和兼容,尤其是MySQL,如果一段很长的SQL报错,那个错误提示真的让人头大。而且为什么手写文法解析器都采用LL分析模式,而不用LR分析模式,我觉得是因为LR的分析模式状态数量太多了,人脑想不过来。
+        ,其实从GCC和Go改用手写文法解析器可以看出,做一个编译器前端并不是那么难。我个人认为他们改成手写解析器的一个原因是因为Bison不太方便扩展,如果要加一些定制功能,可能用bison更不容易开发,比如一些错误代码的提示和兼容,尤其是MySQL,如果一段很长的SQL报错,那个错误提示真的让人头大。而且为什么手写文法解析器都采用LL分析模式,而不用LR分析模式,我觉得是因为LR的分析模式状态数量太多了,人脑想不过来。
     </h2>
     <h2>待续,先睡觉...</h2>
 </body>
