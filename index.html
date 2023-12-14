@@ -10,9 +10,11 @@
             border-collapse: collapse;
         }
 
+        th,
         td {
             border: 1px solid;
             padding: 0 1rem;
+            text-align: center;
         }
 
         .emphasize,
@@ -43,7 +45,7 @@
     <p>假设我们要描述这样一个东西:"一个加法的数学表达式由两个数字和加号运算符组成",我们可以用如下的一条文法规则描述:</p>
     <math>
         <mi>EXP</mi>
-        <mo>=></mo>
+        <mo>→</mo>
         <mi>num</mi>
         <mo>+</mo>
         <mi>num</mi>
@@ -53,7 +55,7 @@
         <li>
             <math>
                 <mi>EXP</mi>
-                <mo>=></mo>
+                <mo>→</mo>
                 <mi>EXP</mi>
                 <mo>+</mo>
                 <mi>EXP</mi>
@@ -62,7 +64,7 @@
         <li>
             <math>
                 <mi>EXP</mi>
-                <mo>=></mo>
+                <mo>→</mo>
                 <mo>(</mo>
                 <mi>EXP</mi>
                 <mo>)</mo>
@@ -71,7 +73,7 @@
         <li>
             <math>
                 <mi>EXP</mi>
-                <mo>=></mo>
+                <mo>→</mo>
                 <mi>NUM</mi>
             </math>
         </li>
@@ -142,7 +144,7 @@
         <li>
             <math>
                 <mi>STMT</mi>
-                <mo>=></mo>
+                <mo>→</mo>
                 <mi>if</mi>
                 <mo>(</mo>
                 <mi>EXP</mi>
@@ -194,7 +196,7 @@
                         <mi>α</mi>
                         <mi>A</mi>
                         <mi>β</mi>
-                        <mo>=></mo>
+                        <mo>→</mo>
                         <mi>α</mi>
                         <mi>γ</mi>
                         <mi>β</mi>
@@ -205,7 +207,7 @@
                         <mi>θ</mi>
                         <mi>A</mi>
                         <mi>λ</mi>
-                        <mo>=></mo>
+                        <mo>→</mo>
                         <mi>α</mi>
                         <mi>ξ</mi>
                         <mi>β</mi>
@@ -226,7 +228,7 @@
             <p>上下文无关文法的产生式规则如下:</p>
             <math>
                 <mi>A</mi>
-                <mo>=></mo>
+                <mo>→</mo>
                 <mi>α</mi>
             </math>
             <p>一条即产生式规则的左侧有且仅有一个非终结符。我们可以发现这里不需要考虑这个非终结符的上下文,这为我们设计计算机编程语言提供了非常大的方便,比如C#中有这样一行代码</p>
@@ -248,21 +250,21 @@
                 <li>
                     <math>
                         <mi>A</mi>
-                        <mo>=></mo>
+                        <mo>→</mo>
                         <mi>a</mi>
                     </math>
                 </li>
                 <li>
                     <math>
                         <mi>A</mi>
-                        <mo>=></mo>
+                        <mo>→</mo>
                         <mi>aB</mi>
                     </math>
                 </li>
                 <li>
                     <math>
                         <mi>A</mi>
-                        <mo>=></mo>
+                        <mo>→</mo>
                         <mi>ε</mi>
                     </math>
                 </li>
@@ -270,7 +272,7 @@
             <p>如果把第二条规则定义成
                 <math>
                     <mi>A</mi>
-                    <mo>=></mo>
+                    <mo>→</mo>
                     <mi>Ba</mi>
                 </math>
                 ,那么这个文法就是左正规文法。正规文法要求一个非终结符①要么能替换成一个终结符,②要么能替换成一个终结符和右侧的一个非终结符(如果这个非终结符在左侧,就是左正规文法),③或者这个非终结符能推导出一个空终结符。3-型文法的表达能力和正则表达式(regular
@@ -279,24 +281,24 @@
             <ol>
                 <li><math>
                         <mi>S</mi>
-                        <mo>=></mo>
+                        <mo>→</mo>
                         <mi>A</mi>
                         <mi>b</mi>
                     </math></li>
                 <li><math>
                         <mi>A</mi>
-                        <mo>=></mo>
+                        <mo>→</mo>
                         <mi>a</mi>
                     </math></li>
                 <li><math>
                         <mi>A</mi>
-                        <mo>=></mo>
+                        <mo>→</mo>
                         <mi>a</mi>
                         <mi>A</mi>
                     </math></li>
                 <li><math>
                         <mi>A</mi>
-                        <mo>=></mo>
+                        <mo>→</mo>
                         <mi>ε</mi>
                     </math></li>
             </ol>
@@ -1309,7 +1311,7 @@
                     <mi>X</mi>
                     <mi>i</mi>
                 </msub>
-                <mo>=></mo>
+                <mo>→</mo>
                 <msub>
                     <mi>β</mi>
                     <mi>1</mi>
@@ -1319,7 +1321,7 @@
                     <mi>X</mi>
                     <mi>i</mi>
                 </msub>
-                <mo>=></mo>
+                <mo>→</mo>
                 <msub>
                     <mi>β</mi>
                     <mi>h</mi>
@@ -1348,23 +1350,23 @@
     <ol>
         <li><math>
                 <mi>S</mi>
-                <mo>=></mo>
+                <mo>→</mo>
                 <mi>E</mi>
             </math></li>
         <li><math>
                 <mi>E</mi>
-                <mo>=></mo>
+                <mo>→</mo>
                 <mi>a</mi>
             </math></li>
         <li><math>
                 <mi>E</mi>
-                <mo>=></mo>
+                <mo>→</mo>
                 <mi>F</mi>
                 <mi>b</mi>
             </math></li>
         <li><math>
                 <mi>F</mi>
-                <mo>=></mo>
+                <mo>→</mo>
                 <mi>ε</mi>
             </math></li>
     </ol>
@@ -1374,31 +1376,31 @@
     <ol>
         <li><math>
                 <mi>S</mi>
-                <mo>=></mo>
+                <mo>→</mo>
                 <mi>A</mi>
                 <mi>B</mi>
             </math></li>
         <li><math>
                 <mi>A</mi>
-                <mo>=></mo>
+                <mo>→</mo>
                 <mi>S</mi>
                 <mi>a</mi>
             </math></li>
         <li><math>
                 <mi>A</mi>
-                <mo>=></mo>
+                <mo>→</mo>
                 <mi>ε</mi>
             </math></li>
         <li><math>
                 <mi>B</mi>
-                <mo>=></mo>
+                <mo>→</mo>
                 <mi>S</mi>
                 <mi>b</mi>
             </math></li>
     </ol>
     <p>我们在计算first(S)的时候,需要求first(AB),因为<math>
             <mi>A</mi>
-            <mo>=></mo>
+            <mo>→</mo>
             <mi>S</mi>
             <mi>a</mi>
         </math>,如果我们单纯的继续展开S,就会进入无限展开,永远都得不到结果。实际上龙书默认我们已经懂了,但是可能部分读者并没有懂的一个知识点:</p>
@@ -1409,7 +1411,7 @@
         <li><math>
                 <mi>S</mi>
                 <mover>
-                    <mo>=></mo>
+                    <mo>→</mo>
                     <mo>产生式1替换S</mo>
                 </mover>
                 <mrow>
@@ -1417,7 +1419,7 @@
                     <mi>B</mi>
                 </mrow>
                 <mover>
-                    <mo>=></mo>
+                    <mo>→</mo>
                     <mo>产生式2替换A</mo>
                 </mover>
                 <mrow>
@@ -1426,7 +1428,7 @@
                     <mi>B</mi>
                 </mrow>
                 <mover>
-                    <mo>=></mo>
+                    <mo>→</mo>
                     <mo>产生式4替换B</mo>
                 </mover>
                 <mrow>
@@ -1439,7 +1441,7 @@
         <li><math>
                 <mi>S</mi>
                 <mover>
-                    <mo>=></mo>
+                    <mo>→</mo>
                     <mo>产生式1替换S</mo>
                 </mover>
                 <mrow>
@@ -1447,7 +1449,7 @@
                     <mi>B</mi>
                 </mrow>
                 <mover>
-                    <mo>=></mo>
+                    <mo>→</mo>
                     <mo>产生式2替换A</mo>
                 </mover>
                 <mrow>
@@ -1456,7 +1458,7 @@
                     <mi>B</mi>
                 </mrow>
                 <mover>
-                    <mo>=></mo>
+                    <mo>→</mo>
                     <mo>产生式1替换S</mo>
                 </mover>
                 <mrow>
@@ -1524,7 +1526,7 @@
                     <mi>X</mi>
                     <mi>i</mi>
                 </msub>
-                <mo>=></mo>
+                <mo>→</mo>
                 <msub>
                     <mi>β</mi>
                     <mi>1</mi>
@@ -1534,7 +1536,7 @@
                     <mi>X</mi>
                     <mi>i</mi>
                 </msub>
-                <mo>=></mo>
+                <mo>→</mo>
                 <msub>
                     <mi>β</mi>
                     <mi>h</mi>
@@ -1650,7 +1652,7 @@
                     <mi>X</mi>
                     <mi>i</mi>
                 </msub>
-                <mo>=></mo>
+                <mo>→</mo>
                 <msub>
                     <mi>β</mi>
                     <mi>1</mi>
@@ -1660,7 +1662,7 @@
                     <mi>X</mi>
                     <mi>i</mi>
                 </msub>
-                <mo>=></mo>
+                <mo>→</mo>
                 <msub>
                     <mi>β</mi>
                     <mi>h</mi>
@@ -1740,24 +1742,24 @@
     <ol>
         <li><math>
                 <mi>S</mi>
-                <mo>=></mo>
+                <mo>→</mo>
                 <mi>A</mi>
                 <mi>B</mi>
             </math></li>
         <li><math>
                 <mi>A</mi>
-                <mo>=></mo>
+                <mo>→</mo>
                 <mi>S</mi>
                 <mi>a</mi>
             </math></li>
         <li><math>
                 <mi>A</mi>
-                <mo>=></mo>
+                <mo>→</mo>
                 <mi>ε</mi>
             </math></li>
         <li><math>
                 <mi>B</mi>
-                <mo>=></mo>
+                <mo>→</mo>
                 <mi>S</mi>
                 <mi>b</mi>
             </math></li>
@@ -1765,31 +1767,36 @@
     <p>我们可以计算follow(S),follow(A),follow(B),但是如果计算follow(a)或者follow(ε)是没什么意义的。对于follow集,我们可以应用下面的程序进行计算</p>
     <ol>
         <li>follow(S)={$},这里的S指整个文法的起始符号,$是一个特殊定义的终结符,表示输入源码的结束标志,这里应该很好理解,整个文法已经解析完成,此时应该接受一个结束标记</li>
-        <li>如果存在一个产生式A=>αBβ,那么FIRST(β)中除ε之外的所有符号都在follow(B)中。也就是我们扫描所有的产生式,如果非终结符B不在产生式的末尾,我们就从B后面截断这个产生式,然后计算裁剪出来符号串的first集并移除ε后添加到follow集。接下来我们检查这个first是否包含了ε
+        <li>如果存在一个产生式A→αBβ,那么FIRST(β)中除ε之外的所有符号都在follow(B)中。也就是我们扫描所有的产生式,如果非终结符B不在产生式的末尾,我们就从B后面截断这个产生式,然后计算裁剪出来符号串的first集并移除ε后添加到follow集。接下来我们检查这个first是否包含了ε
             <ul>
                 <li>如果包含ε,则计算follow(A),并且将follow(A)的结果添加到follow(B)中</li>
             </ul>
         </li>
-        <li>如果存在一个产生式A=>αB,那么follow(A)中的所有符号都在follow(B)中</li>
+        <li>如果存在一个产生式A→αB,那么follow(A)中的所有符号都在follow(B)中</li>
     </ol>
+    <em>如果出现右递归,即<math>
+            <mi>A</mi>
+            <mo>→</mo>
+            <mi>α</mi>
+            <mi>A</mi>
+        </math>(或者间接右递归),我们采用和计算first集类似的策略,直接避免这个产生式的展开即可</em>
     <P>如果我们仔细观察上述规则2的ε检查和规则3,可以发现他们说的是同一件事情<em>first()={ε} (这里计算的是一个空串first集)</em></P>
     <h2>LL(k)文法分析器</h2>
     <p>LL是left to right,leftmost derivation的缩写,括号中的K指的是我们需要从源码中提前读取K个符号就能进行文法分析工作</p>
     <h3>LL(1)</h3>
-    <p>LL(1)已经能根据文法写出很多编程语言的编译器前端了,接下来我将介绍LL(1)文法分析器的工作流程。</p>
+    <p>
+        目前很多编程语言是作者手写递归下降文法解析器,比如GCC、Go(GCC开始是用bison生成的LALR自顶向上分析器,后来改手写了<em>忘了OpenJDK是不是了)</em>。有的前端用的是LR(k)自底向上分析器,比如MySQL的SQL解析器、Linux的Bash
+        shell就是用bison生成的LALR分析器--
+        <q cite="https://en.wikipedia.org/wiki/GNU_Bison#Use"><a href="https://en.wikipedia.org/wiki/GNU_Bison#Use">GNU
+                Bison</a></q>
+        ,其实从GCC和Go改用手写文法解析器可以看出,做一个编译器前端并不是那么难。我个人认为他们改成手写解析器的一个原因是因为Bison不太方便扩展,如果要加一些定制功能,可能用bison更不容易开发,比如一些错误代码的提示和兼容,尤其是MySQL,如果一段很长的SQL报错,错误提示真的让人头大。而且为什么手写文法解析器都采用LL分析模式,而不用LR分析模式,我觉得是因为LR的分析模式状态数量太多了,人脑可能无法处理这么多状态。接下来就说明一下LL(1)文法分析器的工作流程。
+    </p>
     <p>首先给定一个文法G,然后我们根据这个文法生成一个预测分析表,能正确生成这个分表的文法我们就称之为LL(1)文法。假设我们有一个文法G如下:</p>
     <ol>
         <li>
             <math>
-                <mi>S</mi>
-                <mo>=></mo>
                 <mi>E</mi>
-            </math>
-        </li>
-        <li>
-            <math>
-                <mi>E</mi>
-                <mo>=></mo>
+                <mo>→</mo>
                 <mi>E</mi>
                 <mo>+</mo>
                 <mi>E</mi>
@@ -1798,17 +1805,18 @@
         <li>
             <math>
                 <mi>E</mi>
-                <mo>=></mo>
+                <mo>→</mo>
                 <mo>(</mo>
                 <mi>E</mi>
                 <mo>)</mo>
             </math>
+            <em>这里的n表示一个数字</em>
         </li>
         <li>
             <math>
                 <mi>E</mi>
-                <mo>=></mo>
-                <mi>num</mi>
+                <mo>→</mo>
+                <mi>n</mi>
             </math>
         </li>
     </ol>
@@ -1817,7 +1825,7 @@
         <li>
             <math>
                 <mi>E</mi>
-                <mo>=></mo>
+                <mo>→</mo>
                 <mo>(</mo>
                 <mi>E</mi>
                 <mo>)</mo>
@@ -1827,15 +1835,15 @@
         <li>
             <math>
                 <mi>E</mi>
-                <mo>=></mo>
-                <mo>num</mo>
+                <mo>→</mo>
+                <mo>n</mo>
                 <mi>E'</mi>
             </math>
         </li>
         <li>
             <math>
                 <mi>E'</mi>
-                <mo>=></mo>
+                <mo>→</mo>
                 <mo>+</mo>
                 <mi>E</mi>
                 <mo>E'</mo>
@@ -1844,26 +1852,91 @@
         <li>
             <math>
                 <mi>E'</mi>
-                <mo>=></mo>
+                <mo>→</mo>
                 <mi>ε</mi>
             </math>
         </li>
     </ol>
-    <p>然后我们根据这个文法G构造一个预测分析表</p>
-    <p>
-        目前很多编程语言是作者手写递归下降文法解析器,比如GCC、Go(GCC开始是用bison生成的LALR自顶向上分析器,后来改手写了<em>忘了OpenJDK是不是了)</em>。有的前端用的是LR(k)自底向上分析器,比如MySQL的SQL解析器、Linux的Bash
-        shell就是用bison生成的LALR分析器--
-        <q cite="https://en.wikipedia.org/wiki/GNU_Bison#Use"><a href="https://en.wikipedia.org/wiki/GNU_Bison#Use">GNU
-                Bison</a></q>
-        ,其实从GCC和Go改用手写文法解析器可以看出,做一个编译器前端并不是那么难。我个人认为他们改成手写解析器的一个原因是因为Bison不太方便扩展,如果要加一些定制功能,可能用bison更不容易开发,比如一些错误代码的提示和兼容,尤其是MySQL,如果一段很长的SQL报错,错误提示真的让人头大。而且为什么手写文法解析器都采用LL分析模式,而不用LR分析模式,我觉得是因为LR的分析模式状态数量太多了,人脑可能无法处理这么多状态。
-    </p>
+    <p>然后我们用如下规则对文法G构造一个预测分析表</p>
+    <div>
+        <span>我们对文法G中的每个产生式<math>
+                <mi>A</mi>
+                <mo>→</mo>
+                <mi>α</mi>
+            </math>进行如下处理</span>
+        <ol>
+            <li>对于first(α)中的每个终结符号a,将<math>
+                    <mi>A</mi>
+                    <mo>→</mo>
+                    <mi>α</mi>
+                </math>加入到<math>
+                    <mi>M</mi>
+                    <mo>[</mo>
+                    <mi>A</mi>
+                    <mo>,</mo>
+                    <mi>a</mi>
+                    <mo>]</mo>
+                </math>中</li>
+            <li>如果first(α)含有符号ε,则对follow(A)中的每个符号b,将<math>
+                    <mi>A</mi>
+                    <mo>→</mo>
+                    <mi>α</mi>
+                </math>加入到<math>
+                    <mi>M</mi>
+                    <mo>[</mo>
+                    <mi>A</mi>
+                    <mo>,</mo>
+                    <mi>b</mi>
+                    <mo>]</mo>
+                </math>中</li>
+        </ol>
+    </div>
+    <p>我们从头来一遍,生成一个预测分析表</p>
+    <ol>
+        <li>
+            <span>first集</span>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>first(E)</td>
+                        <td>(</td>
+                        <td>n</td>
+                    </tr>
+                    <tr>
+                        <td>first(E')</td>
+                        <td>+</td>
+                        <td>ε</td>
+                    </tr>
+                </tbody>
+            </table>
+        </li>
+        <li>
+            <span>follow集,因为产生式3对E'有右递归,所以在计算follow(E')的时候被忽略,然后E'仅仅出现在产生式1、2的末尾,所以follow(E')=follow(E)</span>
+            <table>
+                <tbody>
+                    <tr>
+                        <td>follow(E)</td>
+                        <td>+</td>
+                        <td>)</td>
+                        <td>$</td>
+                    </tr>
+                    <tr>
+                        <td>follow(E')</td>
+                        <td>+</td>
+                        <td>)</td>
+                        <td>$</td>
+                    </tr>
+                </tbody>
+            </table>
+        </li>
+    </ol>
+    <h2>待续,先睡觉...</h2>
     <h3>左递归</h3>
     <p>left recursive</p>
     <h4>左递归的消除</h4>
     <p>因为A存在左递归,所以这个递归产生式一定是由非递归推导得到的(类似直接推导定理),所以我们可以这样改造<em>(说明多个左递归和多个β的情况,龙书太看得起我们了,以为我们能很轻松的知道这个细节)</em></p>
     <h3>二义性</h3>
     <h2>LR分析器</h2>
-    <h2>待续,先睡觉...</h2>
 </body>
 
 <script type="module" src="./js/NFA-1.js">
