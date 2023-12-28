@@ -1781,6 +1781,242 @@
             <mi>A</mi>
         </math>(或者间接右递归),我们采用和计算first集类似的策略,直接避免这个产生式的展开即可</em>
     <P>如果我们仔细观察上述规则2的ε检查和规则3,可以发现他们说的是同一件事情<em>first()={ε} (这里计算的是一个空串first集)</em></P>
+    <h2>左递归</h2>
+    <p>如果一个文法中有产生式如同
+        <math>
+            <mi>A</mi>
+            <mover>
+                <mo>→</mo>
+                <mo>+</mo>
+            </mover>
+            <mi>A</mi>
+            <mi>α</mi>
+        </math>,则我们称这个文法是左递归的(这个+号表示直接推导或者间接推导),LL(K)文法分析器无法处理左递归文法,所以我们需要消除左递归。
+    </p>
+    <h3>左递归的消除</h3>
+    <p>假设我们有如下产生式导致了左递归(<em>需要注意的是,一个有意义的文法,如果某个非终结符出现了左递归,则这个非终结符一定至少有一条产生式的最左边是非左递归的,否则一个悬空的形如 <math>
+                <mi>A</mi>
+                <mo>→</mo>
+                <mi>A</mi>
+                <mi>α</mi>
+            </math>的产生式会导致无限展开,永远无法结束,这就是我总结的直接推导定理的依据,也就是这个递归产生式的头部一定是由其他产生式规约而成,不允许自身规约。右递归同理</em>)</p>
+    <ol>
+        <li>
+            <math>
+                <mi>A</mi>
+                <mo>→</mo>
+                <mi>A</mi>
+                <mi>α</mi>
+            </math>
+        </li>
+        <li>
+            <math>
+                <mi>A</mi>
+                <mo>→</mo>
+                <mi>A</mi>
+                <mi>β</mi>
+            </math>
+        </li>
+        <li>
+            <math>
+                <mi>A</mi>
+                <mo>→</mo>
+                <mi>γ</mi>
+            </math>
+        </li>
+        <li>
+            <math>
+                <mi>A</mi>
+                <mo>→</mo>
+                <mi>θ</mi>
+            </math>
+        </li>
+    </ol>
+    <p>基于上面理论,我们进行如下改造:</p>
+    <ol>
+        <li>
+            <math>
+                <mi>A</mi>
+                <mo>→</mo>
+                <mi>γ</mi>
+                <mi>A'</mi>
+            </math>
+        </li>
+        <li>
+            <math>
+                <mi>A</mi>
+                <mo>→</mo>
+                <mi>θ</mi>
+                <mi>A'</mi>
+            </math>
+        </li>
+        <li>
+            <math>
+                <mi>A'</mi>
+                <mo>→</mo>
+                <mi>α</mi>
+                <mi>A'</mi>
+            </math>
+        </li>
+        <li>
+            <math>
+                <mi>A'</mi>
+                <mo>→</mo>
+                <mi>β</mi>
+                <mi>A'</mi>
+            </math>
+        </li>
+        <li>
+            <math>
+                <mi>A'</mi>
+                <mo>→</mo>
+                <mi>ε</mi>
+            </math>
+        </li>
+    </ol>
+    <p>改造之后的文法和之前的文法表达能力相同,并且我们把左递归变成了右递归。</p>
+    <h2>二义性</h2>
+    <p>如果一个输入串可以根据我们的文法生成两颗不同的语法树,就说明这个文法是二义性的。所以我们在设计文法的时候就应该避免二义性。下面举些例子说明一下二义性文法</p>
+    <ol>
+        <li>
+            <math>
+                <mi>E</mi>
+                <mo>→</mo>
+                <mi>E</mi>
+                <mo>+</mo>
+                <mi>E</mi>
+            </math>
+        </li>
+        <li>
+            <math>
+                <mi>E</mi>
+                <mo>→</mo>
+                <mo>id</mo>
+            </math>
+            <em>这里的id表示一个终结符,类比于java中的一个变量</em>
+        </li>
+    </ol>
+    <p>那么对于输入a+b+c,可以得到两颗不同的语法树</p>
+    <svg data-name="图层 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 210.75 100.07" style="height: 300px;"><text
+            transform="translate(23.02 90.63)"
+            style="font-size:12px;fill:#231815;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">a</text><text
+            transform="translate(131.62 68.67)"
+            style="font-size:12px;fill:#231815;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">a</text><text
+            transform="translate(63.13 90.63)"
+            style="font-size:12px;fill:#231815;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">b</text><text
+            transform="translate(162.53 93.03)"
+            style="font-size:12px;fill:#231815;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">b</text><text
+            transform="translate(22.53 70.03)"
+            style="font-size:12px;fill:#231815;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">E</text><text
+            transform="translate(42.65 47.5)"
+            style="font-size:12px;fill:#231815;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">E</text><text
+            transform="translate(66.52 20.06)"
+            style="font-size:12px;fill:#231815;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">E</text><text
+            transform="translate(87.83 47.5)"
+            style="font-size:12px;fill:#231815;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">E</text><text
+            transform="translate(174.39 49.01)"
+            style="font-size:12px;fill:#231815;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">E</text><text
+            transform="translate(62.77 70.03)"
+            style="font-size:12px;fill:#231815;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">E</text><text
+            transform="translate(89.46 70.03)"
+            style="font-size:12px;fill:#231815;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">c</text><text
+            transform="translate(186.19 92.14)"
+            style="font-size:12px;fill:#231815;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">c</text>
+        <line x1="25.52" y1="73.07" x2="25.52" y2="80.07"
+            style="fill:none;stroke:#231815;stroke-miterlimit:10;stroke-width:0.25px" />
+        <line x1="46.07" y1="52.2" x2="46.07" y2="59.2"
+            style="fill:none;stroke:#231815;stroke-miterlimit:10;stroke-width:0.25px" />
+        <line x1="66.14" y1="73.07" x2="66.14" y2="80.07"
+            style="fill:none;stroke:#231815;stroke-miterlimit:10;stroke-width:0.25px" /><text
+            transform="translate(131.24 50.7)"
+            style="font-size:12px;fill:#231815;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">E</text>
+        <line x1="134.62" y1="53.74" x2="134.62" y2="60.74"
+            style="fill:none;stroke:#231815;stroke-miterlimit:10;stroke-width:0.25px" /><text
+            transform="translate(160.84 69.45)"
+            style="font-size:12px;fill:#231815;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">E</text>
+        <line x1="164.22" y1="72.5" x2="164.22" y2="79.5"
+            style="fill:none;stroke:#231815;stroke-miterlimit:10;stroke-width:0.25px" /><text
+            transform="translate(185.69 70.05)"
+            style="font-size:12px;fill:#231815;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">E</text>
+        <line x1="189.07" y1="73.1" x2="189.07" y2="80.1"
+            style="fill:none;stroke:#231815;stroke-miterlimit:10;stroke-width:0.25px" /><text
+            transform="translate(42.4 68.64)"
+            style="font-size:12px;fill:#231815;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">+</text><text
+            transform="translate(66.9 45.86)"
+            style="font-size:12px;fill:#231815;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">+</text><text
+            transform="translate(150.7 49.9)"
+            style="font-size:12px;fill:#231815;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">+</text><text
+            transform="translate(173.71 68.67)"
+            style="font-size:12px;fill:#231815;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">+</text>
+        <line x1="35.75" y1="51" x2="29.84" y2="58"
+            style="fill:none;stroke:#231815;stroke-miterlimit:10;stroke-width:0.25px" />
+        <line x1="53.92" y1="27.14" x2="48" y2="34.09"
+            style="fill:none;stroke:#231815;stroke-miterlimit:10;stroke-width:0.25px" />
+        <line x1="70.2" y1="25.63" x2="70.4" y2="34.76"
+            style="fill:none;stroke:#231815;stroke-miterlimit:10;stroke-width:0.25px" />
+        <line x1="91.66" y1="49.94" x2="91.86" y2="59.06"
+            style="fill:none;stroke:#231815;stroke-miterlimit:10;stroke-width:0.25px" />
+        <line x1="52.61" y1="50.9" x2="60.47" y2="57.9"
+            style="fill:none;stroke:#231815;stroke-miterlimit:10;stroke-width:0.25px" />
+        <line x1="177.46" y1="51.57" x2="177.46" y2="58.57"
+            style="fill:none;stroke:#231815;stroke-miterlimit:10;stroke-width:0.25px" />
+        <line x1="167.14" y1="50.37" x2="161.23" y2="57.37"
+            style="fill:none;stroke:#231815;stroke-miterlimit:10;stroke-width:0.25px" />
+        <line x1="184" y1="50.27" x2="191.86" y2="57.27"
+            style="fill:none;stroke:#231815;stroke-miterlimit:10;stroke-width:0.25px" />
+        <line x1="83.9" y1="27.55" x2="91.76" y2="36.28"
+            style="fill:none;stroke:#231815;stroke-miterlimit:10;stroke-width:0.25px" /><text
+            transform="translate(153.93 21.41)"
+            style="font-size:12px;fill:#231815;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">E</text>
+        <line x1="141.32" y1="28.5" x2="135.41" y2="35.44"
+            style="fill:none;stroke:#231815;stroke-miterlimit:10;stroke-width:0.25px" />
+        <line x1="157.61" y1="26.99" x2="157.81" y2="36.11"
+            style="fill:none;stroke:#231815;stroke-miterlimit:10;stroke-width:0.25px" />
+        <line x1="171.31" y1="28.91" x2="179.16" y2="37.64"
+            style="fill:none;stroke:#231815;stroke-miterlimit:10;stroke-width:0.25px" />
+        <rect x="0.25" y="0.25" width="99.57" height="99.57"
+            style="fill:none;stroke:#231815;stroke-miterlimit:10;stroke-width:0.5px" />
+        <rect x="118.46" y="0.25" width="92.03" height="99.57"
+            style="fill:none;stroke:#231815;stroke-miterlimit:10;stroke-width:0.5px" /><text
+            transform="translate(3.67 13.9)"
+            style="font-size:12px;fill:#231815;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">语法树1</text><text
+            transform="translate(167.28 12.55)"
+            style="font-size:12px;fill:#231815;font-family:AdobeSongStd-Light-GBpc-EUC-H, Adobe Song Std">语法树2</text>
+    </svg>
+    <p>或者对于下面这种文法,有个经典的if-else二义性</p>
+    <ol>
+        <li>
+            <math>
+                <mi>stmt</mi>
+                <mo>→</mo>
+                <mi>if</mi>
+                <mo>(</mo>
+                <mi>exp</mi>
+                <mo>)</mo>
+                <mi>stmt</mi>
+            </math>
+        </li>
+        <li>
+            <math>
+                <mi>stmt</mi>
+                <mo>→</mo>
+                <mi>if</mi>
+                <mo>(</mo>
+                <mi>exp</mi>
+                <mo>)</mo>
+                <mi>stmt</mi>
+                <mo>else</mo>
+                <mi>stmt</mi>
+            </math>
+        </li>
+    </ol>
+    <p>这种文法对于输入:</p>
+    <div>if (E1)</div>
+    <div>&nbsp;&nbsp;if (E2)</div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;stmt1</div>
+    <div>&nbsp;&nbsp;<em>else</em></div>
+    <div>&nbsp;&nbsp;&nbsp;&nbsp;<em>stmt2</em></div>
+    <p>对于上述输入的else应该和E1的if语句匹配还是和E2的语句匹配都符合我们的文法,主流的编程语言都会让else和最近的if语句匹配,所以上述文法很明显做不到这一点。所以我们设计文法的时候就不能设计出上面这种二义性文法(或者我们在分析的时候做一些特殊处理,比如yacc遇到shift-reduce conflict的时候默认选择shift动作,刚好解决了if-else二义性问题)。</p>
     <h2>LL(k)文法分析器</h2>
     <p>LL是left to right,leftmost derivation的缩写,括号中的K指的是我们需要从源码中提前读取K个符号就能进行文法分析工作</p>
     <h3>LL(1)</h3>
@@ -1930,12 +2166,7 @@
             </table>
         </li>
     </ol>
-    <h2>待续,先睡觉...</h2>
-    <h3>左递归</h3>
-    <p>left recursive</p>
-    <h4>左递归的消除</h4>
-    <p>因为A存在左递归,所以这个递归产生式一定是由非递归推导得到的(类似直接推导定理),所以我们可以这样改造<em>(说明多个左递归和多个β的情况,龙书太看得起我们了,以为我们能很轻松的知道这个细节)</em></p>
-    <h3>二义性</h3>
+    <h2>待续(构造一个分析表),先睡觉...</h2>
     <h2>LR分析器</h2>
 </body>
 
