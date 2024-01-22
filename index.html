@@ -2297,21 +2297,174 @@
     </ol>
     <p>我们在执行上述循环的时候,已经在构建AST了,每次命中步骤a的时候,表示这时候我们准备创建一个子树,命中步骤b的时候表示构建一个叶子节点。在构建子树和叶子节点的时候,把这些节点挂载到前一个子树上面即可(我们实际运行的时候可以发现这个树是从顶部到底部,从左子树到右子树的建立流程,类似树的先序遍历,这也是LL(1)的由来)。
     </p>
-    <p>前面说过这个文法有二义性,不能正确生成预测分析表,所以我从龙书上抄了一个文法,并用这个文法演示AST的生成,可以在下面观看动画</p>
+    <p>前面说过这个文法有二义性,不能正确生成预测分析表,所以我重新设计了一个文法,并用这个文法演示AST的生成,可以在下面观看动画</p>
     <ol>
         <li>文法:
             <ol>
-                <li>A→B</li>
+                <li>
+                    <math>
+                        <mn>E</mn>
+                        <mo>→</mo>
+                        <mn>E</mn>
+                        <mo>+</mo>
+                        <mn>T</mn>
+                    </math>
+                </li>
+                <li>
+                    <math>
+                        <mn>E</mn>
+                        <mo>→</mo>
+                        <mn>T</mn>
+                    </math>
+                </li>
+                <li>
+                    <math>
+                        <mn>T</mn>
+                        <mo>→</mo>
+                        <mn>n</mn>
+                    </math>
+                </li>
+            </ol>
+        </li>
+        <li>
+            消除左递归:
+            <ol>
+                <li>
+                    <math>
+                        <mn>E</mn>
+                        <mo>→</mo>
+                        <mo>T</mo>
+                        <mn>E'</mn>
+                    </math>
+                </li>
+                <li>
+                    <math>
+                        <mn>E'</mn>
+                        <mo>→</mo>
+                        <mo>+</mo>
+                        <mo>T</mo>
+                        <mo>E'</mo>
+                    </math>
+                </li>
+                <li>
+                    <math>
+                        <mn>E'</mn>
+                        <mo>→</mo>
+                        <mo>ε</mo>
+                    </math>
+                </li>
+                <li>
+                    <math>
+                        <mn>T</mn>
+                        <mo>→</mo>
+                        <mo>n</mo>
+                    </math>
+                </li>
             </ol>
         </li>
         <li>
             <ol>
-                <li>first集</li>
-                <li>follow集</li>
+                <li>first集:
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>first(E)</td>
+                                <td colspan="2">n</td>
+                            </tr>
+                            <tr>
+                                <td>first(E')</td>
+                                <td>+</td>
+                                <td>ε</td>
+                            </tr>
+                            <tr>
+                                <td>first(T)</td>
+                                <td colspan="2">n</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </li>
+                <li>follow集:
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td>follow(E)</td>
+                                <td>$</td>
+                            </tr>
+                            <tr>
+                                <td>follow(E')</td>
+                                <td>$</td>
+                            </tr>
+                            <tr>
+                                <td>follow(T)</td>
+                                <td>$</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </li>
             </ol>
         </li>
-        <li>预测分析表</li>
-        <li>动画:
+        <li>
+            预测分析表:
+            <table>
+                <tbody>
+                    <tr>
+                        <td rowspan="2">非终结符</td>
+                        <td colspan="3">输入符号</td>
+                    </tr>
+                    <tr>
+                        <td>n</td>
+                        <td>+</td>
+                        <td>$</td>
+                    </tr>
+                    <tr>
+                        <td>E</td>
+                        <td>
+                            <math>
+                                <mn>E</mn>
+                                <mo>→</mo>
+                                <mo>T</mo>
+                                <mn>E'</mn>
+                            </math>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>E'</td>
+                        <td></td>
+                        <td>
+                            <math>
+                                <mn>E'</mn>
+                                <mo>→</mo>
+                                <mo>+</mo>
+                                <mo>T</mo>
+                                <mo>E'</mo>
+                            </math>
+                        </td>
+                        <td>
+                            <math>
+                                <mn>E'</mn>
+                                <mo>→</mo>
+                                <mo>ε</mo>
+                            </math>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>T</td>
+                        <td>
+                            <math>
+                                <mn>T</mn>
+                                <mo>→</mo>
+                                <mo>n</mo>
+                            </math>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </li>
+        <li>动画:(好麻烦啊)
             <ol>
                 <li>格局:</li>
                 <li>AST:</li>
