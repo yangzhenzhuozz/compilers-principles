@@ -1,4 +1,4 @@
-import { DarkTools, KleenClosure, LightTools, arrowMotion, arrowmotionTools, dark, delay, light } from "./tools.js";
+import { DarkTools, KleenClosure, LightTools, arrowMotion, arrowmotionTools, delay } from "./tools.js";
 
 let slot = document.querySelector('#NFA-1') as HTMLDivElement;
 let root = slot.attachShadow({ mode: "open" });

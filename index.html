@@ -2208,7 +2208,7 @@
         </li>
     </ol>
     <h3>LL(1)分析器工作流程</h3>
-    <p>有了预测分析表之后,就可以使用这个预测分析表驱动LL(1)分析器对源码进行解析。预测分析表的作用是:如果当前希望把源码输入的部分串规约成一个AST子树(每个AST子树都对应了一个非终结符),则这个非终结符面对不同的源码输入时,应该如何选择对应的产生式进行展开(replace)。我们使用符号栈表示期待的符号,每次解析初始化的时候,格局(中文龙书把configuration翻译成格局)如下:
+    <p>有了预测分析表之后,就可以使用这个预测分析表驱动LL(1)分析器对源码进行解析。预测分析表的作用是:如果当前希望把源码输入的部分串规约成一个AST子树(每个AST子树都对应了一个非终结符),则这个非终结符面对不同的源码输入时,应该如何选择对应的产生式进行展开(replace)。我们使用符号栈表示<em>期待的符号</em>,每次解析初始化的时候,格局(中文龙书把configuration翻译成格局)如下:
     </p>
     <div style="display: flex;">
         <table>
@@ -2246,193 +2246,103 @@
     </div>
     <p>S表示每个文法的起始符号,$表示源码结束标识,然后按照如下流程处理源码</p>
     <ol>
-        <li>从栈中弹出一个符号A(如果栈为空,则表示整个源码已经解析完毕),然后从输入中读取一个符号b
-            <ol type="a">
-                <li>如果A是一个非终结符,则读取预测表中的<math>
+        <li>
+            <span id="ll1_1">从栈中弹出一个符号A(如果栈为空,则表示整个源码已经解析完毕),然后从输入中读取一个符号b</span>
+            <ol type="a" style="color: inherit;">
+                <li>
+                    <span id="ll1_1_a_1">如果A是一个非终结符,则读取预测表中的<math>
+                            <mi>M</mi>
+                            <mo>[</mo>
+                            <mi>A</mi>
+                            <mo>,</mo>
+                            <mi>b</mi>
+                            <mo>]</mo>
+                            <mo>=</mo>
+                            <mi>A</mi>
+                            <mo>→</mo>
+                            <msub>
+                                <mi>X</mi>
+                                <mn>1</mn>
+                            </msub>
+                            <msub>
+                                <mi>X</mi>
+                                <mn>2</mn>
+                            </msub>
+                            <msub>
+                                <mi>X</mi>
+                                <mn>3</mn>
+                            </msub>
+                        </math>,然后把<math>
+                            <msub>
+                                <mi>X</mi>
+                                <mn>3</mn>
+                            </msub>
+                            <msub>
+                                <mi>X</mi>
+                                <mn>2</mn>
+                            </msub>
+                            <msub>
+                                <mi>X</mi>
+                                <mn>1</mn>
+                            </msub>
+                        </math>(注意这里是逆序)压栈,</span><span id="ll1_1_a_2">并且回退输入符号b</span>。如果<math>
                         <mi>M</mi>
                         <mo>[</mo>
                         <mi>A</mi>
                         <mo>,</mo>
                         <mi>b</mi>
                         <mo>]</mo>
-                        <mo>=</mo>
-                        <mi>A</mi>
-                        <mo>→</mo>
-                        <msub>
-                            <mi>X</mi>
-                            <mn>1</mn>
-                        </msub>
-                        <msub>
-                            <mi>X</mi>
-                            <mn>2</mn>
-                        </msub>
-                        <msub>
-                            <mi>X</mi>
-                            <mn>3</mn>
-                        </msub>
-                    </math>,然后把<math>
-                        <msub>
-                            <mi>X</mi>
-                            <mn>3</mn>
-                        </msub>
-                        <msub>
-                            <mi>X</mi>
-                            <mn>2</mn>
-                        </msub>
-                        <msub>
-                            <mi>X</mi>
-                            <mn>1</mn>
-                        </msub>
-                    </math>(注意这里是逆序)压栈,并且回退输入符号b。如果<math>
-                        <mi>M</mi>
-                        <mo>[</mo>
-                        <mi>A</mi>
-                        <mo>,</mo>
-                        <mi>b</mi>
-                        <mo>]</mo>
-                    </math>是一个空白单元格,则语法错误</li>
-                <li>如果A是一个终结符,如果A=b,则回到步骤1,否则报语法错误</li>
+                    </math>是一个空白单元格,则语法错误
+                </li>
+                <li id="ll1_1_b">如果A是一个终结符,如果A=b,则回到步骤1,否则报语法错误</li>
             </ol>
         </li>
     </ol>
-    <p>我们在执行上述循环的时候,已经在构建AST了,每次命中步骤a的时候,表示这时候我们准备创建一个子树,命中步骤b的时候表示构建一个叶子节点。在构建子树和叶子节点的时候,把这些节点挂载到前一个子树上面即可(我们实际运行的时候可以发现这个树是从顶部到底部,从左子树到右子树的建立流程,类似树的先序遍历,这也是LL(1)的由来)。
+    <p>我们在执行上述循环的时候,已经在构建AST了,<em>从栈中弹出符号时,表示我们正在以这个符号作为root构造子树,条件a的压栈操作则表示我们已经用这个产生式构造出了root的所有下一层子节点</em>(我们实际运行的时候可以发现这个树是从顶部到底部,从左子树到右子树的建立流程,类似树的先序遍历,这也是LL(1)的由来)。
     </p>
     <p>前面说过这个文法有二义性,不能正确生成预测分析表,所以我重新设计了一个文法,并用这个文法演示AST的生成,可以在下面观看动画</p>
-    <ol>
-        <li>文法:
+    <div>
+        <div style="display: inline-block;">
             <ol>
-                <li>
-                    <math>
-                        <mn>E</mn>
-                        <mo>→</mo>
-                        <mn>E</mn>
-                        <mo>+</mo>
-                        <mn>T</mn>
-                    </math>
+                <li>文法:
+                    <ol>
+                        <li>
+                            <math>
+                                <mn>E</mn>
+                                <mo>→</mo>
+                                <mn>E</mn>
+                                <mo>+</mo>
+                                <mn>T</mn>
+                            </math>
+                        </li>
+                        <li>
+                            <math>
+                                <mn>E</mn>
+                                <mo>→</mo>
+                                <mn>T</mn>
+                            </math>
+                        </li>
+                        <li>
+                            <math>
+                                <mn>T</mn>
+                                <mo>→</mo>
+                                <mn>id</mn>
+                            </math>
+                        </li>
+                    </ol>
                 </li>
                 <li>
-                    <math>
-                        <mn>E</mn>
-                        <mo>→</mo>
-                        <mn>T</mn>
-                    </math>
-                </li>
-                <li>
-                    <math>
-                        <mn>T</mn>
-                        <mo>→</mo>
-                        <mn>n</mn>
-                    </math>
-                </li>
-            </ol>
-        </li>
-        <li>
-            消除左递归:
-            <ol>
-                <li>
-                    <math>
-                        <mn>E</mn>
-                        <mo>→</mo>
-                        <mo>T</mo>
-                        <mn>E'</mn>
-                    </math>
-                </li>
-                <li>
-                    <math>
-                        <mn>E'</mn>
-                        <mo>→</mo>
-                        <mo>+</mo>
-                        <mo>T</mo>
-                        <mo>E'</mo>
-                    </math>
-                </li>
-                <li>
-                    <math>
-                        <mn>E'</mn>
-                        <mo>→</mo>
-                        <mo>ε</mo>
-                    </math>
-                </li>
-                <li>
-                    <math>
-                        <mn>T</mn>
-                        <mo>→</mo>
-                        <mo>n</mo>
-                    </math>
-                </li>
-            </ol>
-        </li>
-        <li>
-            <ol>
-                <li>first集:
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>first(E)</td>
-                                <td colspan="2">n</td>
-                            </tr>
-                            <tr>
-                                <td>first(E')</td>
-                                <td>+</td>
-                                <td>ε</td>
-                            </tr>
-                            <tr>
-                                <td>first(T)</td>
-                                <td colspan="2">n</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </li>
-                <li>follow集:
-                    <table>
-                        <tbody>
-                            <tr>
-                                <td>follow(E)</td>
-                                <td>$</td>
-                            </tr>
-                            <tr>
-                                <td>follow(E')</td>
-                                <td>$</td>
-                            </tr>
-                            <tr>
-                                <td>follow(T)</td>
-                                <td>$</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </li>
-            </ol>
-        </li>
-        <li>
-            预测分析表:
-            <table>
-                <tbody>
-                    <tr>
-                        <td rowspan="2">非终结符</td>
-                        <td colspan="3">输入符号</td>
-                    </tr>
-                    <tr>
-                        <td>n</td>
-                        <td>+</td>
-                        <td>$</td>
-                    </tr>
-                    <tr>
-                        <td>E</td>
-                        <td>
+                    消除左递归:
+                    <ol>
+                        <li>
                             <math>
                                 <mn>E</mn>
                                 <mo>→</mo>
                                 <mo>T</mo>
                                 <mn>E'</mn>
                             </math>
-                        </td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>E'</td>
-                        <td></td>
-                        <td>
+                        </li>
+                        <li>
                             <math>
                                 <mn>E'</mn>
                                 <mo>→</mo>
@@ -2440,38 +2350,222 @@
                                 <mo>T</mo>
                                 <mo>E'</mo>
                             </math>
-                        </td>
-                        <td>
+                        </li>
+                        <li>
                             <math>
                                 <mn>E'</mn>
                                 <mo>→</mo>
                                 <mo>ε</mo>
                             </math>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>T</td>
-                        <td>
+                        </li>
+                        <li>
                             <math>
                                 <mn>T</mn>
                                 <mo>→</mo>
-                                <mo>n</mo>
+                                <mo>id</mo>
                             </math>
-                        </td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                </tbody>
-            </table>
-        </li>
-        <li>动画:(好麻烦啊)
-            <ol>
-                <li>格局:</li>
-                <li>AST:</li>
+                        </li>
+                    </ol>
+                </li>
+                <li>
+                    <ol>
+                        <li>first集:
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td>first(E)</td>
+                                        <td colspan="2">id</td>
+                                    </tr>
+                                    <tr>
+                                        <td>first(E')</td>
+                                        <td>+</td>
+                                        <td>ε</td>
+                                    </tr>
+                                    <tr>
+                                        <td>first(T)</td>
+                                        <td colspan="2">id</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </li>
+                        <li>follow集:
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td>follow(E)</td>
+                                        <td>$</td>
+                                    </tr>
+                                    <tr>
+                                        <td>follow(E')</td>
+                                        <td>$</td>
+                                    </tr>
+                                    <tr>
+                                        <td>follow(T)</td>
+                                        <td>$</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </li>
+                    </ol>
+                </li>
+                <li>
+                    预测分析表:
+                    <table>
+                        <tbody id="ll1_table">
+                            <tr>
+                                <td rowspan="2">非终结符</td>
+                                <td colspan="3">输入符号</td>
+                            </tr>
+                            <tr>
+                                <td>id</td>
+                                <td>+</td>
+                                <td>$</td>
+                            </tr>
+                            <tr>
+                                <td>E</td>
+                                <td>
+                                    <math>
+                                        <mn>E</mn>
+                                        <mo>→</mo>
+                                        <mo>T</mo>
+                                        <mn>E'</mn>
+                                    </math>
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>E'</td>
+                                <td></td>
+                                <td>
+                                    <math>
+                                        <mn>E'</mn>
+                                        <mo>→</mo>
+                                        <mo>+</mo>
+                                        <mo>T</mo>
+                                        <mo>E'</mo>
+                                    </math>
+                                </td>
+                                <td>
+                                    <math>
+                                        <mn>E'</mn>
+                                        <mo>→</mo>
+                                        <mo>ε</mo>
+                                    </math>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>T</td>
+                                <td>
+                                    <math>
+                                        <mn>T</mn>
+                                        <mo>→</mo>
+                                        <mo>id</mo>
+                                    </math>
+                                </td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </li>
             </ol>
-        </li>
-    </ol>
-    <button>下一步</button>
+        </div>
+        <div style="display: inline-block;">
+            动画:(好麻烦啊)<button id="ll1_next">下一步</button>
+            <ol>
+                <li>格局(假设1+2+3已经被词法分析器解析成id(1)+id(2)+id(3)):
+                    <ul>
+                        <li>输入:
+                            <span id="ll1_input">
+                                <span>id(1)</span>
+                                <span>+</span>
+                                <span>id(2)</span>
+                                <span>+</span>
+                                <span>id(3)</span>
+                                <span>$</span>
+                            </span>
+                        </li>
+                        <li>栈:<span id="ll1_stack">
+                                <span>$</span>
+                                <span>E</span>
+                            </span></li>
+                    </ul>
+                </li>
+                <li>
+                    <span>AST:</span>
+                    <div style="width: 300px;">
+                        <svg id="ll1_svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 118 180">
+                            <text transform="translate(4.25 161.26)" style="font-family: DengXian, DengXian;">
+                                <tspan x="0" y="0" style="fill: #000; font-size: 12px;">id</tspan>
+                                <tspan x="9.57" y="0" style="fill: red; font-size: 6px;">(1)</tspan>
+                            </text>
+                            <path
+                                d="M12.5,146c6.34,0,11.5,5.16,11.5,11.5s-5.16,11.5-11.5,11.5-11.5-5.16-11.5-11.5,5.16-11.5,11.5-11.5M12.5,145c-6.9,0-12.5,5.6-12.5,12.5s5.6,12.5,12.5,12.5,12.5-5.6,12.5-12.5-5.6-12.5-12.5-12.5h0Z"
+                                style="fill: #000; stroke-width: 0px;" />
+                            <text transform="translate(97.25 171.26)" style="font-family: DengXian, DengXian;">
+                                <tspan x="0" y="0" style="fill: #000; font-size: 12px;">id</tspan>
+                                <tspan x="9.57" y="0" style="fill: red; font-size: 6px;">(1)</tspan>
+                            </text>
+                            <path
+                                d="M105.5,156c6.34,0,11.5,5.16,11.5,11.5s-5.16,11.5-11.5,11.5-11.5-5.16-11.5-11.5,5.16-11.5,11.5-11.5M105.5,155c-6.9,0-12.5,5.6-12.5,12.5s5.6,12.5,12.5,12.5,12.5-5.6,12.5-12.5-5.6-12.5-12.5-12.5h0Z"
+                                style="fill: #000; stroke-width: 0px;" />
+                            <text transform="translate(57.25 120.26)" style="font-family: DengXian, DengXian;">
+                                <tspan x="0" y="0" style="fill: #000; font-size: 12px;">id</tspan>
+                                <tspan x="9.57" y="0" style="fill: red; font-size: 6px;">(1)</tspan>
+                            </text>
+                            <path
+                                d="M65.5,105c6.34,0,11.5,5.16,11.5,11.5s-5.16,11.5-11.5,11.5-11.5-5.16-11.5-11.5,5.16-11.5,11.5-11.5M65.5,104c-6.9,0-12.5,5.6-12.5,12.5s5.6,12.5,12.5,12.5,12.5-5.6,12.5-12.5-5.6-12.5-12.5-12.5h0Z"
+                                style="fill: #000; stroke-width: 0px;" />
+                            <g id="E">
+                                <text transform="translate(46.12 16.26)"
+                                    style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                                    <tspan x="0" y="0">E</tspan>
+                                </text>
+                                <g>
+                                    <path id="E_circle"
+                                        d="M49.5,1c6.34,0,11.5,5.16,11.5,11.5s-5.16,11.5-11.5,11.5-11.5-5.16-11.5-11.5S43.16,1,49.5,1M49.5,0c-6.9,0-12.5,5.6-12.5,12.5s5.6,12.5,12.5,12.5,12.5-5.6,12.5-12.5S56.4,0,49.5,0h0Z"
+                                        style="fill: #000; stroke-width: 0px;" />
+                                </g>
+                            </g>
+                            <text transform="translate(61.87 171.26)"
+                                style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                                <tspan x="0" y="0">+</tspan>
+                            </text>
+                            <path
+                                d="M65.5,156c6.34,0,11.5,5.16,11.5,11.5s-5.16,11.5-11.5,11.5-11.5-5.16-11.5-11.5,5.16-11.5,11.5-11.5M65.5,155c-6.9,0-12.5,5.6-12.5,12.5s5.6,12.5,12.5,12.5,12.5-5.6,12.5-12.5-5.6-12.5-12.5-12.5h0Z"
+                                style="fill: #000; stroke-width: 0px;" />
+                            <g id="T">
+                                <text transform="translate(23.12 56.26)"
+                                    style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                                    <tspan x="0" y="0">T</tspan>
+                                </text>
+                                <g>
+                                    <path id="T_circle"
+                                        d="M26.5,41c6.34,0,11.5,5.16,11.5,11.5s-5.16,11.5-11.5,11.5-11.5-5.16-11.5-11.5,5.16-11.5,11.5-11.5M26.5,40c-6.9,0-12.5,5.6-12.5,12.5s5.6,12.5,12.5,12.5,12.5-5.6,12.5-12.5-5.6-12.5-12.5-12.5h0Z"
+                                        style="fill: #000; stroke-width: 0px;" />
+                                </g>
+                            </g>
+                            <line id="E_T" x1="39" y1="25" x2="32" y2="38"
+                                style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                            <g id="Ep">
+                                <text transform="translate(67.12 55.26)"
+                                    style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                                    <tspan x="0" y="0">E’</tspan>
+                                </text>
+                                <g>
+                                    <path id="Ep_circle"
+                                        d="M70.5,40c6.34,0,11.5,5.16,11.5,11.5s-5.16,11.5-11.5,11.5-11.5-5.16-11.5-11.5,5.16-11.5,11.5-11.5M70.5,39c-6.9,0-12.5,5.6-12.5,12.5s5.6,12.5,12.5,12.5,12.5-5.6,12.5-12.5-5.6-12.5-12.5-12.5h0Z"
+                                        style="fill: #000; stroke-width: 0px;" />
+                                </g>
+                            </g>
+                            <line id="E_Ep" x1="58" y1="24" x2="66" y2="38"
+                                style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        </svg>
+                    </div>
+            </ol>
+        </div>
+    </div>
     <h2>动画太麻烦了,先睡觉,后面的LR文法分析器不做动画了,这么多状态要画死人</h2>
     <h2>LR分析器</h2>
     <p>LR(1)为什么不需要follow集,LR(0)没有这种顾虑</p>
@@ -2480,6 +2574,8 @@
 <script type="module" src="./js/NFA-1.js">
 </script>
 <script type="module" src="./js/NFA-2-DFA.js">
+</script>
+<script type="module" src="./js/LL(1).js">
 </script>
 
 </html>
