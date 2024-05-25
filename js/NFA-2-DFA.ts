@@ -1,8 +1,6 @@
 import { DarkTools, LightTools, arrowmotionTools, delay } from "./tools.js";
 
-let slot = document.querySelector('#NFA-2-DFA') as HTMLDivElement;
-let root = slot.attachShadow({ mode: "open" });
-root.appendChild((slot.querySelector('template') as HTMLTemplateElement).content.cloneNode(true));//使style被隔离
+let root = document.querySelector('#NFA-2-DFA') as HTMLDivElement;
 let next = root.querySelector('#next') as HTMLButtonElement;
 let step1 = root.querySelector('ol>li:nth-child(1)') as HTMLElement;
 let step2 = root.querySelector('ol>li:nth-child(2)>ol>:nth-child(1)>ol>:nth-child(1)') as HTMLElement;

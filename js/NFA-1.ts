@@ -1,8 +1,6 @@
 import { DarkTools, KleenClosure, LightTools, arrowMotion, arrowmotionTools, delay } from "./tools.js";
 
-let slot = document.querySelector('#NFA-1') as HTMLDivElement;
-let root = slot.attachShadow({ mode: "open" });
-root.appendChild((slot.querySelector('template') as HTMLTemplateElement).content.cloneNode(true));//使style被隔离
+let root = document.querySelector('#NFA-1') as HTMLDivElement;
 
 function drakAll() {
     DarkTools(root, [

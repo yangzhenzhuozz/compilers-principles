@@ -34,7 +34,7 @@ export function arrowMotion(root: SVGElement, dur: number) {
 function lightSVG(root: SVGElement) {
   root.setAttribute("hasLighted", "1");
   for (let item of root.querySelectorAll(
-    ":not(text):not(polygon)"
+    ":not(text):not(polygon):not(tspan)"
   ) as NodeListOf<SVGElement>) {
     item.style.stroke = "red";
   }
@@ -48,7 +48,7 @@ function lightSVG(root: SVGElement) {
 function darkSVG(root: SVGElement) {
   root.setAttribute("hasLighted", "0");
   for (let item of root.querySelectorAll(
-    ":not(text):not(polygon)"
+    ":not(text):not(polygon):not(tspan"
   ) as NodeListOf<SVGElement>) {
     item.style.stroke = "#000";
   }
@@ -83,18 +83,18 @@ export function KleenClosure(state: number[], matrix: number[][]): number[] {
   return ret;
 }
 
-export function arrowmotionTools(root: ShadowRoot, ids: string[], dur: number) {
+export function arrowmotionTools(root: HTMLElement, ids: string[], dur: number) {
   for (let id of ids) {
     arrowMotion(root.querySelector(`#${id}`) as SVGAElement, dur);
     lightSVG(root.querySelector(`#${id}`) as SVGAElement);
   }
 }
-export function LightTools(root: ShadowRoot, ids: string[]) {
+export function LightTools(root: HTMLElement, ids: string[]) {
   for (let id of ids) {
     lightSVG(root.querySelector(`#${id}`) as SVGAElement);
   }
 }
-export function DarkTools(root: ShadowRoot, ids: string[]) {
+export function DarkTools(root: HTMLElement, ids: string[]) {
   for (let id of ids) {
     darkSVG(root.querySelector(`#${id}`) as SVGAElement);
   }
