@@ -2596,7 +2596,117 @@
     <h2>LR分析器</h2>
     <p>有了LL分析技术还不够,LL分析一个很明显的问题就是不能处理左递归文法,这使得我们设计一门编程语言时必须很小心的设计其文法,下面就介绍一种自底向上的文法分析技术。和LL概念类似,LR技术中的R表示rightmost
         derivation。</p>
-    <p>这里我就不讲LR(0)了,直接上LR(1),读者看完应该就能知道任意LR(k)的分析原理。</p>
+    <p>为了能说明情况,我们先从LR(0)分析技术说起,假设我们有如下文法:</p>
+    <table>
+        <thead>
+            <tr>
+                <th colspan="2">文法-LR章节1</th>
+            </tr>
+            <tr>
+                <th>产生式</th>
+                <th>作用</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><math>
+                        <mi>E</mi>
+                        <mo>→</mo>
+                        <mi>E</mi>
+                        <mo>+</mo>
+                        <mi>E</mi>
+                    </math></td>
+                <td>表达式+表达式还是一个表达式</td>
+            </tr>
+            <tr>
+                <td><math>
+                        <mi>E</mi>
+                        <mo>→</mo>
+                        <mi>id</mi>
+                    </math></td>
+                <td>单个数字或者变量也是一个表达式</td>
+            </tr>
+        </tbody>
+    </table>
+    <p>为了能顺利使用LR技术分析上述文法,我们对文法-LR章节1做一个扩展,生成其<em>增广文法</em>,规则很简单:如果文法G是以S作为开始符号的文法,那么我们就在G中增加一个产生式<math>
+            <mi>S'</mi>
+            <mo>→</mo>
+            <mi>S</mi>
+        </math>(千万不要固执的认为符号名一定是S'和S,只要你记住这个产生式是我们额外添加的就行),这是为了使我们知道什么时候解析完毕,当我们最终把源码规约成<math>
+            <mi>S'</mi>
+            <mo>→</mo>
+            <mi>S</mi>
+        </math>的时候,就表示所有输入已经被成功解析成AST。</p>
+    <p>为了能说明情况,我们先从LR(0)分析技术说起,假设我们有如下文法:</p>
+    <table>
+        <thead>
+            <tr>
+                <th colspan="2">文法-LR章节2</th>
+            </tr>
+            <tr>
+                <th>产生式</th>
+                <th>作用</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><math>
+                        <mi>S'</mi>
+                        <mo>→</mo>
+                        <mi>E</mi>
+                    </math></td>
+                <td>增广文法新增的一个产生式</td>
+            </tr>
+            <tr>
+                <td><math>
+                        <mi>E</mi>
+                        <mo>→</mo>
+                        <mi>E</mi>
+                        <mo>+</mo>
+                        <mi>E</mi>
+                    </math></td>
+                <td>表达式+表达式还是一个表达式</td>
+            </tr>
+            <tr>
+                <td><math>
+                        <mi>E</mi>
+                        <mo>→</mo>
+                        <mi>id</mi>
+                    </math></td>
+                <td>单个数字或者变量也是一个表达式</td>
+            </tr>
+        </tbody>
+    </table>
+    <p>可以看到,一个满足LR(0)的文法更容易比LL型文法容易写出来,然后再介绍三个超级简单的概念:<em>项</em>、<em>项集</em>、<em>项集族</em>。LR分析器通过维护一些状态表明当前可能使用了哪些产生式以及预期的下一个符号。</p>
+    <ul>
+        <li><span>项：</span><span>龙书使用一个圆点表示当前后续的预期符号,一个项可以这样表示：<math>
+                    <mi>E</mi>
+                    <mo>→</mo>
+                    <mo>.</mo>
+                    <mi>id</mi>
+                </math></span></li>
+        <li><span>项集：</span><span>一堆项放在一起就叫做项集,比如：</span><br />
+            <div style="border: 1px solid black;display:inline-block;">
+                <math>
+                    <mi>E</mi>
+                    <mo>→</mo>
+                    <mi>.</mi>
+                    <mi>E</mi>
+                    <mo>+</mo>
+                    <mi>E</mi>
+                </math>
+                <br />
+                <math>
+                    <mi>E</mi>
+                    <mo>→</mo>
+                    <mo>.</mo>
+                    <mi>id</mi>
+                </math>
+            </div><br />
+            这就是一个项集了
+        </li>
+    </ul>
+    <p>项集的闭包：如果我们想要知道当前项集到底预期哪个符号?可以通过计算闭包(closure)来寻找这个项集的所有预期符号</p>
     <p>说明龙书没讲清楚的LR(1)为什么不需要follow集,LR(0)没有这种顾虑</p>
 </body>
 
