@@ -2677,14 +2677,19 @@
             </tr>
         </tbody>
     </table>
-    <p>可以看到,一个满足LR(0)的文法更容易比LL型文法容易写出来,然后再介绍三个超级简单的概念:<em>项</em>、<em>项集</em>、<em>项集族</em>。LR分析器通过维护一些状态表明当前可能使用了哪些产生式以及预期的下一个符号。</p>
+    <p>可以看到,一个满足LR(0)的文法更容易比LL型文法容易写出来。</p>
+    <p>
+        接下来再介绍三个简单的概念:<em>项</em>、<em>项集</em>、<em>项集族</em>。LR分析器通过维护一些状态表明当前可能使用了哪些产生式以及这些产生式期待的输入串。
+    </p>
     <ul>
-        <li><span>项：</span><span>龙书使用一个圆点表示当前后续的预期符号,一个项可以这样表示：<math>
+        <li><span>项：</span><span>使用一个圆点和产生式表示项,一个项可以这样表示：<math>
                     <mi>E</mi>
                     <mo>→</mo>
                     <mo>.</mo>
-                    <mi>id</mi>
-                </math></span></li>
+                    <mi>E</mi>
+                    <mo>+</mo>
+                    <mi>E</mi>
+                </math></span>,这表示对于当前这个产生式,我们期待接下来的输入串是{E + E}</li>
         <li><span>项集：</span><span>一堆项放在一起就叫做项集,比如：</span><br />
             <div style="border: 1px solid black;display:inline-block;">
                 <math>
@@ -2705,8 +2710,246 @@
             </div><br />
             这就是一个项集了
         </li>
+        <li>项集族:一系列的项集就组成了项集族,比如:<br />
+            <div style="border: 2px solid black;display:inline-block;padding: 5px;">
+                <div style="text-align: center;">这是一个项集族</div>
+                <div style="border: 1px solid black;display:inline-block;">
+                    <math>
+                        <mi>S'</mi>
+                        <mo>→</mo>
+                        <mi>.</mi>
+                        <mi>E</mi>
+                    </math>
+                    <br />
+                    <math>
+                        <mi>E</mi>
+                        <mo>→</mo>
+                        <mo>.</mo>
+                        <mi>E</mi>
+                        <mo>+</mo>
+                        <mi>E</mi>
+                    </math>
+                </div>
+                <div style="border: 1px solid black;display:inline-block;">
+                    <math>
+                        <mi>E</mi>
+                        <mo>→</mo>
+                        <mi>.</mi>
+                        <mi>E</mi>
+                        <mo>+</mo>
+                        <mi>E</mi>
+                    </math>
+                    <br />
+                    <math>
+                        <mi>E</mi>
+                        <mo>→</mo>
+                        <mo>.</mo>
+                        <mi>id</mi>
+                    </math>
+                </div>
+            </div>
+        </li>
     </ul>
-    <p>项集的闭包：如果我们想要知道当前项集到底预期哪个符号?可以通过计算闭包(closure)来寻找这个项集的所有预期符号</p>
+    <p>LR分析器通过维护一个状态机,表明当前状态期待什么串输入,使用一个项集表示一个状态(这是LR分析技术规定的,不要问为什么,后续我会详细介绍这种分析原理)</p>
+    <p>假设当前分析器处于这样一个状态:</p>
+    <div style="border: 1px solid black;display:inline-block;">
+        <math>
+            <mi>S'</mi>
+            <mo>→</mo>
+            <mi>.</mi>
+            <mi>E</mi>
+        </math>
+    </div>
+    <p>就说明分析器希望下接下来的输入串是{E},但是这样还不够,我们知道对于{id + id}是可以规约成E的,所以当前状态除了期待{E},还期待{id +
+        id},同样的这个状态也期待{id}这样的输入串,因为{id}也可以规约成E。所以我们在往项集中添加一些项之后,可以计算一下这个项的闭包,找出项集所有期待的输入串。下面介绍一下项集的构造方法(<math>
+            <mi>Closure</mi>
+            <mo>(</mo>
+            <mi>I</mi>
+            <mo>)</mo>
+        </math>):</p>
+    <ol>
+        <li>往项集<math>
+                <mi>I</mi>
+            </math>中添加形如:<math>
+                <mi>A</mi>
+                <mo>→</mo>
+                <mi>α</mi>
+                <mo>.</mo>
+                <mi>ε</mi>
+                <mi>β</mi>
+            </math>这样的项时,如果点后面的符号是终结符ε,则将点的位置后移,直到点后面不是ε或者移动到产生式的末尾。前面这个项变成<math>
+                <mi>A</mi>
+                <mo>→</mo>
+                <mi>α</mi>
+                <mi>ε</mi>
+                <mo>.</mo>
+                <mi>β</mi>
+            </math></li>
+        <li>for <math>
+                <mi>I</mi>
+            </math> 中的每一个项
+            <ol type="a">
+                <li>如果点后面的符号是一个非终结符B,则找到所有以B作为头的产生式<math>
+                        <mi>B</mi>
+                        <mo>→</mo>
+                        <msub>
+                            <mi>β</mi>
+                            <mn>1</mn>
+                        </msub>
+                    </math> , <math>
+                        <mi>B</mi>
+                        <mo>→</mo>
+                        <msub>
+                            <mi>β</mi>
+                            <mn>2</mn>
+                        </msub>
+                    </math> , <math>
+                        <mi>B</mi>
+                        <mo>→</mo>
+                        <msub>
+                            <mi>β</mi>
+                            <mn>n</mn>
+                        </msub>
+                    </math> , <math>
+                        <mi>B</mi>
+                        <mo>→</mo>
+                        <msub>
+                            <mi>β</mi>
+                            <mn>i</mn>
+                        </msub>
+                    </math>做如下判断和处理:
+                    <ol type="i">
+                        <li>如果项<math>
+                                <mi>B</mi>
+                                <mo>→</mo>
+                                <mo>.</mo>
+                                <msub>
+                                    <mi>β</mi>
+                                    <mn>i</mn>
+                                </msub>
+                            </math>没有出现在项集<math>
+                                <mi>I</mi>
+                            </math>中,则往<math>
+                                <mi>I</mi>
+                            </math>中按照规则1添加进去</li>
+                    </ol>
+                </li>
+            </ol>
+        </li>
+    </ol>
+    <p>至此,我们可以轻松得到分析器当前状态期待的所有后续输入串了。前面说过项集是编译器(分析器)一个状态,状态机需要在不同的状态之间跳转,我们如何生成这个状态机(项集族G)呢?我们按照下面的规则定义一个函数<math>
+            <mi>Goto</mi>
+            <mo>(</mo>
+            <mi>I</mi>
+            <mo>,</mo>
+            <mi>b</mi>
+            <mo>)</mo>
+        </math>表示项集<math>
+            <mi>I</mi>
+        </math>在接受一个符号s之后跳转到的目标项集</p>
+    <ol>
+        <li>先准备一个空项集result</li>
+        <li>for <math>
+                <mi>I</mi>
+            </math> 中的每一个项<math>
+                <mi>A</mi>
+                <mo>→</mo>
+                <mi>a</mi>
+                <mo>.</mo>
+                <mi>b</mi>
+                <mi>c</mi>
+                <mi>d</mi>
+            </math>
+            <ol>
+                <li>如果项中圆点后面的符号是b,则把<math>
+                        <mi>A</mi>
+                        <mo>→</mo>
+                        <mi>a</mi>
+                        <mi>b</mi>
+                        <mo>.</mo>
+                        <mi>c</mi>
+                        <mi>d</mi>
+                    </math>(这里圆点后移了一位)添加到result中</li>
+            </ol>
+        </li>
+        <li>计算<math>
+                <msub>
+                    <mi>I</mi>
+                    <mi>b</mi>
+                </msub>
+                <mo>=</mo>
+                <mi>Clousre</mi>
+                <mo>(</mo>
+                <mi>result</mi>
+                <mo>)</mo>
+            </math>,如果<math>
+                <msub>
+                    <mi>I</mi>
+                    <mi>b</mi>
+                </msub>
+            </math>和项集族G中的每一个项集都不相等(就是<math>
+                <msub>
+                    <mi>I</mi>
+                    <mi>b</mi>
+                </msub>
+            </math>没有在项集族G中出现过),则把项集<math>
+                <msub>
+                    <mi>I</mi>
+                    <mi>b</mi>
+                </msub>
+            </math>添加到项集族G中,并创建这样的一条边<math style="vertical-align:middle;">
+                <mover>
+                    <mrow>
+                        <mover>
+                            <mrow>
+                                <mi>I</mi>
+                                <mspace width="3rem"></mspace>
+                                <msub>
+                                    <mi>I</mi>
+                                    <mi>b</mi>
+                                </msub>
+                            </mrow>
+                            <mrow>
+                                <mo>→</mo>
+                            </mrow>
+                        </mover>
+                    </mrow>
+                    <mi>b</mi>
+                </mover>
+            </math>(<em>集合A中的每一个元素都在集合B中出现,且集合B中的每一个元素都在集合A中出现则说明两个集合相等,和顺序无关</em>)
+        </li>
+    </ol>
+    <p>我们先找到项集<math>
+            <mi>I</mi>
+        </math>中的每一个圆点不在最后的项,然后提取出圆点后面的符号<math>
+            <msub>
+                <mi>s</mi>
+                <mi>i</mi>
+            </msub>
+        </math>依次执行<math>
+            <mi>Goto</mi>
+            <mo>(</mo>
+            <mi>I</mi>
+            <mo>,</mo>
+            <msub>
+                <mi>s</mi>
+                <mi>i</mi>
+            </msub>
+            <mo>)</mo>
+        </math>，就能得到项集(状态)<math>
+            <mi>I</mi>
+        </math>的所有后继个状态<math>
+            <msub>
+                <mi>I</mi>
+                <mi>next</mi>
+            </msub>
+        </math>和跳转条件<math>
+            <msub>
+                <mi>s</mi>
+                <mi>i</mi>
+            </msub>
+        </math></p>
+    <p>接下来我们只要构造出这个文法的项集族，就能愉快的使用LR(0)分析器做我们编译器的前端了。</p>
     <p>说明龙书没讲清楚的LR(1)为什么不需要follow集,LR(0)没有这种顾虑</p>
 </body>
 
