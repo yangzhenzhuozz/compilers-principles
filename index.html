@@ -2916,7 +2916,7 @@
                     </mrow>
                     <mi>b</mi>
                 </mover>
-            </math>(<em>集合A中的每一个元素都在集合B中出现,且集合B中的每一个元素都在集合A中出现则说明两个集合相等,和顺序无关</em>)
+            </math>，如果项集族已经存在目标项集，我们可以直接用边连接。(<em>集合A中的每一个元素都在集合B中出现,且集合B中的每一个元素都在集合A中出现则说明两个集合相等,和顺序无关</em>)
         </li>
     </ol>
     <p>我们先找到项集<math>
@@ -2949,7 +2949,215 @@
                 <mi>i</mi>
             </msub>
         </math></p>
-    <p>接下来我们只要构造出这个文法的项集族，就能愉快的使用LR(0)分析器做我们编译器的前端了。</p>
+    <p>接下来我们只要构造出这个文法的项集族，就能愉快的使用LR(0)分析器做我们编译器的前端了。<em>先创建一个项集，这个项集中只有一项:增广文法新增的这个产生式，并且把圆点放在这个产生式体的最前面,计算这个项集的闭包之后添加到项集族G中。然后找到到这个项集的所有后继项集，添加到项集族G中，直到G没有新的项集可以添加。</em>
+    </p>
+    <p>假设我们有如下文法</p>
+    <table>
+        <thead>
+            <tr>
+                <th>产生式</th>
+                <th>作用</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><math>
+                        <mi>S'</mi>
+                        <mo>→</mo>
+                        <mi>E</mi>
+                    </math></td>
+                <td>增广文法新增的一个产生式</td>
+            </tr>
+            <tr>
+                <td><math>
+                        <mi>E</mi>
+                        <mo>→</mo>
+                        <mi>E</mi>
+                        <mo>+</mo>
+                        <mi>E</mi>
+                    </math></td>
+                <td>表达式+表达式还是一个表达式</td>
+            </tr>
+            <tr>
+                <td><math>
+                        <mi>E</mi>
+                        <mo>→</mo>
+                        <mi>id</mi>
+                    </math></td>
+                <td>单个数字或者变量也是一个表达式</td>
+            </tr>
+        </tbody>
+    </table>
+    <p>我们可以得到这样的一个项集族：</p>
+    <svg id="LR_0_状态图" style="width: 600px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 303.16 209.39">
+        <text transform="translate(89.28 28.01)" style="fill: #000; font-family: SimSun, SimSun; font-size: 10px;">
+            <tspan x="0" y="0">E</tspan>
+        </text>
+        <text transform="translate(209.28 145.67)" style="fill: #000; font-family: SimSun, SimSun; font-size: 10px;">
+            <tspan x="0" y="0">E</tspan>
+        </text>
+        <text transform="translate(34.66 102.17)" style="fill: #000; font-family: SimSun, SimSun; font-size: 10px;">
+            <tspan x="0" y="0">id</tspan>
+        </text>
+        <text transform="translate(154.66 88.56)" style="fill: #000; font-family: SimSun, SimSun; font-size: 10px;">
+            <tspan x="0" y="0">+</tspan>
+        </text>
+        <text transform="translate(209.03 206.09)" style="fill: #000; font-family: SimSun, SimSun; font-size: 10px;">
+            <tspan x="0" y="0">+</tspan>
+        </text>
+        <text transform="translate(88.04 145.67)" style="fill: #000; font-family: SimSun, SimSun; font-size: 10px;">
+            <tspan x="0" y="0">id</tspan>
+        </text>
+        <text transform="translate(7.66 33.06)" style="fill: #000; font-size: 10px;">
+            <tspan x="0" y="0" style="font-family: SimSun, SimSun;">S</tspan>
+            <tspan x="5" y="0" style="font-family: DengXian, DengXian;">’</tspan>
+            <tspan x="7.21" y="0" style="font-family: SimSun, SimSun;">→.E</tspan>
+        </text>
+        <text transform="translate(7.66 46.76)" style="fill: red; font-family: SimSun, SimSun; font-size: 10px;">
+            <tspan x="0" y="0">E→.E + E</tspan>
+        </text>
+        <text transform="translate(7.66 60.37)" style="fill: red; font-family: SimSun, SimSun; font-size: 10px;">
+            <tspan x="0" y="0">E→.id</tspan>
+        </text>
+        <path d="M2.66,62.06c0,3.51,2.67,6.36,5.97,6.36h48.06c3.3,0,5.97-2.85,5.97-6.36V17.5H2.66v44.56Z"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <path d="M56.69.5H8.63C5.33.5,2.66,3.19,2.66,6.51v10.99h60V6.51c0-3.32-2.67-6.01-5.97-6.01Z"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <text transform="translate(26.11 12.57)" style="fill: #000; font-family: SimSun, SimSun; font-size: 10px;">
+            <tspan x="0" y="0">S0</tspan>
+        </text>
+        <text transform="translate(127.66 33.06)" style="fill: #000; font-size: 10px;">
+            <tspan x="0" y="0" style="font-family: SimSun, SimSun;">S</tspan>
+            <tspan x="5" y="0" style="font-family: DengXian, DengXian;">’</tspan>
+            <tspan x="7.21" y="0" style="font-family: SimSun, SimSun;">→E.</tspan>
+        </text>
+        <text transform="translate(127.66 46.76)" style="fill: #000; font-family: SimSun, SimSun; font-size: 10px;">
+            <tspan x="0" y="0">E→E .+ E</tspan>
+        </text>
+        <path d="M122.66,50.15c0,2.57,2.67,4.66,5.97,4.66h48.06c3.3,0,5.97-2.09,5.97-4.66V17.5h-60v32.65Z"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <path d="M176.69.5h-48.06c-3.3,0-5.97,2.69-5.97,6.01v10.99h60V6.51c0-3.32-2.67-6.01-5.97-6.01Z"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <text transform="translate(146.11 12.57)" style="fill: #000; font-family: SimSun, SimSun; font-size: 10px;">
+            <tspan x="0" y="0">S1</tspan>
+        </text>
+        <text transform="translate(127.66 147.37)" style="fill: #000; font-family: SimSun, SimSun; font-size: 10px;">
+            <tspan x="0" y="0">E→E + .E</tspan>
+        </text>
+        <text transform="translate(127.66 160.98)" style="fill: red; font-family: SimSun, SimSun; font-size: 10px;">
+            <tspan x="0" y="0">E→.E + E</tspan>
+        </text>
+        <text transform="translate(128.05 174.58)" style="fill: red; font-family: SimSun, SimSun; font-size: 10px;">
+            <tspan x="0" y="0">E→.id</tspan>
+        </text>
+        <path d="M122.66,176.28c0,3.51,2.67,6.35,5.97,6.35h48.06c3.3,0,5.97-2.84,5.97-6.35v-44.47h-60v44.47Z"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <path d="M176.69,114.81h-48.06c-3.3,0-5.97,2.69-5.97,6.01v10.99h60v-10.99c0-3.32-2.67-6.01-5.97-6.01Z"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <text transform="translate(146.11 126.87)" style="fill: #000; font-family: SimSun, SimSun; font-size: 10px;">
+            <tspan x="0" y="0">S3</tspan>
+        </text>
+        <text transform="translate(247.66 147.37)" style="fill: #000; font-family: SimSun, SimSun; font-size: 10px;">
+            <tspan x="0" y="0">E→E + E.</tspan>
+        </text>
+        <text transform="translate(247.66 160.98)" style="fill: #000; font-family: SimSun, SimSun; font-size: 10px;">
+            <tspan x="0" y="0">E→E .+ E</tspan>
+        </text>
+        <path d="M242.66,164.38c0,2.57,2.67,4.65,5.97,4.65h48.06c3.3,0,5.97-2.08,5.97-4.65v-32.57h-60v32.57Z"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <path d="M296.69,114.81h-48.06c-3.3,0-5.97,2.69-5.97,6.01v10.99h60v-10.99c0-3.32-2.67-6.01-5.97-6.01Z"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <text transform="translate(266.11 126.87)" style="fill: #000; font-family: SimSun, SimSun; font-size: 10px;">
+            <tspan x="0" y="0">S4</tspan>
+        </text>
+        <text transform="translate(5.5 160.98)" style="fill: #000; font-family: SimSun, SimSun; font-size: 10px;">
+            <tspan x="0" y="0">E→id.</tspan>
+        </text>
+        <path d="M.5,166.08c0,1.63,2.67,2.95,5.97,2.95h48.06c3.3,0,5.97-1.32,5.97-2.95v-20.66H.5v20.66Z"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <path d="M54.53,128.42H6.47c-3.3,0-5.97,2.69-5.97,6.01v10.99h60v-10.99c0-3.32-2.67-6.01-5.97-6.01Z"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <text transform="translate(23.94 140.48)" style="fill: #000; font-family: SimSun, SimSun; font-size: 10px;">
+            <tspan x="0" y="0">S2</tspan>
+        </text>
+        <g>
+            <line x1="67.66" y1="31.06" x2="113.23" y2="31.06"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+            <polygon points="112.24 32.51 117.66 31.06 112.24 29.6 112.24 32.51"
+                style="fill: #000; stroke-width: 0px;" />
+        </g>
+        <g>
+            <line x1="187.66" y1="148.72" x2="233.23" y2="148.72"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+            <polygon points="232.24 150.17 237.66 148.72 232.24 147.27 232.24 150.17"
+                style="fill: #000; stroke-width: 0px;" />
+        </g>
+        <g>
+            <line x1="117.66" y1="148.72" x2="72.09" y2="148.72"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+            <polygon points="73.08 147.27 67.66 148.72 73.08 150.17 73.08 147.27"
+                style="fill: #000; stroke-width: 0px;" />
+        </g>
+        <g>
+            <line x1="32.66" y1="73.42" x2="32.66" y2="118.99"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+            <polygon points="31.21 118 32.66 123.42 34.11 118 31.21 118" style="fill: #000; stroke-width: 0px;" />
+        </g>
+        <g>
+            <line x1="152.66" y1="59.81" x2="152.66" y2="105.38"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+            <polygon points="151.21 104.39 152.66 109.81 154.11 104.39 151.21 104.39"
+                style="fill: #000; stroke-width: 0px;" />
+        </g>
+        <g>
+            <path d="M272.66,174.72v29.43c0,2.76-2.24,5-5,5h-110c-2.76,0-5-2.24-5-5v-12.08"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+            <polygon points="154.11 193.05 152.66 187.63 151.21 193.05 154.11 193.05"
+                style="fill: #000; stroke-width: 0px;" />
+        </g>
+    </svg>
+    <p>和LL分析器类似，LR分析器也需要一个输入队列和状态栈作为分析器的格局，我们按照如下流程处理源码：</p>
+    <ol>
+        <li>栈中先压入一个元素S0</li>
+        <li>假设输入队列的第一个元素为符号A(此时还没有把A读出来)，然后结合分析器的栈顶元素<math>
+                <msub>
+                    <mi>S</mi>
+                    <mi>i</mi>
+                </msub>
+            </math>做如下判断：
+            <ol type="a">
+                <li>如果项集族中的某一项<math>
+                        <msub>
+                            <mi>S</mi>
+                            <mi>i</mi>
+                        </msub>
+                    </math>能接受A，则将边A的目标状态<math>
+                        <msub>
+                            <mi>S</mi>
+                            <mi>next</mi>
+                        </msub>
+                    </math>压入状态栈中，并且从输入队列中移除符号A</li>
+                    <li>如果不能接受符号A，则判断状态<math>
+                        <msub>
+                            <mi>S</mi>
+                            <mi>i</mi>
+                        </msub>
+                    </math>是否存在某个项<math>
+                        <msub>
+                            <mi>I</mi>
+                            <mi>k</mi>
+                        </msub>
+                    </math>的圆点在产生式末尾
+                    <ol type="i">
+                        <li>如果存在，则从状态栈中删除对应产生式体符号数量的状态，并且把产生式头H退回输入队列</li>
+                        <li>如不不存在，则报语法错误</li>
+                    </ol>
+                </li>
+            </ol>
+        </li>
+    </ol>
+    <p>根据条件(2.a.i),我们可以发现一个LR(0)项集最多只允许存在一个项的圆点在最后面，凡是我们在构造项集族时发现<em>一个项集有多个圆点在最后面</em>，我们就可以说这个文法不能用LR(0)分析器进行分析。</p>
+    <p>下面又到头痛的演示时间了，xxxxxxx</p>
     <p>说明龙书没讲清楚的LR(1)为什么不需要follow集,LR(0)没有这种顾虑</p>
 </body>
 
