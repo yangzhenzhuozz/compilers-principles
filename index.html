@@ -30,6 +30,10 @@
             display: inline-block;
             font-size: small;
         }
+
+        #lr_0_table * {
+            text-align: start;
+        }
     </style>
 </head>
 
@@ -3023,7 +3027,8 @@
             style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
         <path d="M56.69.5H8.63C5.33.5,2.66,3.19,2.66,6.51v10.99h60V6.51c0-3.32-2.67-6.01-5.97-6.01Z"
             style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
-        <text transform="translate(26.11 12.57)" style="fill: #000; font-family: SimSun, SimSun; font-size: 10px;">
+        <text id="s0" transform="translate(26.11 12.57)"
+            style="fill: #000; font-family: SimSun, SimSun; font-size: 10px;">
             <tspan x="0" y="0">S0</tspan>
         </text>
         <text transform="translate(127.66 33.06)" style="fill: #000; font-size: 10px;">
@@ -3038,7 +3043,8 @@
             style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
         <path d="M176.69.5h-48.06c-3.3,0-5.97,2.69-5.97,6.01v10.99h60V6.51c0-3.32-2.67-6.01-5.97-6.01Z"
             style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
-        <text transform="translate(146.11 12.57)" style="fill: #000; font-family: SimSun, SimSun; font-size: 10px;">
+        <text id="s1" transform="translate(146.11 12.57)"
+            style="fill: #000; font-family: SimSun, SimSun; font-size: 10px;">
             <tspan x="0" y="0">S1</tspan>
         </text>
         <text transform="translate(127.66 147.37)" style="fill: #000; font-family: SimSun, SimSun; font-size: 10px;">
@@ -3054,7 +3060,8 @@
             style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
         <path d="M176.69,114.81h-48.06c-3.3,0-5.97,2.69-5.97,6.01v10.99h60v-10.99c0-3.32-2.67-6.01-5.97-6.01Z"
             style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
-        <text transform="translate(146.11 126.87)" style="fill: #000; font-family: SimSun, SimSun; font-size: 10px;">
+        <text id="s3" transform="translate(146.11 126.87)"
+            style="fill: #000; font-family: SimSun, SimSun; font-size: 10px;">
             <tspan x="0" y="0">S3</tspan>
         </text>
         <text transform="translate(247.66 147.37)" style="fill: #000; font-family: SimSun, SimSun; font-size: 10px;">
@@ -3067,7 +3074,8 @@
             style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
         <path d="M296.69,114.81h-48.06c-3.3,0-5.97,2.69-5.97,6.01v10.99h60v-10.99c0-3.32-2.67-6.01-5.97-6.01Z"
             style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
-        <text transform="translate(266.11 126.87)" style="fill: #000; font-family: SimSun, SimSun; font-size: 10px;">
+        <text id="s4" transform="translate(266.11 126.87)"
+            style="fill: #000; font-family: SimSun, SimSun; font-size: 10px;">
             <tspan x="0" y="0">S4</tspan>
         </text>
         <text transform="translate(5.5 160.98)" style="fill: #000; font-family: SimSun, SimSun; font-size: 10px;">
@@ -3077,94 +3085,589 @@
             style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
         <path d="M54.53,128.42H6.47c-3.3,0-5.97,2.69-5.97,6.01v10.99h60v-10.99c0-3.32-2.67-6.01-5.97-6.01Z"
             style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
-        <text transform="translate(23.94 140.48)" style="fill: #000; font-family: SimSun, SimSun; font-size: 10px;">
+        <text id="s2" transform="translate(23.94 140.48)"
+            style="fill: #000; font-family: SimSun, SimSun; font-size: 10px;">
             <tspan x="0" y="0">S2</tspan>
         </text>
-        <g>
-            <line x1="67.66" y1="31.06" x2="113.23" y2="31.06"
-                style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
-            <polygon points="112.24 32.51 117.66 31.06 112.24 29.6 112.24 32.51"
-                style="fill: #000; stroke-width: 0px;" />
-        </g>
-        <g>
-            <line x1="187.66" y1="148.72" x2="233.23" y2="148.72"
-                style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
-            <polygon points="232.24 150.17 237.66 148.72 232.24 147.27 232.24 150.17"
-                style="fill: #000; stroke-width: 0px;" />
-        </g>
-        <g>
-            <line x1="117.66" y1="148.72" x2="72.09" y2="148.72"
-                style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
-            <polygon points="73.08 147.27 67.66 148.72 73.08 150.17 73.08 147.27"
-                style="fill: #000; stroke-width: 0px;" />
-        </g>
-        <g>
-            <line x1="32.66" y1="73.42" x2="32.66" y2="118.99"
-                style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
-            <polygon points="31.21 118 32.66 123.42 34.11 118 31.21 118" style="fill: #000; stroke-width: 0px;" />
-        </g>
-        <g>
-            <line x1="152.66" y1="59.81" x2="152.66" y2="105.38"
-                style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
-            <polygon points="151.21 104.39 152.66 109.81 154.11 104.39 151.21 104.39"
-                style="fill: #000; stroke-width: 0px;" />
-        </g>
-        <g>
-            <path d="M272.66,174.72v29.43c0,2.76-2.24,5-5,5h-110c-2.76,0-5-2.24-5-5v-12.08"
-                style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
-            <polygon points="154.11 193.05 152.66 187.63 151.21 193.05 154.11 193.05"
-                style="fill: #000; stroke-width: 0px;" />
-        </g>
+        <polygon id="s0_1"
+            points="117.66 31.06 112.24 29.6 112.24 30.81 67.66 30.81 67.66 31.31 112.24 31.31 112.24 32.51 117.66 31.06"
+            style="fill: #000; stroke-width: 0px;" />
+        <polygon id="s3_4"
+            points="237.66 148.72 232.24 147.27 232.24 148.47 187.66 148.47 187.66 148.97 232.24 148.97 232.24 150.17 237.66 148.72"
+            style="fill: #000; stroke-width: 0px;" />
+        <polygon id="s3_2"
+            points="117.66 148.47 73.08 148.47 73.08 147.27 67.66 148.72 73.08 150.17 73.08 148.97 117.66 148.97 117.66 148.47"
+            style="fill: #000; stroke-width: 0px;" />
+        <polygon id="s0_2"
+            points="32.91 118 32.91 73.42 32.41 73.42 32.41 118 31.21 118 32.66 123.42 34.11 118 32.91 118"
+            style="fill: #000; stroke-width: 0px;" />
+        <polygon id="s1_3"
+            points="152.91 104.39 152.91 59.81 152.41 59.81 152.41 104.39 151.21 104.39 152.66 109.81 154.11 104.39 152.91 104.39"
+            style="fill: #000; stroke-width: 0px;" />
+        <path id="s4_3"
+            d="M272.41,174.72v29.43c0,2.62-2.13,4.75-4.75,4.75h-110c-2.62,0-4.75-2.13-4.75-4.75v-11.09h1.2l-1.45-5.42-1.45,5.42h1.2v11.09c0,2.9,2.35,5.25,5.25,5.25h110c2.9,0,5.25-2.35,5.25-5.25v-29.43h-.5Z"
+            style="fill: #000; stroke-width: 0px;" />
     </svg>
-    <p>和LL分析器类似，LR分析器也需要一个输入队列和状态栈作为分析器的格局，我们按照如下流程处理源码：</p>
+    <p>和LL分析器类似，LR分析器也需要一个输入队列、状态栈，并且状态栈每个元素除了记录状态，还会记录移入操作时移入的符号信息,在编译原理中叫做语法制导定义(Syntax-Directed
+        Definition),作为分析器的格局，我们按照如下流程处理源码：</p>
     <ol>
-        <li>栈中初始化为空</li>
-        <li>假设输入队列的第一个元素为符号A(此时还没有把A读出来)，然后结合分析器的栈顶元素<math>
-                <msub>
-                    <mi>S</mi>
-                    <mi>i</mi>
-                </msub>
-            </math>做如下判断：
+        <li>栈中先压入一个元素S0,</li>
+        <li><span id="lr_0_step_2">假设输入队列的第一个元素为符号A(此时还没有把A读出来)，然后结合分析器的栈顶元素<math>
+                    <msub>
+                        <mi>S</mi>
+                        <mi>i</mi>
+                    </msub>
+                </math>做如下判断：</span>
             <ol type="a">
-                <li>如果项集族中的某一项<math>
-                        <msub>
-                            <mi>S</mi>
-                            <mi>i</mi>
-                        </msub>
-                    </math>能接受A，则将边A的目标状态<math>
-                        <msub>
-                            <mi>S</mi>
-                            <mi>next</mi>
-                        </msub>
-                    </math>压入状态栈中，并且从输入队列中移除符号A</li>
-                <li>如果不能接受符号A，则判断状态<math>
-                        <msub>
-                            <mi>S</mi>
-                            <mi>i</mi>
-                        </msub>
-                    </math>是否存在某个项<math>
-                        <msub>
-                            <mi>I</mi>
-                            <mi>k</mi>
-                        </msub>
-                    </math>的圆点在产生式末尾
+                <li><span id="lr_0_step_2_a">如果项集族中的某一项<math>
+                            <msub>
+                                <mi>S</mi>
+                                <mi>i</mi>
+                            </msub>
+                        </math>能接受A，则将边A的目标状态<math>
+                            <msub>
+                                <mi>S</mi>
+                                <mi>next</mi>
+                            </msub>
+                        </math>压入状态栈中，同时在压入的这个元素挂载符号A对应的子树(对于终结符就是一个单节点)，并且从输入队列中移除符号A</span></li>
+                <li><span id="lr_0_step_2_b">如果不能接受符号A，则判断状态<math>
+                            <msub>
+                                <mi>S</mi>
+                                <mi>i</mi>
+                            </msub>
+                        </math>是否存在某个项<math>
+                            <msub>
+                                <mi>I</mi>
+                                <mi>k</mi>
+                            </msub>
+                        </math>的圆点在产生式末尾</span>
                     <ol type="i">
-                        <li>如果存在，则从状态栈中删除对应产生式体符号数量的状态，并且把产生式头H退回输入队列，同时构造一颗子树，根节点是H，各个子节点是从栈中弹出的节点(按照弹出顺序从子树的最右节点开始创建)。如果规约的是增广文法添加的产生式,且下一个输入是$，则分析结束
+                        <li id="lr_0_step_2_b_1">
+                            如果存在，则从状态栈中弹出对应产生式体符号数量的状态，并且把产生式头H退回输入队列，同时构造一颗子树，根节点是H，各个子节点是从栈中弹出的节点(按照弹出顺序从子树的最右节点开始创建)。如果规约的是增广文法添加的产生式,且下一个输入是$，则分析结束
                         </li>
-                        <li>如不不存在，则报语法错误</li>
+                        <li id="lr_0_step_2_b_2">如不不存在，则报语法错误</li>
                     </ol>
                 </li>
             </ol>
         </li>
     </ol>
     <p>根据条件(2.a.i),我们可以发现一个LR(0)项集最多只允许存在一个项的圆点在最后面，凡是我们在构造项集族时发现<em>一个项集有多个圆点在最后面</em>，我们就可以说这个文法不能用LR(0)分析器进行分析。</p>
-    <p>下面又到演示时间了，依旧是熟悉的"1+2+3" <button id="LR_0_next">下一步</button></p>
-    <ul>
-        <li>当前状态:<span id="LR_0_now_state">0</span></li>
-        <li>栈:</li>
-        <li>输入队列:<span><span>1</span><span>+</span><span>2</span><span>+</span><span>3</span></li>
-    </ul>
+    <p>下面又到演示时间了，依旧是熟悉的"1+2+3"，弄动画实在是太累了，下面就列个表演示吧</p>
+    <table id="lr_0_table">
+        <thead>
+            <tr>
+                <th>步骤</th>
+                <th>栈</th>
+                <th>输入</th>
+                <th>动作</th>
+                <th>AST</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>s0(nil)</td>
+                <td>1(id) + 2(id) + 3(id)</td>
+                <td>S0可以通过id移入S2，输入移除一个元素，状态栈压入s2，把id挂入栈顶</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>s0(nil) s2(1)</td>
+                <td>+ 2(id) + 3(id)</td>
+                <td>S2对于输入符号'+'，使用产生式'E→id'规约,栈弹出一个元素,生成AST的一个子树</td>
+                <td><svg style="width: 30px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21.7 57">
+                        <text transform="translate(8.42 50.26)"
+                            style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                            <tspan x="0" y="0">1</tspan>
+                        </text>
+                        <circle cx="11.2" cy="46.5" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <text transform="translate(7.12 14.26)"
+                            style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                            <tspan x="0" y="0">E</tspan>
+                        </text>
+                        <circle cx="10.5" cy="10.5" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <line x1="10.5" y1="23.5" x2="10.5" y2="33.5"
+                            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                    </svg></td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>s0(nil)</td>
+                <td>E + 2(id) + 3(id)</td>
+                <td>移入S1</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>s0(nil) s1(E)</td>
+                <td>+ 2(id) + 3(id)</td>
+                <td>移入s3</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>s0(nil) s1(E) s3(+)</td>
+                <td>2(id) + 3(id)</td>
+                <td>移入s2</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>s0(nil) s1(E) s3(+) s2(2)</td>
+                <td>+ 3(id)</td>
+                <td>规约</td>
+                <td><svg style="width: 30px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21.7 57">
+                        <text transform="translate(8.42 50.26)"
+                            style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                            <tspan x="0" y="0">2</tspan>
+                        </text>
+                        <circle cx="11.2" cy="46.5" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <text transform="translate(7.12 14.26)"
+                            style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                            <tspan x="0" y="0">E</tspan>
+                        </text>
+                        <circle cx="10.5" cy="10.5" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <line x1="11.2" y1="23.5" x2="11.2" y2="33.5"
+                            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                    </svg></td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td>s0(nil) s1(E) s3(+)</td>
+                <td>E + 3(id)</td>
+                <td>移入s4</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td>s0(nil) s1(E1) s3(+) s4(E2)</td>
+                <td>+ 3(id)</td>
+                <td>移入s3</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>9</td>
+                <td>s0(nil) s1(E1) s3(+) s4(E2) s3(+)</td>
+                <td>3(id)</td>
+                <td>移入s2</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td>s0(nil) s1(E1) s3(+) s4(E2) s3(+) s2(3)</td>
+                <td>$(后面没有输入了，按照惯例用这个符号表示末尾)</td>
+                <td>规约</td>
+                <td><svg style="width: 30px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 21 57">
+                        <text transform="translate(7.12 14.26)"
+                            style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                            <tspan x="0" y="0">E</tspan>
+                        </text>
+                        <circle cx="10.5" cy="10.5" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <circle cx="10.5" cy="46.5" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <text transform="translate(7.73 50.26)"
+                            style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                            <tspan x="0" y="0">3</tspan>
+                        </text>
+                        <line x1="10.5" y1="23.5" x2="10.5" y2="33.5"
+                            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                    </svg></td>
+            </tr>
+            <tr>
+                <td>11</td>
+                <td>s0(nil) s1(E1) s3(+) s4(E2) s3(+)</td>
+                <td>E</td>
+                <td>移入s4</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>12</td>
+                <td>s0(nil) s1(E1) s3(+) s4(E2) s3(+) s4(E3)</td>
+                <td>$</td>
+                <td>规约</td>
+                <td><svg style="width: 100px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 84.62 97.32">
+                        <text transform="translate(37.29 14.26)"
+                            style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                            <tspan x="0" y="0">E</tspan>
+                        </text>
+                        <circle cx="40.66" cy="10.5" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <text transform="translate(7.73 90.57)"
+                            style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                            <tspan x="0" y="0">2</tspan>
+                        </text>
+                        <circle cx="10.5" cy="86.82" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <line x1="10.5" y1="63.82" x2="10.5" y2="73.82"
+                            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <text transform="translate(7.12 53.87)"
+                            style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                            <tspan x="0" y="0">E</tspan>
+                        </text>
+                        <circle cx="10.5" cy="50.11" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <text transform="translate(36.69 53.87)"
+                            style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                            <tspan x="0" y="0">+</tspan>
+                        </text>
+                        <circle cx="40.32" cy="50.11" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <text transform="translate(70.74 53.26)"
+                            style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                            <tspan x="0" y="0">E</tspan>
+                        </text>
+                        <circle cx="74.12" cy="49.5" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <circle cx="74.12" cy="85.5" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <text transform="translate(71.34 89.26)"
+                            style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                            <tspan x="0" y="0">3</tspan>
+                        </text>
+                        <line x1="74.12" y1="62.5" x2="74.12" y2="72.5"
+                            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <line x1="50.32" y1="23.5" x2="70.17" y2="36.5"
+                            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <line x1="40.32" y1="26.5" x2="40.32" y2="36.5"
+                            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <line x1="30.32" y1="23.5" x2="11.16" y2="36.5"
+                            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                    </svg></td>
+            </tr>
+            <tr>
+                <td>13</td>
+                <td>s0(nil) s1(E1) s3(+)</td>
+                <td>E</td>
+                <td>移入s4</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>14</td>
+                <td>s0(nil) s1(E1) s3(+) s4(E)</td>
+                <td>$</td>
+                <td>规约</td>
+                <td><svg style="width: 200px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 155.06 134.02">
+                        <text transform="translate(8.42 86.96)"
+                            style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                            <tspan x="0" y="0">1</tspan>
+                        </text>
+                        <circle cx="11.2" cy="83.2" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <text transform="translate(7.12 50.96)"
+                            style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                            <tspan x="0" y="0">E</tspan>
+                        </text>
+                        <circle cx="10.5" cy="47.2" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <line x1="10.5" y1="60.2" x2="10.5" y2="70.2"
+                            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <text transform="translate(107.73 50.96)"
+                            style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                            <tspan x="0" y="0">E</tspan>
+                        </text>
+                        <circle cx="111.11" cy="47.2" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <text transform="translate(57.35 50.96)"
+                            style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                            <tspan x="0" y="0">+</tspan>
+                        </text>
+                        <circle cx="60.98" cy="47.2" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <text transform="translate(78.17 127.28)"
+                            style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                            <tspan x="0" y="0">2</tspan>
+                        </text>
+                        <circle cx="80.95" cy="123.52" r="10"
+                            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <line x1="80.95" y1="100.52" x2="80.95" y2="110.52"
+                            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <text transform="translate(77.57 90.57)"
+                            style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                            <tspan x="0" y="0">E</tspan>
+                        </text>
+                        <circle cx="80.95" cy="86.82" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <text transform="translate(107.13 90.57)"
+                            style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                            <tspan x="0" y="0">+</tspan>
+                        </text>
+                        <circle cx="110.76" cy="86.82" r="10"
+                            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <text transform="translate(141.19 89.96)"
+                            style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                            <tspan x="0" y="0">E</tspan>
+                        </text>
+                        <circle cx="144.56" cy="86.2" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <circle cx="144.56" cy="122.2" r="10"
+                            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <text transform="translate(141.79 125.96)"
+                            style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                            <tspan x="0" y="0">3</tspan>
+                        </text>
+                        <line x1="144.56" y1="99.2" x2="144.56" y2="109.2"
+                            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <text transform="translate(57.6 14.26)"
+                            style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                            <tspan x="0" y="0">E</tspan>
+                        </text>
+                        <circle cx="60.98" cy="10.5" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <line x1="120.76" y1="60.2" x2="140.61" y2="73.2"
+                            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <line x1="110.76" y1="63.2" x2="110.76" y2="73.2"
+                            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <line x1="100.76" y1="60.2" x2="81.6" y2="73.2"
+                            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <line x1="60.98" y1="23.5" x2="60.98" y2="33.5"
+                            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <line x1="50.98" y1="20.5" x2="10.85" y2="33.5"
+                            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <line x1="70.98" y1="20.5" x2="111.11" y2="33.5"
+                            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                    </svg></td>
+            </tr>
+            <tr>
+                <td>15</td>
+                <td>s0(nil)</td>
+                <td>E</td>
+                <td>移入s1</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>16</td>
+                <td>s0(nil) s1(E)</td>
+                <td>$</td>
+                <td>规约</td>
+                <td><svg style="width: 200px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 155.06 170.02">
+                        <text transform="translate(8.42 122.96)"
+                            style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                            <tspan x="0" y="0">1</tspan>
+                        </text>
+                        <circle cx="11.2" cy="119.2" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <text transform="translate(7.12 86.96)"
+                            style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                            <tspan x="0" y="0">E</tspan>
+                        </text>
+                        <circle cx="10.5" cy="83.2" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <line x1="10.5" y1="96.2" x2="10.5" y2="106.2"
+                            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <text transform="translate(107.73 86.96)"
+                            style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                            <tspan x="0" y="0">E</tspan>
+                        </text>
+                        <circle cx="111.11" cy="83.2" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <text transform="translate(57.35 86.96)"
+                            style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                            <tspan x="0" y="0">+</tspan>
+                        </text>
+                        <circle cx="60.98" cy="83.2" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <text transform="translate(78.17 163.28)"
+                            style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                            <tspan x="0" y="0">2</tspan>
+                        </text>
+                        <circle cx="80.95" cy="159.52" r="10"
+                            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <line x1="80.95" y1="136.52" x2="80.95" y2="146.52"
+                            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <text transform="translate(77.57 126.57)"
+                            style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                            <tspan x="0" y="0">E</tspan>
+                        </text>
+                        <circle cx="80.95" cy="122.82" r="10"
+                            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <text transform="translate(107.13 126.57)"
+                            style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                            <tspan x="0" y="0">+</tspan>
+                        </text>
+                        <circle cx="110.76" cy="122.82" r="10"
+                            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <text transform="translate(141.19 125.96)"
+                            style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                            <tspan x="0" y="0">E</tspan>
+                        </text>
+                        <circle cx="144.56" cy="122.2" r="10"
+                            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <circle cx="144.56" cy="158.2" r="10"
+                            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <text transform="translate(141.79 161.96)"
+                            style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                            <tspan x="0" y="0">3</tspan>
+                        </text>
+                        <line x1="144.56" y1="135.2" x2="144.56" y2="145.2"
+                            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <text transform="translate(57.6 14.26)"
+                            style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                            <tspan x="0" y="0">S’</tspan>
+                        </text>
+                        <circle cx="60.98" cy="10.5" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <text transform="translate(57.6 50.26)"
+                            style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                            <tspan x="0" y="0">E</tspan>
+                        </text>
+                        <circle cx="60.98" cy="46.5" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <line x1="60.98" y1="23.5" x2="60.98" y2="33.5"
+                            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <line x1="120.76" y1="96.2" x2="140.61" y2="109.2"
+                            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <line x1="110.76" y1="99.2" x2="110.76" y2="109.2"
+                            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <line x1="100.76" y1="96.2" x2="81.6" y2="109.2"
+                            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <line x1="60.98" y1="59.5" x2="60.98" y2="69.5"
+                            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <line x1="50.98" y1="56.5" x2="10.85" y2="69.5"
+                            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                        <line x1="70.98" y1="56.5" x2="111.11" y2="69.5"
+                            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+                    </svg></td>
+            </tr>
+            <tr>
+                <td colspan="5">结束</td>
+            </tr>
+        </tbody>
+    </table>
+    <p>大家应该可以发现，这个文法其实是有二义性的，但是刚好我们定的这个LR(0)文法分析器是能移入就移入，所以碰巧解决了这个问题，因为我们定义的这个文法对于输入"1+2+3"可以生成这样的两棵树：</p>
+    <svg style="width: 500px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 396.14 170.02">
+        <g>
+            <text transform="translate(8.42 158.96)"
+                style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                <tspan x="0" y="0">1</tspan>
+            </text>
+            <circle cx="11.2" cy="155.2" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <text transform="translate(7.12 122.96)"
+                style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                <tspan x="0" y="0">E</tspan>
+            </text>
+            <circle cx="10.5" cy="119.2" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <line x1="10.5" y1="132.2" x2="10.5" y2="142.2" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <text transform="translate(66.74 158.96)"
+                style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                <tspan x="0" y="0">2</tspan>
+            </text>
+            <circle cx="69.51" cy="155.2" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <text transform="translate(65.44 122.96)"
+                style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                <tspan x="0" y="0">E</tspan>
+            </text>
+            <circle cx="68.81" cy="119.2" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <line x1="69.51" y1="132.2" x2="69.51" y2="142.2"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <line x1="49.66" y1="93.2" x2="69.51" y2="106.2" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <text transform="translate(36.03 122.96)"
+                style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                <tspan x="0" y="0">+</tspan>
+            </text>
+            <circle cx="39.66" cy="119.2" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <text transform="translate(36.28 86.96)"
+                style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                <tspan x="0" y="0">E</tspan>
+            </text>
+            <circle cx="39.66" cy="83.2" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <text transform="translate(86.16 86.26)"
+                style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                <tspan x="0" y="0">+</tspan>
+            </text>
+            <circle cx="89.79" cy="82.5" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <text transform="translate(136.54 86.96)"
+                style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                <tspan x="0" y="0">E</tspan>
+            </text>
+            <circle cx="139.92" cy="83.2" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <circle cx="139.92" cy="119.2" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <text transform="translate(137.15 118.9)"
+                style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                <tspan x="0" y="0">3</tspan>
+            </text>
+            <line x1="139.92" y1="96.2" x2="139.92" y2="106.2"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <text transform="translate(86.41 14.26)"
+                style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                <tspan x="0" y="0">S’</tspan>
+            </text>
+            <circle cx="89.79" cy="10.5" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <text transform="translate(86.41 50.26)"
+                style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                <tspan x="0" y="0">E</tspan>
+            </text>
+            <circle cx="89.79" cy="46.5" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <line x1="39.66" y1="96.2" x2="39.66" y2="106.2" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <line x1="89.79" y1="59.5" x2="89.79" y2="69.5" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <line x1="89.79" y1="23.5" x2="89.79" y2="33.5" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <line x1="29.66" y1="93.2" x2="10.5" y2="106.2" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <line x1="79.79" y1="56.5" x2="39.66" y2="69.5" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <line x1="99.79" y1="56.5" x2="139.92" y2="69.5" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        </g>
+        <g>
+            <text transform="translate(249.5 122.96)"
+                style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                <tspan x="0" y="0">1</tspan>
+            </text>
+            <circle cx="252.28" cy="119.2" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <text transform="translate(248.2 86.96)"
+                style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                <tspan x="0" y="0">E</tspan>
+            </text>
+            <circle cx="251.58" cy="83.2" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <line x1="251.58" y1="96.2" x2="251.58" y2="106.2"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <text transform="translate(348.81 86.96)"
+                style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                <tspan x="0" y="0">E</tspan>
+            </text>
+            <circle cx="352.19" cy="83.2" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <text transform="translate(298.43 86.96)"
+                style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                <tspan x="0" y="0">+</tspan>
+            </text>
+            <circle cx="302.06" cy="83.2" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <text transform="translate(319.26 163.28)"
+                style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                <tspan x="0" y="0">2</tspan>
+            </text>
+            <circle cx="322.03" cy="159.52" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <line x1="322.03" y1="136.52" x2="322.03" y2="146.52"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <text transform="translate(318.65 126.57)"
+                style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                <tspan x="0" y="0">E</tspan>
+            </text>
+            <circle cx="322.03" cy="122.82" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <text transform="translate(348.21 126.57)"
+                style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                <tspan x="0" y="0">+</tspan>
+            </text>
+            <circle cx="351.84" cy="122.82" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <text transform="translate(382.27 125.96)"
+                style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                <tspan x="0" y="0">E</tspan>
+            </text>
+            <circle cx="385.64" cy="122.2" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <circle cx="385.64" cy="158.2" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <text transform="translate(382.87 161.96)"
+                style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                <tspan x="0" y="0">3</tspan>
+            </text>
+            <line x1="385.64" y1="135.2" x2="385.64" y2="145.2"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <text transform="translate(298.68 14.26)"
+                style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                <tspan x="0" y="0">S’</tspan>
+            </text>
+            <circle cx="302.06" cy="10.5" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <text transform="translate(298.68 50.26)"
+                style="fill: #000; font-family: DengXian, DengXian; font-size: 12px;">
+                <tspan x="0" y="0">E</tspan>
+            </text>
+            <circle cx="302.06" cy="46.5" r="10" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <line x1="302.06" y1="23.5" x2="302.06" y2="33.5"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <line x1="361.84" y1="96.2" x2="381.7" y2="109.2"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <line x1="351.84" y1="99.2" x2="351.84" y2="109.2"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <line x1="341.84" y1="96.2" x2="322.69" y2="109.2"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <line x1="302.06" y1="59.5" x2="302.06" y2="69.5"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <line x1="292.06" y1="56.5" x2="251.93" y2="69.5"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <line x1="312.06" y1="56.5" x2="352.19" y2="69.5"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        </g>
+    </svg>
+    <h3>LR(1)分析器</h3>
+    <p>接下来就介绍前端的最后一个内容LR(1)分析器。</p>
     <p>说明龙书没讲清楚的LR(1)为什么不需要follow集,LR(0)没有这种顾虑</p>
+    <p>除了上面说的LR(k)之外还有一个LR分析方法叫做通用LR分析技术(GLR)，就是在移入、规约的时候同时选择移入和规约步骤，尝试所有可能的路线，这种分析方法理论上能处理所有的CFG(龙书说的)，就是开销很大</p>
+
 </body>
 
 <script type="module" src="./js/NFA-1.js">
