@@ -4980,8 +4980,268 @@
         'a = b = c' 会被解释为'a = (b = c)'，而不是(a = b) = c</p>
     </p>
     <h1>后端</h1>
-    <p>前面讲了这么多前端内容，现在我们开始进入编译器后端知识，编译器前端有很成熟的理论支撑，后端就不同，有着一个个的NP-C问题待解决，也就是不管你的编译器多厉害，我都可以写出烂代码击溃他</p>
+    <p>前面讲了这么多前端内容，现在我们开始进入编译器后端知识，编译器前端有很成熟的理论支撑，后端就不同，有很多NP-C问题待解决，也就是不管你的编译器多厉害，我都可以写出烂代码击溃他</p>
+    <h2>指令序列的生成</h2>
+    <p>我们可以用一种非常简单的算法把AST转换成机器指令，只需后序遍历这棵树，依次生成相关的指令即可，假设我们有这样一段代码：</p>
+    <svg style="width: 1100px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 729.08 677.07">
+        <text transform="translate(161.41 28.87)"
+            style="font-family: DengXian-Light, DengXian; font-size: 12px; font-weight: 300;">
+            <tspan x="0" y="0">文法</tspan>
+            <tspan x="0" y="14.4" xml:space="preserve">stmt → if ( condition ) stmt else stmt</tspan>
+            <tspan x="0" y="28.8">stmt → id ++</tspan>
+            <tspan x="0" y="43.2">condition → a == b</tspan>
+        </text>
+        <text transform="translate(0 24.63)"
+            style="font-family: DengXian-Light, DengXian; font-size: 12px; font-weight: 300;">
+            <tspan x="0" y="0">代码</tspan>
+            <tspan x="0" y="14.4">if(a==b)</tspan>
+            <tspan x="0" y="28.8" style="letter-spacing: 2.73em;"> </tspan>
+            <tspan x="36" y="28.8">a++</tspan>
+            <tspan x="0" y="43.2">else</tspan>
+            <tspan x="0" y="57.6" style="letter-spacing: 2.73em;"> </tspan>
+            <tspan x="36" y="57.6">b++</tspan>
+        </text>
+        <text transform="translate(240.44 135.61)"
+            style="font-family: DengXian-Light, DengXian; font-size: 12px; font-weight: 300;">
+            <tspan x="0" y="0">stmt</tspan>
+        </text>
+        <circle cx="250.56" cy="131.85" r="12.5"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <text transform="translate(196.41 245.61)"
+            style="font-family: DengXian-Light, DengXian; font-size: 12px; font-weight: 300;">
+            <tspan x="0" y="0">a&gt;b</tspan>
+        </text>
+        <circle cx="205.56" cy="241.85" r="12.5"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <text transform="translate(330.8 245.61)"
+            style="font-family: DengXian-Light, DengXian; font-size: 12px; font-weight: 300;">
+            <tspan x="0" y="0">b++</tspan>
+        </text>
+        <circle cx="340.56" cy="241.85" r="12.5"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <text transform="translate(240.29 245.61)"
+            style="font-family: DengXian-Light, DengXian; font-size: 12px; font-weight: 300;">
+            <tspan x="0" y="0">a++</tspan>
+        </text>
+        <circle cx="250.56" cy="241.85" r="12.5"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <text transform="translate(193.84 190.61)"
+            style="font-family: DengXian-Light, DengXian; font-size: 12px; font-weight: 300;">
+            <tspan x="0" y="0">con..</tspan>
+        </text>
+        <circle cx="205.56" cy="186.85" r="12.5"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <text transform="translate(240.44 190.61)"
+            style="font-family: DengXian-Light, DengXian; font-size: 12px; font-weight: 300;">
+            <tspan x="0" y="0">stmt</tspan>
+        </text>
+        <circle cx="250.56" cy="186.85" r="12.5"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <text transform="translate(330.44 190.61)"
+            style="font-family: DengXian-Light, DengXian; font-size: 12px; font-weight: 300;">
+            <tspan x="0" y="0">stmt</tspan>
+        </text>
+        <circle cx="340.56" cy="186.85" r="12.5"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <text transform="translate(156.89 190.61)"
+            style="font-family: DengXian-Light, DengXian; font-size: 12px; font-weight: 300;">
+            <tspan x="0" y="0">if</tspan>
+        </text>
+        <circle cx="160.56" cy="186.85" r="12.5"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <text transform="translate(287.2 190.61)"
+            style="font-family: DengXian-Light, DengXian; font-size: 12px; font-weight: 300;">
+            <tspan x="0" y="0">else</tspan>
+        </text>
+        <circle cx="295.56" cy="186.85" r="12.5"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <line x1="250.56" y1="149.35" x2="250.56" y2="169.35"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <line x1="250.56" y1="204.35" x2="250.56" y2="224.35"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <line x1="340.56" y1="204.35" x2="340.56" y2="224.35"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <line x1="205.56" y1="204.35" x2="205.56" y2="224.35"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <line x1="233.06" y1="149.35" x2="160.56" y2="169.35"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <line x1="241.81" y1="149.35" x2="205.56" y2="169.35"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <line x1="259.31" y1="149.35" x2="295.56" y2="169.35"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <line x1="268.06" y1="149.35" x2="340.56" y2="169.35"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <text transform="translate(220.45 594.33)"
+            style="font-family: DengXian-Light, DengXian; font-size: 12px; font-weight: 300;">
+            <tspan x="0" y="0" xml:space="preserve">0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cmp a,b</tspan>
+            <tspan x="0" y="14.4" xml:space="preserve">1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jnz $4</tspan>
+            <tspan x="0" y="28.8" xml:space="preserve">2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inc a</tspan>
+            <tspan x="0" y="43.2" xml:space="preserve">3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;jmp $5</tspan>
+            <tspan x="0" y="57.6" xml:space="preserve">4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;inc b</tspan>
+            <tspan x="0" y="72" xml:space="preserve">5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;nop</tspan>
+        </text>
+        <rect x="200.56" y="576.57" width="100" height="100" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <text transform="translate(240.62 318.03)"
+            style="font-family: DengXian-Light, DengXian; font-size: 12px; font-weight: 300;">
+            <tspan x="0" y="0">stmt</tspan>
+        </text>
+        <circle cx="250.74" cy="314.27" r="12.5"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <text transform="translate(196.59 428.03)"
+            style="font-family: DengXian-Light, DengXian; font-size: 12px; font-weight: 300;">
+            <tspan x="0" y="0">a&gt;b</tspan>
+        </text>
+        <circle cx="205.74" cy="424.27" r="12.5"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <text transform="translate(330.98 428.03)"
+            style="font-family: DengXian-Light, DengXian; font-size: 12px; font-weight: 300;">
+            <tspan x="0" y="0">b++</tspan>
+        </text>
+        <circle cx="340.74" cy="424.27" r="12.5"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <text transform="translate(240.46 428.03)"
+            style="font-family: DengXian-Light, DengXian; font-size: 12px; font-weight: 300;">
+            <tspan x="0" y="0">a++</tspan>
+        </text>
+        <circle cx="250.74" cy="424.27" r="12.5"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <text transform="translate(194.02 373.03)"
+            style="font-family: DengXian-Light, DengXian; font-size: 12px; font-weight: 300;">
+            <tspan x="0" y="0">con..</tspan>
+        </text>
+        <circle cx="205.74" cy="369.27" r="12.5"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <text transform="translate(240.62 373.03)"
+            style="font-family: DengXian-Light, DengXian; font-size: 12px; font-weight: 300;">
+            <tspan x="0" y="0">stmt</tspan>
+        </text>
+        <circle cx="250.74" cy="369.27" r="12.5"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <text transform="translate(330.62 373.03)"
+            style="font-family: DengXian-Light, DengXian; font-size: 12px; font-weight: 300;">
+            <tspan x="0" y="0">stmt</tspan>
+        </text>
+        <circle cx="340.74" cy="369.27" r="12.5"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <text transform="translate(157.06 373.03)"
+            style="font-family: DengXian-Light, DengXian; font-size: 12px; font-weight: 300;">
+            <tspan x="0" y="0">if</tspan>
+        </text>
+        <circle cx="160.74" cy="369.27" r="12.5"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <text transform="translate(287.38 373.03)"
+            style="font-family: DengXian-Light, DengXian; font-size: 12px; font-weight: 300;">
+            <tspan x="0" y="0">else</tspan>
+        </text>
+        <circle cx="295.74" cy="369.27" r="12.5"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <line x1="250.74" y1="331.77" x2="250.74" y2="351.77"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <line x1="250.74" y1="386.77" x2="250.74" y2="406.77"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <line x1="340.74" y1="386.77" x2="340.74" y2="406.77"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <line x1="205.74" y1="386.77" x2="205.74" y2="406.77"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <line x1="233.24" y1="331.77" x2="160.74" y2="351.77"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <line x1="241.99" y1="331.77" x2="205.74" y2="351.77"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <line x1="259.49" y1="331.77" x2="295.74" y2="351.77"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <line x1="268.24" y1="331.77" x2="340.74" y2="351.77"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <text transform="translate(123.91 487.19)"
+            style="font-family: DengXian-Light, DengXian; font-size: 12px; font-weight: 300;">
+            <tspan x="0" y="0">生成指令:</tspan>
+            <tspan x="0" y="14.4" xml:space="preserve">cmp a,b</tspan>
+            <tspan x="0" y="28.8" xml:space="preserve">jnz false_label</tspan>
+        </text>
+        <rect x="111.9" y="472.84" width="100" height="50" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <text transform="translate(264.4 493.4)"
+            style="font-family: DengXian-Light, DengXian; font-size: 12px; font-weight: 300;">
+            <tspan x="0" y="0">生成指令:</tspan>
+            <tspan x="0" y="14.4" xml:space="preserve">inc a</tspan>
+        </text>
+        <rect x="230.28" y="476.84" width="100" height="40" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <text transform="translate(384.46 493.4)"
+            style="font-family: DengXian-Light, DengXian; font-size: 12px; font-weight: 300;">
+            <tspan x="0" y="0">生成指令:</tspan>
+            <tspan x="0" y="14.4" xml:space="preserve">inc b</tspan>
+        </text>
+        <rect x="350.86" y="476.84" width="100" height="40" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <g>
+            <line x1="197.06" y1="438.4" x2="177.28" y2="459.89"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <polygon points="176.46 455.32 178.12 458.98 181.91 460.33 173.24 464.28 176.46 455.32" />
+        </g>
+        <g>
+            <line x1="252.21" y1="441.08" x2="257.85" y2="463.26"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <polygon points="253.56 461.45 257.54 462.06 260.74 459.63 259.31 469.04 253.56 461.45" />
+        </g>
+        <g>
+            <line x1="350.86" y1="436.77" x2="388.86" y2="466.93"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <polygon points="384.36 468.08 387.89 466.16 388.96 462.28 393.54 470.64 384.36 468.08" />
+        </g>
+        <rect x="140.74" y="354.27" width="220" height="30"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <rect x="438.58" y="344.27" width="290" height="50" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <text transform="translate(447.91 358.63)"
+            style="font-family: DengXian-Light, DengXian; font-size: 12px; font-weight: 300;">
+            <tspan x="0" y="0">1.在stmt2的结束位置添加一条空指令nop作为end</tspan>
+            <tspan x="0" y="14.4">2.在stmt1的结束位置添加一条跳转指令，跳转到end</tspan>
+            <tspan x="0" y="28.8">3.在condition的false_label填入stmt2的第一条指令地址</tspan>
+        </text>
+        <g>
+            <line x1="365.6" y1="369.27" x2="429.63" y2="369.27"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <polygon points="426.82 372.98 428.4 369.27 426.82 365.57 435.6 369.27 426.82 372.98" />
+        </g>
+        <rect x="150.74" y=".5" width="200" height="90" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+    </svg>
+    <p>我们经过这三个步骤：生成AST→后序遍历AST→拼接遍历结果，就能得到一系列可以执行的机器指令，我们可以编写这样一段java代码，javac本身几乎不对代码做优化，代码优化都交给了jvm，所以可以看到java和我们自己编译器生成的指令大差不差：
+    </p>
+    <div class="code-area">
+        <div><span class="line-number"></span><span class="key-word">void</span> <span class="variable">fun</span>(<span
+                class="key-word">int</span>
+            <span class="variable">a</span>,
+            <span class="key-word">int</span>
+            <span class="variable">b</span>) {
+        </div>
+        <div><span class="line-number"></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="key-word">if</span> (<span
+                class="variable">a</span> == <span class="variable">b</span>)</div>
+        <div><span class="line-number"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                class="variable">a</span>++;</div>
+        <div><span class="line-number"></span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="key-word">else</span></div>
+        <div><span class="line-number"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
+                class="variable">b</span>++;</div>
+        <div><span class="line-number"></span>}</div>
+    </div>
+    <p>编译出来的字节码如下：</p>
+    <div class="code-area" style="font-size:large;">
+        <pre>fun(II)V              <span class="comment">//函数fun，参数为两个int</span>
+L0                   <span class="comment">//label:L0</span>
+ LINENUMBER 2 L0     <span class="comment">//下面的指令对应了java源码的第1行,而且对应了一个label:L0</span>
+ ILOAD 1             <span class="comment">//用int方式(4字节)加载第1个局部变量到运算栈</span>
+ ILOAD 2             <span class="comment">//用int方式(4字节)加载第2个局部变量到运算栈</span>
+ IF_ICMPNE L1        <span class="comment">//将运算栈中的数据用int比较的方式对比，不等于0则跳转到L1</span>
+L2                   <span class="comment">//label:L2</span>
+ LINENUMBER 3 L2     <span class="comment">//下面的指令对应了java源码的第3行,而且对应了一个label:L2</span>
+ IINC 1 1            <span class="comment">//将第1个局部变量用int方式增加1</span>
+ GOTO L3             <span class="comment">//无条件跳转到L3</span>
+L1                   <span class="comment">//label:L1</span>
+ LINENUMBER 5 L1     <span class="comment">//下面的指令对应了java源码的第5行,而且对应了一个label:L1</span>
+FRAME SAME           <span class="comment">//变量栈、运算栈都和上一次操作一样,这些栈用于辅助GC_root和抛出异常之后的stack unwind等</span>
+ IINC 2 1            <span class="comment">//将第2个局部变量用int方式增加1</span>
+L3                   <span class="comment">//label:L3</span>
+ LINENUMBER 6 L3     <span class="comment">//下面的指令对应了java源码的第3行,而且对应了一个label:L3</span>
+FRAME SAME           <span class="comment">//变量栈、运算栈都和上一次操作一样,这些栈用于辅助GC_root和抛出异常之后的stack unwind等</span>
+ RETURN              <span class="comment">//返回</span></pre>
+    </div>
     <h2>基本块</h2>
+    <p>为了方便演示，这里的指令序列我们都使用三地址代码"a=b+c"的形式，每条指令最多出现三个地址(变量名实际上就对应了在内存中的地址)</p>
     <h2>有向无环图(Directed Acyclic Graph)优化</h2>
     <h2>窥孔优化</h2>
     <h2>基于栈的机器(jvm)和基于寄存器的机器</h2>
@@ -4993,10 +5253,21 @@
 </body>
 <style>
     .code-area {
+        counter-reset: code_line_number 0;
         background-color: #f2f2f2;
         margin-top: 0;
         margin-bottom: 0;
         padding: 5px 10px;
+    }
+
+    .line-number {
+        color: #000;
+        margin-right: 1rem;
+    }
+
+    .line-number::after {
+        counter-increment: code_line_number 1;
+        content: counter(code_line_number)':';
     }
 
     .code-header {
