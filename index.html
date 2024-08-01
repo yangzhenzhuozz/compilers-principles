@@ -38,7 +38,6 @@
 </head>
 
 <body>
-    <p>小心,这是一堆抽象的东西</p>
     <p>目前已经实现了编程语言ty,可以上<a href="https://github.com/yangzhenzhuozz/ty">github</a>看看</p>
     <h1>乔姆斯基体系(chomsky hierarchy)</h1>
     <p>提起编译原理,就不得不先说说文法。</p>
@@ -4980,7 +4979,7 @@
         'a = b = c' 会被解释为'a = (b = c)'，而不是(a = b) = c</p>
     </p>
     <h1>后端</h1>
-    <p>前面讲了这么多前端内容，现在我们开始进入编译器后端知识，编译器前端有很成熟的理论支撑，后端就不同，有很多NP-C问题待解决，也就是不管你的编译器多厉害，我都可以写出烂代码击溃他</p>
+    <p>前面讲了这么多前端内容，现在我们开始进入编译器后端知识，编译器前端有很成熟的理论支撑，后端就不同，有很多NP-C问题待解决。不管编译器多厉害，我都可以写出一些糟糕代码击溃他</p>
     <h2>指令序列的生成</h2>
     <p>我们可以用一种非常简单的算法把AST转换成机器指令，只需后序遍历这棵树，依次生成相关的指令即可，假设我们有这样一段代码：</p>
     <svg style="width: 1100px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 729.08 677.07">
@@ -5241,7 +5240,40 @@ FRAME SAME           <span class="comment">//变量栈、运算栈都和上一�
  RETURN              <span class="comment">//返回</span></pre>
     </div>
     <h2>基本块</h2>
-    <p>为了方便演示，这里的指令序列我们都使用三地址代码"a=b+c"的形式，每条指令最多出现三个地址(变量名实际上就对应了在内存中的地址)</p>
+    <p>为了方便演示，这里的指令序列我们使用三地址代码"a=b+c"的形式，每条指令最多出现三个地址(变量名实际上就对应了在内存中的地址)。基本块的定义如下:</p>
+    <ol>
+        <li>控制流只能从基本块中的第一个指令进入该块。也就是说，没有跳转到基本块中间的转移指令。</li>
+        <li>除了基本块的最后一个指令，控制流在离开基本块之前不会停机或者跳转。</li>
+    </ol>
+    <p>我们用下面这段代码把10×10的矩阵设置为单位矩阵：</p>
+    <div class="code-area">
+        <div>for i from 1 to 10 do</div>
+        <div>for j from 1 to 10 do</div>
+        <div>a[i, j]= 0.0;</div>
+        <div>for i from 1 to 10 do</div>
+        <div>a[i, i] = 1.0;</div>
+    </div>
+    <p>将其翻译成指令序列之后如下:</p>
+    <div class="code-area">
+        <div><span class="line-number"></span>i = 1</div>
+        <div><span class="line-number"></span>j = 1</div>
+        <div><span class="line-number"></span>t1 = 10 * i</div>
+        <div><span class="line-number"></span>t2 = t1 + j</div>
+        <div><span class="line-number"></span>t3 = 8 * t2</div>
+        <div><span class="line-number"></span>t4 = t3 - 88</div>
+        <div><span class="line-number"></span>a[t4] = 0.0</div>
+        <div><span class="line-number"></span>j = j + 1</div>
+        <div><span class="line-number"></span>if j &lt;= 10 goto (3)</div>
+        <div><span class="line-number"></span>i = i + 1</div>
+        <div><span class="line-number"></span>if i &lt;= 10 goto (2)</div>
+        <div><span class="line-number"></span>i = 1</div>
+        <div><span class="line-number"></span>t5 = i - 1</div>
+        <div><span class="line-number"></span>t6 = 88 * t5</div>
+        <div><span class="line-number"></span>a[t6] = 1.0</div>
+        <div><span class="line-number"></span>i = i + 1</div>
+        <div><span class="line-number"></span>if i &lt;= 10 goto (13)</div>
+    </div>
+    <p>一段程序会被拆分成多个基本块组成的流图。</p>
     <h2>有向无环图(Directed Acyclic Graph)优化</h2>
     <h2>窥孔优化</h2>
     <h2>基于栈的机器(jvm)和基于寄存器的机器</h2>
