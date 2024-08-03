@@ -5273,7 +5273,112 @@ FRAME SAME           <span class="comment">//变量栈、运算栈都和上一�
         <div><span class="line-number"></span>i = i + 1</div>
         <div><span class="line-number"></span>if i &lt;= 10 goto (13)</div>
     </div>
-    <p>一段程序会被拆分成多个基本块组成的流图。</p>
+    <p>我们把这段程序拆分成多个基本块组成的流图。</p>
+    <svg style="width: 400px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 269.75 656.27">
+        <text transform="translate(9.59 151.66)" style="fill: #231815; font-family: STSong, STSong; font-size: 12px;">
+            <tspan x="0" y="0">j=1</tspan>
+        </text>
+        <rect x=".5" y="135.43" width="113.39" height="24.95"
+            style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
+        <text transform="translate(9.29 522.95)" style="fill: #231815; font-family: STSong, STSong; font-size: 12px;">
+            <tspan x="0" y="0">t5=i-1</tspan>
+            <tspan x="0" y="14.4">t6=88*t5</tspan>
+            <tspan x="0" y="28.8">a[t6]=1.0</tspan>
+            <tspan x="0" y="43.2">i=i+1</tspan>
+            <tspan x="0" y="57.6" xml:space="preserve">if i&lt;=10 goto B6</tspan>
+        </text>
+        <rect x=".5" y="506.1" width="113.39" height="82.2"
+            style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
+        <text transform="translate(9.29 454.86)" style="fill: #231815; font-family: STSong, STSong; font-size: 12px;">
+            <tspan x="0" y="0">i=1</tspan>
+        </text>
+        <rect x=".5" y="438.63" width="113.39" height="24.95"
+            style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
+        <text transform="translate(9.29 372.99)" style="fill: #231815; font-family: STSong, STSong; font-size: 12px;">
+            <tspan x="0" y="0">i=i+1</tspan>
+            <tspan x="0" y="14.4" xml:space="preserve">if i&lt;=10 goto B2</tspan>
+        </text>
+        <rect x=".5" y="356.76" width="113.39" height="39.35"
+            style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
+        <text transform="translate(9.59 219.13)" style="fill: #231815; font-family: STSong, STSong; font-size: 12px;">
+            <tspan x="0" y="0">t1=10*i</tspan>
+            <tspan x="0" y="14.4">t2=t1+j</tspan>
+            <tspan x="0" y="28.8">t3=8*t2</tspan>
+            <tspan x="0" y="43.2">t4=t3-88</tspan>
+            <tspan x="0" y="57.6">a[t4]=0.0</tspan>
+            <tspan x="0" y="72">j=j+1</tspan>
+            <tspan x="0" y="86.4" xml:space="preserve">if j&lt;10 goto B3</tspan>
+        </text>
+        <rect x=".5" y="202.9" width="113.39" height="111.35"
+            style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
+        <text transform="translate(9.29 84.2)" style="fill: #231815; font-family: STSong, STSong; font-size: 12px;">
+            <tspan x="0" y="0">i=1</tspan>
+        </text>
+        <rect x=".5" y="67.97" width="113.39" height="24.95"
+            style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
+        <text transform="translate(38.14 16.73)" style="fill: #231815; font-family: STSong, STSong; font-size: 12px;">
+            <tspan x="0" y="0">ENTRY</tspan>
+        </text>
+        <rect x=".5" y=".5" width="113.39" height="24.95" style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
+        <text transform="translate(38.14 647.05)" style="fill: #231815; font-family: STSong, STSong; font-size: 12px;">
+            <tspan x="0" y="0">EXIT</tspan>
+        </text>
+        <rect x=".5" y="630.82" width="113.39" height="24.95"
+            style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
+        <g>
+            <line x1="57.19" y1="25.45" x2="57.19" y2="62"
+                style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
+            <polygon points="53.49 59.19 57.19 60.76 60.9 59.19 57.19 67.97 53.49 59.19" style="fill: #231815;" />
+        </g>
+        <g>
+            <line x1="57.19" y1="92.91" x2="57.19" y2="129.46"
+                style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
+            <polygon points="53.49 126.65 57.19 128.23 60.9 126.65 57.19 135.43 53.49 126.65" style="fill: #231815;" />
+        </g>
+        <g>
+            <line x1="57.19" y1="160.38" x2="57.19" y2="196.93"
+                style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
+            <polygon points="53.49 194.12 57.19 195.69 60.9 194.12 57.19 202.9 53.49 194.12" style="fill: #231815;" />
+        </g>
+        <g>
+            <line x1="57.19" y1="314.24" x2="57.19" y2="350.79"
+                style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
+            <polygon points="53.49 347.99 57.19 349.56 60.9 347.99 57.19 356.76 53.49 347.99" style="fill: #231815;" />
+        </g>
+        <g>
+            <line x1="57.19" y1="396.11" x2="57.19" y2="432.66"
+                style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
+            <polygon points="53.49 429.85 57.19 431.43 60.9 429.85 57.19 438.63 53.49 429.85" style="fill: #231815;" />
+        </g>
+        <g>
+            <line x1="57.19" y1="463.58" x2="57.19" y2="500.13"
+                style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
+            <polygon points="53.49 497.32 57.19 498.89 60.9 497.32 57.19 506.1 53.49 497.32" style="fill: #231815;" />
+        </g>
+        <g>
+            <line x1="57.19" y1="588.3" x2="57.19" y2="624.85"
+                style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
+            <polygon points="53.49 622.04 57.19 623.62 60.9 622.04 57.19 630.82 53.49 622.04" style="fill: #231815;" />
+        </g>
+        <g>
+            <path d="M113.89,314.24c82.81,49.01,88.64-146.1,5.47-113.75"
+                style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
+            <polygon points="120.52 196.06 120.52 200.08 123.41 202.87 113.89 202.9 120.52 196.06"
+                style="fill: #231815;" />
+        </g>
+        <g>
+            <path d="M113.89,396.11c164.5,91.53,243.52-328.43,5.73-262.35"
+                style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
+            <polygon points="121.35 129.51 120.83 133.5 123.34 136.65 113.89 135.43 121.35 129.51"
+                style="fill: #231815;" />
+        </g>
+        <g>
+            <path d="M113.89,588.3c54.21,38.02,75.17-116.98,5.32-84.92"
+                style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
+            <polygon points="120.09 498.87 120.33 502.88 123.39 505.49 113.89 506.1 120.09 498.87"
+                style="fill: #231815;" />
+        </g>
+    </svg>
     <h2>有向无环图(Directed Acyclic Graph)优化</h2>
     <h2>窥孔优化</h2>
     <h2>基于栈的机器(jvm)和基于寄存器的机器</h2>
