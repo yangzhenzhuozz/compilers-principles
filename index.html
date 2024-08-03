@@ -5379,7 +5379,265 @@ FRAME SAME           <span class="comment">//变量栈、运算栈都和上一�
                 style="fill: #231815;" />
         </g>
     </svg>
+    <p>很多后端编译技术都是基于基本块进行，因为在一个基本块内部，可以保证变量不会因为if-else或者循环语句发生变化，这使得优化之后的代码能和原语句运算结果一致</p>
     <h2>有向无环图(Directed Acyclic Graph)优化</h2>
+    <p>使用DAG可以很方便的进行代码优化，比如Spark就会把我们的SQL生成一张DAG，通过DAG可以合并很多冗余运算，DAG在语法树生成阶段可以使用，并且还可以通过基本块构造DAG</p>
+    <p>AST转换为DAG，首先有一个图论的知识点：有向树是有向无环图的真子集，AST很明显是一颗有向树(AST的所有节点只有一个根，方向指向根)。我们可以在生成AST的时候就顺便使用DAG优化：每次遇到完全一致的子树时，我们不生成新子树了，而是直接使用已经生成好的子树。假设我们有这么一条语句："a+a*(b-c)+(b-c)*d"，则优化过程如下：
+    </p>
+    <svg style="width: 600px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 302.91 369.12">
+        <g>
+            <text transform="translate(69.4 145.44)" style="font-family: SimSun, SimSun; font-size: 12px; stroke: red;">
+                <tspan x="0" y="0">b</tspan>
+            </text>
+            <circle cx="72.4" cy="141.12" r="9"
+                style="fill: none; stroke: red; stroke-miterlimit: 10; stroke-width: .25px;" />
+            <text transform="translate(102.4 112.44)"
+                style="font-family: SimSun, SimSun; font-size: 12px; stroke: red;">
+                <tspan x="0" y="0">-</tspan>
+            </text>
+            <circle cx="105.4" cy="108.12" r="9"
+                style="fill: none; stroke: red; stroke-miterlimit: 10; stroke-width: .25px;" />
+            <text transform="translate(135.4 145.44)"
+                style="font-family: SimSun, SimSun; font-size: 12px; stroke: red;">
+                <tspan x="0" y="0">c</tspan>
+            </text>
+            <circle cx="138.4" cy="141.12" r="9"
+                style="fill: none; stroke: red; stroke-miterlimit: 10; stroke-width: .25px;" />
+            <text transform="translate(39.13 112.44)"
+                style="font-family: SimSun, SimSun; font-size: 12px; stroke: blue;">
+                <tspan x="0" y="0">a</tspan>
+            </text>
+            <circle cx="42.12" cy="108.12" r="9"
+                style="fill: none; stroke: blue; stroke-miterlimit: 10; stroke-width: .25px;" />
+            <text transform="translate(6.12 79.44)" style="font-family: SimSun, SimSun; font-size: 12px; stroke: blue;">
+                <tspan x="0" y="0">a</tspan>
+            </text>
+            <circle cx="9.12" cy="75.12" r="9"
+                style="fill: none; stroke: blue; stroke-miterlimit: 10; stroke-width: .25px;" />
+            <text transform="translate(69.4 79.44)" style="font-family: SimSun, SimSun; font-size: 12px;">
+                <tspan x="0" y="0">*</tspan>
+            </text>
+            <circle cx="72.4" cy="75.12" r="9"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+            <text transform="translate(168.4 13.44)" style="font-family: SimSun, SimSun; font-size: 12px;">
+                <tspan x="0" y="0">+</tspan>
+            </text>
+            <circle cx="171.4" cy="9.12" r="9"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+            <text transform="translate(39.12 46.44)" style="font-family: SimSun, SimSun; font-size: 12px;">
+                <tspan x="0" y="0">+</tspan>
+            </text>
+            <circle cx="42.12" cy="42.12" r="9"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+            <g>
+                <line x1="81.4" y1="132.12" x2="94.29" y2="119.24"
+                    style="fill: none; stroke: red; stroke-miterlimit: 10; stroke-width: .5px;" />
+                <polygon points="94.61 121.54 93.85 119.67 91.99 118.92 96.4 117.12 94.61 121.54" style="fill: red;" />
+            </g>
+            <g>
+                <line x1="49.76" y1="99.12" x2="62.65" y2="86.24"
+                    style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+                <polygon points="62.97 88.54 62.22 86.67 60.35 85.92 64.76 84.12 62.97 88.54" />
+            </g>
+            <g>
+                <line x1="18.12" y1="66.12" x2="31.01" y2="53.24"
+                    style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+                <polygon points="31.33 55.54 30.58 53.67 28.71 52.92 33.12 51.12 31.33 55.54" />
+            </g>
+            <g>
+                <line x1="129.4" y1="132.12" x2="116.51" y2="119.24"
+                    style="fill: none; stroke: red; stroke-miterlimit: 10; stroke-width: .5px;" />
+                <polygon points="118.81 118.92 116.95 119.67 116.2 121.54 114.4 117.12 118.81 118.92"
+                    style="fill: red;" />
+            </g>
+            <text transform="translate(257.79 46.44)" style="font-family: SimSun, SimSun; font-size: 12px;">
+                <tspan x="0" y="0">*</tspan>
+            </text>
+            <circle cx="260.78" cy="42.12" r="9"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+            <text transform="translate(201.4 112.44)"
+                style="font-family: SimSun, SimSun; font-size: 12px; stroke: red;">
+                <tspan x="0" y="0">b</tspan>
+            </text>
+            <circle cx="204.4" cy="108.12" r="9"
+                style="fill: none; stroke: red; stroke-miterlimit: 10; stroke-width: .25px;" />
+            <text transform="translate(224.78 79.44)"
+                style="font-family: SimSun, SimSun; font-size: 12px; stroke: red;">
+                <tspan x="0" y="0">-</tspan>
+            </text>
+            <circle cx="227.78" cy="75.12" r="9"
+                style="fill: none; stroke: red; stroke-miterlimit: 10; stroke-width: .25px;" />
+            <text transform="translate(247.4 112.44)"
+                style="font-family: SimSun, SimSun; font-size: 12px; stroke: red;">
+                <tspan x="0" y="0">c</tspan>
+            </text>
+            <circle cx="250.4" cy="108.12" r="9"
+                style="fill: none; stroke: red; stroke-miterlimit: 10; stroke-width: .25px;" />
+            <text transform="translate(290.78 79.44)" style="font-family: SimSun, SimSun; font-size: 12px;">
+                <tspan x="0" y="0">d</tspan>
+            </text>
+            <circle cx="293.78" cy="75.12" r="9"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+            <g>
+                <line x1="208.59" y1="99.12" x2="221.48" y2="86.24"
+                    style="fill: none; stroke: red; stroke-miterlimit: 10; stroke-width: .5px;" />
+                <polygon points="221.8 88.54 221.05 86.67 219.18 85.92 223.59 84.12 221.8 88.54" style="fill: red;" />
+            </g>
+            <g>
+                <line x1="236.78" y1="66.12" x2="249.67" y2="53.24"
+                    style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+                <polygon points="249.99 55.54 249.24 53.67 247.37 52.92 251.78 51.12 249.99 55.54" />
+            </g>
+            <g>
+                <line x1="246.59" y1="99.12" x2="233.7" y2="86.24"
+                    style="fill: none; stroke: red; stroke-miterlimit: 10; stroke-width: .5px;" />
+                <polygon points="236.01 85.92 234.14 86.67 233.39 88.54 231.59 84.12 236.01 85.92" style="fill: red;" />
+            </g>
+            <g>
+                <line x1="284.78" y1="66.12" x2="271.9" y2="53.24"
+                    style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+                <polygon points="274.2 52.92 272.33 53.67 271.58 55.54 269.78 51.12 274.2 52.92" />
+            </g>
+            <g>
+                <line x1="96.4" y1="99.12" x2="83.51" y2="86.24"
+                    style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+                <polygon points="85.81 85.92 83.95 86.67 83.2 88.54 81.4 84.12 85.81 85.92" />
+            </g>
+            <g>
+                <line x1="64.76" y1="66.12" x2="51.87" y2="53.24"
+                    style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+                <polygon points="54.18 52.92 52.31 53.67 51.56 55.54 49.76 51.12 54.18 52.92" />
+            </g>
+            <g>
+                <line x1="51.12" y1="33.12" x2="159.44" y2="18.52"
+                    style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+                <polygon points="158.3 20.55 158.83 18.61 157.8 16.88 162.4 18.12 158.3 20.55" />
+            </g>
+            <g>
+                <line x1="250.4" y1="33.12" x2="183.32" y2="18.75"
+                    style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+                <polygon points="185.08 17.23 183.92 18.88 184.3 20.86 180.4 18.12 185.08 17.23" />
+            </g>
+        </g>
+        <g>
+            <g>
+                <text transform="translate(70.87 304.44)"
+                    style="font-family: SimSun, SimSun; font-size: 12px; stroke: blue;">
+                    <tspan x="0" y="0">a</tspan>
+                </text>
+                <circle cx="73.87" cy="300.13" r="9"
+                    style="fill: none; stroke: blue; stroke-miterlimit: 10; stroke-width: .25px;" />
+            </g>
+            <text transform="translate(101.15 271.44)" style="font-family: SimSun, SimSun; font-size: 12px;">
+                <tspan x="0" y="0">*</tspan>
+            </text>
+            <circle cx="104.15" cy="267.12" r="9"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+            <g>
+                <text transform="translate(134.15 205.44)" style="font-family: SimSun, SimSun; font-size: 12px;">
+                    <tspan x="0" y="0">+</tspan>
+                </text>
+                <circle cx="137.15" cy="201.12" r="9"
+                    style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+            </g>
+            <text transform="translate(70.87 238.44)" style="font-family: SimSun, SimSun; font-size: 12px;">
+                <tspan x="0" y="0">+</tspan>
+            </text>
+            <circle cx="73.87" cy="234.12" r="9"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+            <g>
+                <line x1="81.51" y1="291.12" x2="94.4" y2="278.24"
+                    style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+                <polygon points="94.72 280.54 93.96 278.67 92.1 277.92 96.51 276.12 94.72 280.54" />
+            </g>
+            <text transform="translate(101.15 337.44)"
+                style="font-family: SimSun, SimSun; font-size: 12px; stroke: red;">
+                <tspan x="0" y="0">b</tspan>
+            </text>
+            <circle cx="104.15" cy="333.13" r="9"
+                style="fill: none; stroke: red; stroke-miterlimit: 10; stroke-width: .25px;" />
+            <text transform="translate(134.15 304.44)"
+                style="font-family: SimSun, SimSun; font-size: 12px; stroke: red;">
+                <tspan x="0" y="0">-</tspan>
+            </text>
+            <circle cx="137.15" cy="300.13" r="9"
+                style="fill: none; stroke: red; stroke-miterlimit: 10; stroke-width: .25px;" />
+            <text transform="translate(167.15 337.44)"
+                style="font-family: SimSun, SimSun; font-size: 12px; stroke: red;">
+                <tspan x="0" y="0">c</tspan>
+            </text>
+            <circle cx="170.15" cy="333.13" r="9"
+                style="fill: none; stroke: red; stroke-miterlimit: 10; stroke-width: .25px;" />
+            <g>
+                <line x1="113.15" y1="324.12" x2="126.04" y2="311.24"
+                    style="fill: none; stroke: red; stroke-miterlimit: 10; stroke-width: .5px;" />
+                <polygon points="126.35 313.54 125.6 311.67 123.74 310.92 128.15 309.12 126.35 313.54"
+                    style="fill: red;" />
+            </g>
+            <g>
+                <line x1="161.15" y1="324.12" x2="148.26" y2="311.24"
+                    style="fill: none; stroke: red; stroke-miterlimit: 10; stroke-width: .5px;" />
+                <polygon points="150.56 310.92 148.7 311.67 147.94 313.54 146.15 309.12 150.56 310.92"
+                    style="fill: red;" />
+            </g>
+            <g>
+                <text transform="translate(200.15 238.44)" style="font-family: SimSun, SimSun; font-size: 12px;">
+                    <tspan x="0" y="0">*</tspan>
+                </text>
+                <circle cx="203.15" cy="234.12" r="9"
+                    style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+            </g>
+            <g>
+                <text transform="translate(233.15 271.44)" style="font-family: SimSun, SimSun; font-size: 12px;">
+                    <tspan x="0" y="0">d</tspan>
+                </text>
+                <circle cx="236.15" cy="267.12" r="9"
+                    style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+            </g>
+            <g>
+                <line x1="227.15" y1="258.12" x2="214.26" y2="245.24"
+                    style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+                <polygon points="216.56 244.92 214.7 245.67 213.94 247.54 212.15 243.12 216.56 244.92" />
+            </g>
+            <g>
+                <line x1="128.15" y1="291.12" x2="115.26" y2="278.24"
+                    style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+                <polygon points="117.56 277.92 115.7 278.67 114.94 280.54 113.15 276.12 117.56 277.92" />
+            </g>
+            <g>
+                <line x1="96.51" y1="258.12" x2="83.62" y2="245.24"
+                    style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+                <polygon points="85.92 244.92 84.06 245.67 83.31 247.54 81.51 243.12 85.92 244.92" />
+            </g>
+            <g>
+                <path d="M64.87,291.12c-12.59-23.37-5.38-39.67-1.72-45.57"
+                    style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+                <polygon points="63.93 247.79 62.84 246.1 60.87 245.7 64.87 243.12 63.93 247.79" />
+            </g>
+            <g>
+                <line x1="146.15" y1="291.12" x2="192.04" y2="245.24"
+                    style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+                <polygon points="192.35 247.54 191.6 245.67 189.74 244.92 194.15 243.12 192.35 247.54" />
+            </g>
+            <g>
+                <line x1="82.87" y1="225.12" x2="125.32" y2="211.06"
+                    style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+                <polygon points="124.56 213.26 124.73 211.26 123.4 209.75 128.15 210.12 124.56 213.26" />
+            </g>
+            <g>
+                <line x1="194.15" y1="225.12" x2="149.55" y2="211.08"
+                    style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+                <polygon points="151.45 209.74 150.14 211.27 150.34 213.27 146.7 210.19 151.45 209.74" />
+            </g>
+        </g>
+        <text transform="translate(142.45 175.44)" style="font-family: SimSun, SimSun; font-size: 12px;">
+            <tspan x="0" y="0">AST</tspan>
+        </text>
+        <text transform="translate(142.45 367.44)" style="font-family: SimSun, SimSun; font-size: 12px;">
+            <tspan x="0" y="0">DAG</tspan>
+        </text>
+    </svg>
+    <p>我们在使用下面这个DAG生成指令序列的时候就能少做一些运算，使生成的代码更小，计算速度更快。即使在已经生成了指令序列，我们仍然能将指令序列转换为DAG优化，然后再用优化之后的DAG重新生成指令序列，假设我们有如下的基本块：</p>
     <h2>窥孔优化</h2>
     <h2>基于栈的机器(jvm)和基于寄存器的机器</h2>
     <h2>寄存器分配</h2>
