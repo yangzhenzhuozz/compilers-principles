@@ -4979,7 +4979,7 @@
         'a = b = c' 会被解释为'a = (b = c)'，而不是(a = b) = c</p>
     </p>
     <h1>后端</h1>
-    <p>前面讲了这么多前端内容，现在我们开始进入编译器后端知识，编译器前端有很成熟的理论支撑，后端就不同，有很多NP-C问题待解决。不管编译器多厉害，我都可以写出一些糟糕代码击溃他</p>
+    <p>前面讲了这么多前端内容，现在我们开始进入编译器后端知识，编译器前端有很成熟的理论支撑，后端就不同，有很多NP-C问题待解决。不管编译器多厉害，我们都可以写出一些糟糕代码让他无法优化</p>
     <h2>指令序列的生成</h2>
     <p>我们可以用一种非常简单的算法把AST转换成机器指令，只需后序遍历这棵树，依次生成相关的指令即可，假设我们有这样一段代码：</p>
     <svg style="width: 1100px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 729.08 677.07">
@@ -5239,8 +5239,11 @@ L3                   <span class="comment">//label:L3</span>
 FRAME SAME           <span class="comment">//变量栈、运算栈都和上一次操作一样,这些栈用于辅助GC_root和抛出异常之后的stack unwind等</span>
  RETURN              <span class="comment">//返回</span></pre>
     </div>
+    <h2>中间代码</h2>
+    <p>很多编译器并不是直接生成cpu可以直接执行的指令序列，而是先生成一些中间代码，这些代码容易被人类阅读，也容易进行优化。编译器可以先生成中间代码进行优化，然后再使用优化之后的中间代码生成CPU可以执行的指令。后面我就使用一种称为"三地址代码"的中间指令，三地址代码是形如"a=b+c"的形式，每条指令最多出现三个地址(变量名实际上就对应了在内存中的地址)
+    </p>
     <h2>基本块</h2>
-    <p>为了方便演示，这里的指令序列我们使用三地址代码"a=b+c"的形式，每条指令最多出现三个地址(变量名实际上就对应了在内存中的地址)。基本块的定义如下:</p>
+    <p>基本块的定义如下:</p>
     <ol>
         <li>控制流只能从基本块中的第一个指令进入该块。也就是说，没有跳转到基本块中间的转移指令。</li>
         <li>除了基本块的最后一个指令，控制流在离开基本块之前不会停机或者跳转。</li>
@@ -5274,117 +5277,132 @@ FRAME SAME           <span class="comment">//变量栈、运算栈都和上一�
         <div><span class="line-number"></span>if i &lt;= 10 goto (13)</div>
     </div>
     <p>我们把这段程序拆分成多个基本块组成的流图。</p>
-    <svg style="width: 400px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 269.75 656.27">
-        <text transform="translate(9.59 151.66)" style="fill: #231815; font-family: STSong, STSong; font-size: 12px;">
-            <tspan x="0" y="0">j=1</tspan>
-        </text>
-        <rect x=".5" y="135.43" width="113.39" height="24.95"
-            style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
-        <text transform="translate(9.29 522.95)" style="fill: #231815; font-family: STSong, STSong; font-size: 12px;">
-            <tspan x="0" y="0">t5=i-1</tspan>
-            <tspan x="0" y="14.4">t6=88*t5</tspan>
-            <tspan x="0" y="28.8">a[t6]=1.0</tspan>
-            <tspan x="0" y="43.2">i=i+1</tspan>
-            <tspan x="0" y="57.6" xml:space="preserve">if i&lt;=10 goto B6</tspan>
-        </text>
-        <rect x=".5" y="506.1" width="113.39" height="82.2"
-            style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
-        <text transform="translate(9.29 454.86)" style="fill: #231815; font-family: STSong, STSong; font-size: 12px;">
-            <tspan x="0" y="0">i=1</tspan>
-        </text>
-        <rect x=".5" y="438.63" width="113.39" height="24.95"
-            style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
-        <text transform="translate(9.29 372.99)" style="fill: #231815; font-family: STSong, STSong; font-size: 12px;">
-            <tspan x="0" y="0">i=i+1</tspan>
-            <tspan x="0" y="14.4" xml:space="preserve">if i&lt;=10 goto B2</tspan>
-        </text>
-        <rect x=".5" y="356.76" width="113.39" height="39.35"
-            style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
-        <text transform="translate(9.59 219.13)" style="fill: #231815; font-family: STSong, STSong; font-size: 12px;">
-            <tspan x="0" y="0">t1=10*i</tspan>
-            <tspan x="0" y="14.4">t2=t1+j</tspan>
-            <tspan x="0" y="28.8">t3=8*t2</tspan>
-            <tspan x="0" y="43.2">t4=t3-88</tspan>
-            <tspan x="0" y="57.6">a[t4]=0.0</tspan>
-            <tspan x="0" y="72">j=j+1</tspan>
-            <tspan x="0" y="86.4" xml:space="preserve">if j&lt;10 goto B3</tspan>
-        </text>
-        <rect x=".5" y="202.9" width="113.39" height="111.35"
-            style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
-        <text transform="translate(9.29 84.2)" style="fill: #231815; font-family: STSong, STSong; font-size: 12px;">
-            <tspan x="0" y="0">i=1</tspan>
-        </text>
-        <rect x=".5" y="67.97" width="113.39" height="24.95"
-            style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
-        <text transform="translate(38.14 16.73)" style="fill: #231815; font-family: STSong, STSong; font-size: 12px;">
-            <tspan x="0" y="0">ENTRY</tspan>
-        </text>
-        <rect x=".5" y=".5" width="113.39" height="24.95" style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
-        <text transform="translate(38.14 647.05)" style="fill: #231815; font-family: STSong, STSong; font-size: 12px;">
-            <tspan x="0" y="0">EXIT</tspan>
-        </text>
-        <rect x=".5" y="630.82" width="113.39" height="24.95"
-            style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
-        <g>
-            <line x1="57.19" y1="25.45" x2="57.19" y2="62"
+    <div style="display: flex;justify-content: center;">
+        <svg style="width: 400px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 269.75 656.27">
+            <text transform="translate(9.59 151.66)"
+                style="fill: #231815; font-family: STSong, STSong; font-size: 12px;">
+                <tspan x="0" y="0">j=1</tspan>
+            </text>
+            <rect x=".5" y="135.43" width="113.39" height="24.95"
                 style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
-            <polygon points="53.49 59.19 57.19 60.76 60.9 59.19 57.19 67.97 53.49 59.19" style="fill: #231815;" />
-        </g>
-        <g>
-            <line x1="57.19" y1="92.91" x2="57.19" y2="129.46"
+            <text transform="translate(9.29 522.95)"
+                style="fill: #231815; font-family: STSong, STSong; font-size: 12px;">
+                <tspan x="0" y="0">t5=i-1</tspan>
+                <tspan x="0" y="14.4">t6=88*t5</tspan>
+                <tspan x="0" y="28.8">a[t6]=1.0</tspan>
+                <tspan x="0" y="43.2">i=i+1</tspan>
+                <tspan x="0" y="57.6" xml:space="preserve">if i&lt;=10 goto B6</tspan>
+            </text>
+            <rect x=".5" y="506.1" width="113.39" height="82.2"
                 style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
-            <polygon points="53.49 126.65 57.19 128.23 60.9 126.65 57.19 135.43 53.49 126.65" style="fill: #231815;" />
-        </g>
-        <g>
-            <line x1="57.19" y1="160.38" x2="57.19" y2="196.93"
+            <text transform="translate(9.29 454.86)"
+                style="fill: #231815; font-family: STSong, STSong; font-size: 12px;">
+                <tspan x="0" y="0">i=1</tspan>
+            </text>
+            <rect x=".5" y="438.63" width="113.39" height="24.95"
                 style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
-            <polygon points="53.49 194.12 57.19 195.69 60.9 194.12 57.19 202.9 53.49 194.12" style="fill: #231815;" />
-        </g>
-        <g>
-            <line x1="57.19" y1="314.24" x2="57.19" y2="350.79"
+            <text transform="translate(9.29 372.99)"
+                style="fill: #231815; font-family: STSong, STSong; font-size: 12px;">
+                <tspan x="0" y="0">i=i+1</tspan>
+                <tspan x="0" y="14.4" xml:space="preserve">if i&lt;=10 goto B2</tspan>
+            </text>
+            <rect x=".5" y="356.76" width="113.39" height="39.35"
                 style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
-            <polygon points="53.49 347.99 57.19 349.56 60.9 347.99 57.19 356.76 53.49 347.99" style="fill: #231815;" />
-        </g>
-        <g>
-            <line x1="57.19" y1="396.11" x2="57.19" y2="432.66"
+            <text transform="translate(9.59 219.13)"
+                style="fill: #231815; font-family: STSong, STSong; font-size: 12px;">
+                <tspan x="0" y="0">t1=10*i</tspan>
+                <tspan x="0" y="14.4">t2=t1+j</tspan>
+                <tspan x="0" y="28.8">t3=8*t2</tspan>
+                <tspan x="0" y="43.2">t4=t3-88</tspan>
+                <tspan x="0" y="57.6">a[t4]=0.0</tspan>
+                <tspan x="0" y="72">j=j+1</tspan>
+                <tspan x="0" y="86.4" xml:space="preserve">if j&lt;10 goto B3</tspan>
+            </text>
+            <rect x=".5" y="202.9" width="113.39" height="111.35"
                 style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
-            <polygon points="53.49 429.85 57.19 431.43 60.9 429.85 57.19 438.63 53.49 429.85" style="fill: #231815;" />
-        </g>
-        <g>
-            <line x1="57.19" y1="463.58" x2="57.19" y2="500.13"
+            <text transform="translate(9.29 84.2)" style="fill: #231815; font-family: STSong, STSong; font-size: 12px;">
+                <tspan x="0" y="0">i=1</tspan>
+            </text>
+            <rect x=".5" y="67.97" width="113.39" height="24.95"
                 style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
-            <polygon points="53.49 497.32 57.19 498.89 60.9 497.32 57.19 506.1 53.49 497.32" style="fill: #231815;" />
-        </g>
-        <g>
-            <line x1="57.19" y1="588.3" x2="57.19" y2="624.85"
+            <text transform="translate(38.14 16.73)"
+                style="fill: #231815; font-family: STSong, STSong; font-size: 12px;">
+                <tspan x="0" y="0">ENTRY</tspan>
+            </text>
+            <rect x=".5" y=".5" width="113.39" height="24.95"
                 style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
-            <polygon points="53.49 622.04 57.19 623.62 60.9 622.04 57.19 630.82 53.49 622.04" style="fill: #231815;" />
-        </g>
-        <g>
-            <path d="M113.89,314.24c82.81,49.01,88.64-146.1,5.47-113.75"
+            <text transform="translate(38.14 647.05)"
+                style="fill: #231815; font-family: STSong, STSong; font-size: 12px;">
+                <tspan x="0" y="0">EXIT</tspan>
+            </text>
+            <rect x=".5" y="630.82" width="113.39" height="24.95"
                 style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
-            <polygon points="120.52 196.06 120.52 200.08 123.41 202.87 113.89 202.9 120.52 196.06"
-                style="fill: #231815;" />
-        </g>
-        <g>
-            <path d="M113.89,396.11c164.5,91.53,243.52-328.43,5.73-262.35"
-                style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
-            <polygon points="121.35 129.51 120.83 133.5 123.34 136.65 113.89 135.43 121.35 129.51"
-                style="fill: #231815;" />
-        </g>
-        <g>
-            <path d="M113.89,588.3c54.21,38.02,75.17-116.98,5.32-84.92"
-                style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
-            <polygon points="120.09 498.87 120.33 502.88 123.39 505.49 113.89 506.1 120.09 498.87"
-                style="fill: #231815;" />
-        </g>
-    </svg>
+            <g>
+                <line x1="57.19" y1="25.45" x2="57.19" y2="62"
+                    style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
+                <polygon points="53.49 59.19 57.19 60.76 60.9 59.19 57.19 67.97 53.49 59.19" style="fill: #231815;" />
+            </g>
+            <g>
+                <line x1="57.19" y1="92.91" x2="57.19" y2="129.46"
+                    style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
+                <polygon points="53.49 126.65 57.19 128.23 60.9 126.65 57.19 135.43 53.49 126.65"
+                    style="fill: #231815;" />
+            </g>
+            <g>
+                <line x1="57.19" y1="160.38" x2="57.19" y2="196.93"
+                    style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
+                <polygon points="53.49 194.12 57.19 195.69 60.9 194.12 57.19 202.9 53.49 194.12"
+                    style="fill: #231815;" />
+            </g>
+            <g>
+                <line x1="57.19" y1="314.24" x2="57.19" y2="350.79"
+                    style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
+                <polygon points="53.49 347.99 57.19 349.56 60.9 347.99 57.19 356.76 53.49 347.99"
+                    style="fill: #231815;" />
+            </g>
+            <g>
+                <line x1="57.19" y1="396.11" x2="57.19" y2="432.66"
+                    style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
+                <polygon points="53.49 429.85 57.19 431.43 60.9 429.85 57.19 438.63 53.49 429.85"
+                    style="fill: #231815;" />
+            </g>
+            <g>
+                <line x1="57.19" y1="463.58" x2="57.19" y2="500.13"
+                    style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
+                <polygon points="53.49 497.32 57.19 498.89 60.9 497.32 57.19 506.1 53.49 497.32"
+                    style="fill: #231815;" />
+            </g>
+            <g>
+                <line x1="57.19" y1="588.3" x2="57.19" y2="624.85"
+                    style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
+                <polygon points="53.49 622.04 57.19 623.62 60.9 622.04 57.19 630.82 53.49 622.04"
+                    style="fill: #231815;" />
+            </g>
+            <g>
+                <path d="M113.89,314.24c82.81,49.01,88.64-146.1,5.47-113.75"
+                    style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
+                <polygon points="120.52 196.06 120.52 200.08 123.41 202.87 113.89 202.9 120.52 196.06"
+                    style="fill: #231815;" />
+            </g>
+            <g>
+                <path d="M113.89,396.11c164.5,91.53,243.52-328.43,5.73-262.35"
+                    style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
+                <polygon points="121.35 129.51 120.83 133.5 123.34 136.65 113.89 135.43 121.35 129.51"
+                    style="fill: #231815;" />
+            </g>
+            <g>
+                <path d="M113.89,588.3c54.21,38.02,75.17-116.98,5.32-84.92"
+                    style="fill: none; stroke: #231815; stroke-miterlimit: 10;" />
+                <polygon points="120.09 498.87 120.33 502.88 123.39 505.49 113.89 506.1 120.09 498.87"
+                    style="fill: #231815;" />
+            </g>
+        </svg>
+    </div>
     <p>很多后端编译技术都是基于基本块进行，因为在一个基本块内部，可以保证变量不会因为if-else或者循环语句发生变化，这使得优化之后的代码能和原语句运算结果一致</p>
     <h2>有向无环图(Directed Acyclic Graph)优化</h2>
     <p>使用DAG可以很方便的进行代码优化，比如Spark就会把我们的SQL生成一张DAG，通过DAG可以合并很多冗余运算，DAG在语法树生成阶段可以使用，并且还可以通过基本块构造DAG</p>
-    <h3>公共表达式优化</h3>
-    <h4>AST优化</h4>
-    <p>AST转换为DAG，首先有一个图论的知识点：有向树是有向无环图的真子集，AST很明显是一颗有向树(AST的所有节点只有一个根，方向指向根)。我们可以在生成AST的时候就顺便使用DAG优化：每次遇到完全一致的子树时，我们不生成新子树了，而是直接使用已经生成好的子树。假设我们有这么一条语句："a+a*(b-c)+(b-c)*d"，则优化过程如下：
+    <h3>AST优化</h3>
+    <p>有一个众所周知的图论知识点：有向树是有向无环图的真子集。AST很明显是一颗有向树(AST的所有节点只有一个根，方向指向根)。我们可以在生成AST的时候就顺便使用DAG优化：每次遇到完全一致的子树时，我们不生成新子树了，而是直接使用已经生成好的子树。假设我们有这么一条语句："a+a*(b-c)+(b-c)*d"，则优化过程如下：
     </p>
     <svg style="width: 600px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 302.91 369.12">
         <g>
@@ -5641,14 +5659,408 @@ FRAME SAME           <span class="comment">//变量栈、运算栈都和上一�
     </svg>
     <p>我们在使用DAG生成指令序列的时候就能少做一些运算，使生成的代码更小，计算速度更快。即使在已经生成了指令序列，我们仍然能将指令序列转换为DAG优化，然后再用优化之后的DAG重新生成指令序列
     </p>
-    <h4>指令序列优化</h4>
+    <h3>指令序列优化</h3>
+    <p>每次我们使用一个变量时，使用的最近一次该变量被定值的节点(找到该层数最高的节点即可)，如果存在一颗子树和我们需要的子树结构相同，则直接引用</p>
     <p>假设我们有如下的基本块</p>
+    <div class="code-area">
+        <div><span class="line-number"></span>a = b + c</div>
+        <div><span class="line-number"></span>d = a - c</div>
+        <div><span class="line-number"></span>c = b + c</div>
+        <div><span class="line-number"></span>e = c - d</div>
+    </div>
+    <p>我们可以得到这样一个DAG，为了表示不同定值的C，我在C的后面加了下标，可以看到原本的四次运算被我们优化成了3次</p>
+    <svg style="width: 200px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 87.2 114.26">
+        <text transform="translate(0 112.57)" style="font-family: SimSun, SimSun; font-size: 12px; isolation: isolate;">
+            <tspan x="0" y="0">b</tspan>
+        </text>
+        <text transform="translate(.28 112.57)"
+            style="font-family: SimSun, SimSun; font-size: 12px; isolation: isolate;">
+            <tspan x="0" y="0">b</tspan>
+        </text>
+        <text transform="translate(33 79.57)" style="font-family: SimSun, SimSun; font-size: 12px; isolation: isolate;">
+            <tspan x="0" y="0">-</tspan>
+        </text>
+        <text transform="translate(33 79.57)" style="font-family: SimSun, SimSun; font-size: 12px; isolation: isolate;">
+            <tspan x="0" y="0">+</tspan>
+        </text>
+        <circle cx="36" cy="75.25" r="9" style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <text transform="translate(66 112.57)"
+            style="font-family: SimSun, SimSun; font-size: 12px; isolation: isolate;">
+            <tspan x="0" y="0">c</tspan>
+        </text>
+        <text transform="translate(66 112.57)" style="font-family: SimSun, SimSun; isolation: isolate;">
+            <tspan x="0" y="0" style="font-size: 12px;">c</tspan>
+            <tspan x="6" y="0" style="font-size: 6px;">0</tspan>
+        </text>
+        <line x1="12" y1="99.25" x2="24.89" y2="86.37"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <polygon points="25.21 88.67 24.45 86.8 22.59 86.05 27 84.25 25.21 88.67"
+            style="stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <line x1="60" y1="99.25" x2="47.11" y2="86.37"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <polygon points="49.41 86.05 47.55 86.8 46.8 88.67 45 84.25 49.41 86.05" />
+        <text transform="translate(66 46.57)" style="font-family: SimSun, SimSun; font-size: 12px; isolation: isolate;">
+            <tspan x="0" y="0">-</tspan>
+        </text>
+        <text transform="translate(66 46.57)" style="font-family: SimSun, SimSun; font-size: 12px; isolation: isolate;">
+            <tspan x="0" y="0">-</tspan>
+        </text>
+        <circle cx="69" cy="42.25" r="9" style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <text transform="translate(33 13.57)" style="font-family: SimSun, SimSun; font-size: 12px; isolation: isolate;">
+            <tspan x="0" y="0">-</tspan>
+        </text>
+        <text transform="translate(33 13.57)" style="font-family: SimSun, SimSun; font-size: 12px; isolation: isolate;">
+            <tspan x="0" y="0">-</tspan>
+        </text>
+        <circle cx="36" cy="9.25" r="9" style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <text transform="translate(80.21 45.53)"
+            style="font-family: SimSun, SimSun; font-size: 12px; isolation: isolate;">
+            <tspan x="0" y="0">d</tspan>
+        </text>
+        <text transform="translate(47.96 13.57)"
+            style="font-family: SimSun, SimSun; font-size: 12px; isolation: isolate;">
+            <tspan x="0" y="0">e</tspan>
+        </text>
+        <text transform="translate(47.21 78.07)" style="font-family: SimSun, SimSun; isolation: isolate;">
+            <tspan x="0" y="0" style="font-size: 12px;">a,c</tspan>
+            <tspan x="18" y="0" style="font-size: 6px;">1</tspan>
+        </text>
+        <line x1="45" y1="66.25" x2="57.89" y2="53.37"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <polygon points="58.21 55.67 57.45 53.8 55.59 53.05 60 51.25 58.21 55.67"
+            style="stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <line x1="60" y1="33.25" x2="47.11" y2="20.37"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <polygon points="49.41 20.05 47.55 20.8 46.8 22.67 45 18.25 49.41 20.05"
+            style="stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <g>
+            <path d="M27,66.25c-15.39-18.34-5.96-36.94-1.73-43.45"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+            <polygon points="26.04 25.04 24.96 23.34 22.99 22.94 27 20.37 26.04 25.04" />
+        </g>
+        <g>
+            <path d="M78,99.25c5.85-5,15.73-29.44,2.03-45.81"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+            <polygon points="82.32 53.27 80.41 53.92 79.57 55.75 78 51.25 82.32 53.27" />
+        </g>
+    </svg>
+    <h3>消除死代码</h3>
+    <p>假设我们对上面这个基本块进行分析，判断出e这个变量不会被其他地方使用(可以使用基本块流图，看看其他基本块还会不会用到e)，可能是程序员无聊写了一些没用到的代码，我们可以直接在DAG移除这个节点，得到这样一个DAG，原来的四次计算被优化成了两次
+    </p>
+    <svg style="width: 200px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 87.2 81.26">
+        <text transform="translate(0 79.57)" style="font-family: SimSun, SimSun; font-size: 12px; isolation: isolate;">
+            <tspan x="0" y="0">b</tspan>
+        </text>
+        <text transform="translate(.28 79.57)"
+            style="font-family: SimSun, SimSun; font-size: 12px; isolation: isolate;">
+            <tspan x="0" y="0">b</tspan>
+        </text>
+        <text transform="translate(33 46.57)" style="font-family: SimSun, SimSun; font-size: 12px; isolation: isolate;">
+            <tspan x="0" y="0">-</tspan>
+        </text>
+        <text transform="translate(33 46.57)" style="font-family: SimSun, SimSun; font-size: 12px; isolation: isolate;">
+            <tspan x="0" y="0">+</tspan>
+        </text>
+        <circle cx="36" cy="42.25" r="9" style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <text transform="translate(66 79.57)" style="font-family: SimSun, SimSun; font-size: 12px; isolation: isolate;">
+            <tspan x="0" y="0">c</tspan>
+        </text>
+        <text transform="translate(66 79.57)" style="font-family: SimSun, SimSun; isolation: isolate;">
+            <tspan x="0" y="0" style="font-size: 12px;">c</tspan>
+            <tspan x="6" y="0" style="font-size: 6px;">0</tspan>
+        </text>
+        <line x1="12" y1="66.25" x2="24.89" y2="53.37"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <polygon points="25.21 55.67 24.45 53.8 22.59 53.05 27 51.25 25.21 55.67"
+            style="stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <line x1="60" y1="66.25" x2="47.11" y2="53.37"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <polygon points="49.41 53.05 47.55 53.8 46.8 55.67 45 51.25 49.41 53.05" />
+        <text transform="translate(66 13.57)" style="font-family: SimSun, SimSun; font-size: 12px; isolation: isolate;">
+            <tspan x="0" y="0">-</tspan>
+        </text>
+        <text transform="translate(66 13.57)" style="font-family: SimSun, SimSun; font-size: 12px; isolation: isolate;">
+            <tspan x="0" y="0">-</tspan>
+        </text>
+        <circle cx="69" cy="9.25" r="9" style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <text transform="translate(80.21 12.53)"
+            style="font-family: SimSun, SimSun; font-size: 12px; isolation: isolate;">
+            <tspan x="0" y="0">d</tspan>
+        </text>
+        <text transform="translate(47.21 45.07)" style="font-family: SimSun, SimSun; isolation: isolate;">
+            <tspan x="0" y="0" style="font-size: 12px;">a,c</tspan>
+            <tspan x="18" y="0" style="font-size: 6px;">1</tspan>
+        </text>
+        <line x1="45" y1="33.25" x2="57.89" y2="20.37"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <polygon points="58.21 22.67 57.45 20.8 55.59 20.05 60 18.25 58.21 22.67"
+            style="stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <g>
+            <path d="M78,66.25c5.85-5,15.73-29.44,2.03-45.81"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+            <polygon points="82.32 20.27 80.41 20.92 79.57 22.75 78 18.25 82.32 20.27" />
+        </g>
+    </svg>
+    <h3>代数恒等式</h3>
+    <p>有些数学计算我们可以使用代数恒等式优化，这里我就不画DAG了，比如"x=1+2"，我们在生成DAG的过程中发现这行指令可以写成"x=3"，这个技术叫做常量折叠。据说javac前端在编译的时候只会对源码进行极少的优化，常量折叠就是其中之一。假设我们有下面的语句：
+    </p>
+    <div class="code-area">
+        <div><span class="line-number"></span>a = b + c</div>
+        <div><span class="line-number"></span>e = c + d + b</div>
+    </div>
+    <p>那么我们很有可能生成这样的指令：</p>
+    <div class="code-area">
+        <div><span class="line-number"></span>a = b + c</div>
+        <div><span class="line-number"></span>t = c + d</div>
+        <div><span class="line-number"></span>e = t + b</div>
+    </div>
+    <p>在上面的代码中，变量t是一个临时生成的变量，出了基本块就不会被使用了，我们可以使用这样的策略(<em>这里真的是我编的，书上没说怎么处理</em>)：我们把满足交换律的运算符分量按照变量名称大小从左往右对语句中的变量排序，这样可以保证一系列变量的运算公共表达式部分生成的指令是一样的。比如上面的语句被我们重排之后就会变成：
+    </p>
+    <div class="code-area">
+        <div><span class="line-number"></span>a = b + c</div>
+        <div><span class="line-number"></span>e = b + c + d</div>
+    </div>
+    <p>然后我们用DAG优化之后就知道这样的中间代码：</p>
+    <div class="code-area">
+        <div><span class="line-number"></span>a = b + c</div>
+        <div><span class="line-number"></span>e = a + d</div>
+    </div>
+    <p>当然我们需要小心的设置恒等变换规则，比如两个整数的乘法是可以交换顺序的，"a * b"="b *
+        a"，但是如果我们设计的编程语言提供矩阵乘法，很明显就不能交换顺序。还有一些恒等变化比如："a+b-b+c"可以优化成"a+c"，这些都需要编译器的实现者编写恒等变换策略。</p>
+    <h3>数组引用</h3>
+    <p>其实我们可以发现DAG优化就是复用一些已经计算的节点，但是有的节点可能是不允许复用的，比如C语言中用volatile修饰的变量，如果我们把这个变量映射到一个IO端口，很有可能每次读取的值都是不同的。又或者我们有这样的代码：
+    </p>
+    <div class="code-area">
+        <div><span class="line-number"></span>x = a[i]</div>
+        <div><span class="line-number"></span>a[j] = y</div>
+        <div><span class="line-number"></span>z = a[i]</div>
+    </div>
+    <p>我们可能生成这样的DAG：</p>
+    <svg style="width: 400px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 163.77 48.98">
+        <text transform="translate(0 46.57)" style="font-family: SimSun, SimSun; font-size: 12px; isolation: isolate;">
+            <tspan x="0" y="0">a</tspan>
+        </text>
+        <text transform="translate(28.97 12.48)"
+            style="font-family: SimSun, SimSun; font-size: 9px; isolation: isolate;">
+            <tspan x="0" y="0">=[]</tspan>
+        </text>
+        <circle cx="35.72" cy="9.25" r="9"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <text transform="translate(65.72 46.57)"
+            style="font-family: SimSun, SimSun; font-size: 12px; isolation: isolate;">
+            <tspan x="0" y="0">i</tspan>
+        </text>
+        <text transform="translate(101.43 46.38)"
+            style="font-family: SimSun, SimSun; font-size: 12px; isolation: isolate;">
+            <tspan x="0" y="0">j</tspan>
+        </text>
+        <g>
+            <line x1="11.72" y1="33.25" x2="24.61" y2="20.37"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+            <polygon points="24.93 22.67 24.17 20.8 22.31 20.05 26.72 18.25 24.93 22.67"
+                style="stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        </g>
+        <g>
+            <line x1="109.77" y1="33.25" x2="122.66" y2="20.37"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+            <polygon points="122.98 22.67 122.22 20.8 120.36 20.05 124.77 18.25 122.98 22.67"
+                style="stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        </g>
+        <line x1="59.72" y1="33.25" x2="46.83" y2="20.37"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <polygon points="49.13 20.05 47.27 20.8 46.52 22.67 44.72 18.25 49.13 20.05" />
+        <text transform="translate(46.93 12.07)"
+            style="font-family: SimSun, SimSun; font-size: 12px; isolation: isolate;">
+            <tspan x="0" y="0">x,z</tspan>
+        </text>
+        <g>
+            <line x1="157.77" y1="33.25" x2="144.88" y2="20.37"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+            <polygon points="147.18 20.05 145.32 20.8 144.57 22.67 142.77 18.25 147.18 20.05" />
+        </g>
+        <text transform="translate(127.02 12.48)"
+            style="font-family: SimSun, SimSun; font-size: 9px; isolation: isolate;">
+            <tspan x="0" y="0">[]=</tspan>
+        </text>
+        <circle cx="133.77" cy="9.25" r="9"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <text transform="translate(157.77 47.3)"
+            style="font-family: SimSun, SimSun; font-size: 12px; isolation: isolate;">
+            <tspan x="0" y="0">y</tspan>
+        </text>
+        <g>
+            <line x1="19.85" y1="33.25" x2="114.31" y2="14.81"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+            <polygon points="113.29 16.89 113.7 14.93 112.58 13.26 117.24 14.24 113.29 16.89" />
+        </g>
+    </svg>
+    <p>我们在生成第三条指令的时候发现a[i]这个子树已经存在了，就直接复用，但是如果j==i的话，这个DAG将会是错误的。所以只要发现后续有任何节点对数组赋值，就直接把所有的数组取值节点标记为不可复用：</p>
+    <svg style="width: 400px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 163.77 88.06">
+        <text transform="translate(0 85.64)" style="font-family: SimSun, SimSun; font-size: 12px; isolation: isolate;">
+            <tspan x="0" y="0">a</tspan>
+        </text>
+        <text transform="translate(28.97 51.56)"
+            style="font-family: SimSun, SimSun; font-size: 9px; isolation: isolate;">
+            <tspan x="0" y="0">=[]</tspan>
+        </text>
+        <circle cx="35.72" cy="48.32" r="9"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <text transform="translate(65.72 85.64)"
+            style="font-family: SimSun, SimSun; font-size: 12px; isolation: isolate;">
+            <tspan x="0" y="0">i</tspan>
+        </text>
+        <text transform="translate(101.43 85.45)"
+            style="font-family: SimSun, SimSun; font-size: 12px; isolation: isolate;">
+            <tspan x="0" y="0">j</tspan>
+        </text>
+        <g>
+            <line x1="11.72" y1="72.32" x2="24.61" y2="59.44"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+            <polygon points="24.93 61.74 24.17 59.87 22.31 59.12 26.72 57.32 24.93 61.74"
+                style="stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        </g>
+        <g>
+            <line x1="109.77" y1="72.32" x2="122.66" y2="59.44"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+            <polygon points="122.98 61.74 122.22 59.87 120.36 59.12 124.77 57.32 122.98 61.74"
+                style="stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        </g>
+        <line x1="59.72" y1="72.32" x2="46.83" y2="59.44"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <polygon points="49.13 59.12 47.27 59.87 46.52 61.74 44.72 57.32 49.13 59.12" />
+        <text transform="translate(46.93 51.14)"
+            style="font-family: SimSun, SimSun; font-size: 12px; isolation: isolate;">
+            <tspan x="0" y="0">x</tspan>
+        </text>
+        <text transform="translate(28.97 12.48)"
+            style="font-family: SimSun, SimSun; font-size: 9px; isolation: isolate;">
+            <tspan x="0" y="0">=[]</tspan>
+        </text>
+        <circle cx="35.72" cy="9.25" r="9"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <text transform="translate(46.93 12.07)"
+            style="font-family: SimSun, SimSun; font-size: 12px; isolation: isolate;">
+            <tspan x="0" y="0">z</tspan>
+        </text>
+        <g>
+            <line x1="157.77" y1="72.32" x2="144.88" y2="59.44"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+            <polygon points="147.18 59.12 145.32 59.87 144.57 61.74 142.77 57.32 147.18 59.12" />
+        </g>
+        <text transform="translate(127.02 51.56)"
+            style="font-family: SimSun, SimSun; font-size: 9px; isolation: isolate;">
+            <tspan x="0" y="0">[]=</tspan>
+        </text>
+        <circle cx="133.77" cy="48.32" r="9"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <text transform="translate(157.77 86.37)"
+            style="font-family: SimSun, SimSun; font-size: 12px; isolation: isolate;">
+            <tspan x="0" y="0">y</tspan>
+        </text>
+        <g>
+            <line x1="19.85" y1="72.32" x2="114.31" y2="53.88"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+            <polygon points="113.29 55.97 113.7 54 112.58 52.33 117.24 53.31 113.29 55.97" />
+        </g>
+        <g>
+            <path d="M3.98,72.32C-8.54,48.8,14.64,26.56,22.29,20.12"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+            <polygon points="22.41 22.47 21.84 20.54 20.05 19.62 24.61 18.25 22.41 22.47" />
+        </g>
+        <g>
+            <path d="M66.99,72.32c9.81-7.66-4.72-39.12-17.89-51.4"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+            <polygon points="51.37 20.46 49.56 21.35 48.95 23.27 46.83 19 51.37 20.46" />
+        </g>
+        <text transform="translate(31.29 36.67)"
+            style="font-family: AdobeSongStd-Light-GBpc-EUC-H, &apos;Adobe Song Std&apos;; font-size: 9px; font-weight: 300;">
+            <tspan x="0" y="0">kill</tspan>
+        </text>
+    </svg>
+    <p>这就是正确的DAG，对于volatile修饰的变量，我们可以采取一样的策略。</p>
+    <h2>静态单赋值(Static Single Assignment)</h2>
+    <p>实际上我们在做DAG优化的时候已经使用过SSA的形式了，SSA就是指每一个变量在赋值之后就变成一个新变量，我们在后续使用的时候就直接使用新的变量名。比如我们有这样一些中间代码：</p>
+    <div class="code-area">
+        <div><span class="line-number"></span>p = a + b</div>
+        <div><span class="line-number"></span>q = p + c</div>
+        <div><span class="line-number"></span>p = a * c</div>
+        <div><span class="line-number"></span>r = p * q</div>
+    </div>
+    <p>那么用SSA形式的三地址代码表示将会是这样的</p>
+    <div class="code-area">
+        <div><span class="line-number"></span>p0 = a + b</div>
+        <div><span class="line-number"></span>q0 = p0 + c</div>
+        <div><span class="line-number"></span>p1 = a * c</div>
+        <div><span class="line-number"></span>r = p1 * q0</div>
+    </div>
+    <p>通过SSA形式的中间代码，我们在使用DAG优化或者其他优化技术的时候就更方便了，想想我们每次生成DAG节点的时候都要搜索变量最近的一次赋值，那个速度真的感人,用SSA就不需要搜索了(<em>我乍一看：甚至从原理来看，他们是同一种优化技术</em>)。
+    </p>
+    <p>SSA和普通的三地址代码还有一个不同：因为每次对变量定值，都会生成一个新的变量，如果我们有下面这种代码：</p>
+    <div class="code-area">
+        <div><span class="key-word">if</span>(<span class="variable">flag</span>)<span>&nbsp;x=1</span><span
+                class="key-word">&nbsp;else</span><span>&nbsp;x=-1</span></div>
+        <div>y=x</div>
+    </div>
+    <p>对于这种在不同分支对同一个变量赋值的语句，我们生成SSA的时候可以在分支结束后添加一个φ函数，把上述代码编译成这样的SSA</p>
+    <div class="code-area">
+        <div><span class="key-word">if</span>&nbsp;(<span
+                class="variable">flag</span>)&nbsp;<span>&nbsp;x1=1</span><span
+                class="key-word">&nbsp;else</span><span>&nbsp;x2=-1</span></div>
+        <div>x3=φ(x1,x2)</div>
+        <div>y=x3</div>
+    </div>
+    <p>而φ函数可以是这样的：<span class="key-word">if</span>&nbsp;(<span class="variable">flag</span>)&nbsp;<span
+            class="key-word">then</span>&nbsp;x3=x1<span><span
+                class="key-word">&nbsp;else</span><span>&nbsp;x3=x2</span></p>
+    <p>这个函数的具体实现没有标准，编译器作者自行解决(<em>比如每次生成CPU指令的时候，我们单独给φ函数生成一小段指令插进我们的指令序列中</em>)</p>
     <h2>窥孔优化</h2>
+    <p>窥孔优化就是指我们每次优化的时候只看一小段代码，用滑动窗口顺着指令序列往下滑动，边滑动边优化。在我们优化完成之后还可以再来几次窥孔优化，比如我们把指令分成10条一个块，然后对所有的块优化完成之后，重新又按10条指令一个块，再优化一次。窥孔优化是因为一次进行大量代码的优化或者做一次全局优化是一件及其困难的事情，做一次全局优化可能会生成一个高达几十万甚至几百万节点的DAG。
+    </p>
+    <p>窥孔优化无法保证每次优化之后都能得到最优的转换，但是确实在很多情况下能有效提高程序的运行效率。下面说的这几种优化手段当然不仅仅用于窥孔优化，在全局优化中也是可以使用的。</p>
+    <h3>消除冗余load\store指令</h3>
+    <p>假设我们滑动的时候在窗口内看到这样的指令(<em>这个指令可能无法在中间代码优化阶段识别出来，因为每个中间代码指令可能对应了真实CPU上面的多条指令</em>)</p>
+    <p>假设我们有这样的两条中间代码：</p>
+    <div class="code-area">
+        <div><span class="line-number"></span>b=a</div>
+        <div><span class="line-number"></span>a=b</div>
+    </div>
+    <p>将其翻译到arm汇编之后可能得到这样的代码(<em>我们假设把变量b映射到了寄存器R0，后面会说寄存器分配技术</em>)</p>
+    <div class="code-area">
+        <div><span class="line-number"></span>LD R0 , a</div>
+        <div><span class="line-number"></span>ST a , R0</div>
+    </div>
+    <p>我们在窗口内看到这样两条连续的指令，就可以直接删除掉ST指令，因为R0存放的就是内存a的值，后面这条ST指令可以不执行</p>
+    <h3>消除不可达代码</h3>
+    <p>假设我们有这样一段指令，当debug变量为1时才执行：</p>
+    <div class="code-area">
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;debug&nbsp;==1&nbsp;goto&nbsp;L1</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goto&nbsp;L2</div>
+        <div>L1:&nbsp;print debug message</div>
+        <div>L2:&nbsp;xxxxxxx</div>
+    </div>
+    <p>在c++的宏中定义debug为0，或者JIT(后面会说什么是JIT)的时候我们发现debug是0，我们就可以用<em>常量传播</em>技术把指令转换为：</p>
+    <div class="code-area">
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;0&nbsp;==1&nbsp;goto&nbsp;L1</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goto&nbsp;L2</div>
+        <div>L1:&nbsp;print debug message</div>
+        <div>L2:&nbsp;xxxxxxx</div>
+    </div>
+    <p>然后进一步优化成：</p>
+    <div class="code-area">
+        <div>L2:&nbsp;xxxxxxx</div>
+    </div>
+    <p>if指令被消除掉，并且print debug message指令也被消除掉了，不仅减少了计算量，而且还减小了代码体积。</p>
+    <p>当然窥孔优化中我们也可以使用代数恒等式等技术进行优化，这些优化技术不是专属的，在各个环节都可以交叉使用</p>
+    <h2>全局优化</h2>
+    <p>这个就不多说了，我们在全局中可以做很多优化，比如常量折叠、代数恒等式优化、常量传播、消除无效的跳转语句，时间和空间复杂度极高，可能有少数的编译器会使用全局优化技术</p>
     <h2>基于栈的机器(jvm)和基于寄存器的机器</h2>
+    <p>阿巴阿巴阿巴</p>
     <h2>寄存器分配</h2>
-    <h2>静态单赋值(SSA)</h2>
+    <p>一个NPC问题：图着色</p>
     <h2>GC</h2>
+    <p>一个NPC问题：有向图的可达性</p>
     <h2>解释执行、AOT、JIT</h2>
+    <p>阿巴阿巴阿巴</p>
     <h1>完!</h1>
 </body>
 <style>
