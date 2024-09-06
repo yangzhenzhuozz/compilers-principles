@@ -6091,8 +6091,151 @@ FRAME SAME           <span class="comment">//变量栈、运算栈都和上一�
     </div>
     <p>我们就能更直观的看到a2赋值了没有被使用。</p>
     <h2>逃逸分析</h2>
-    <p>如果一个对象被赋给全局、返回，或者其引用被赋给了另外一个对象，则转为分析持有这个变量的对象</p>
-    <p>xxxxxxxxxxxxxx</p>
+    <p>很多编程语言都有值类型和引用类型的概念，大部分的编程语言实现都会把值类型分配在栈中，引用类型分配到堆中。比如下面的代码：</p>
+    <div class="code-area">
+        <div><span class="key-word">class</span><span class="class-name"> Point</span> {</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="key-word">int</span><span class="variable"> x</span>;</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="key-word">int</span><span class="variable"> y</span>;</div>
+        <div>}</div>
+        <div><span class="key-word">void</span><span> fun</span> ( ) {</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="key-word">int</span> a ; <span class="comment">//分配到栈中</span></div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="key-word">Point</span> p = <span class="key-word">new </span><span
+                class="class-name">Point</span> ( ) ; <span class="comment">//分配到堆中</span></div>
+        <div>}</div>
+    </div>
+    <p>栈空间在程序启动时就会预设好大小，一个函数代码片段退出时会自动清空作用域内的所有变量。如果分析器在分析期间发现一个对象完全不会被外部使用(<em>可以理解成这个对象就是一个彻彻底底的局部变量</em>)，那么在new这个对象的时候，可以直接在栈上预留空间，把变量放在栈中。
+    </p>
+    <svg style="width: 400px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 174.86 180">
+        <text transform="translate(3.03 89.46) scale(.94 1)"
+            style="font-family: DengXian, DengXian; font-size: 10.98px;">
+            <tspan x="0" y="0">4</tspan>
+        </text>
+        <text transform="translate(19.99 89.46) scale(.94 1)"
+            style="font-family: DengXian, DengXian; font-size: 10.98px;">
+            <tspan x="0" y="0">a</tspan>
+        </text>
+        <text transform="translate(3.26 105.41) scale(.94 1)"
+            style="font-family: DengXian, DengXian; font-size: 10.98px;">
+            <tspan x="0" y="0">4</tspan>
+        </text>
+        <text transform="translate(19.18 103.49) scale(.94 1)"
+            style="font-family: DengXian, DengXian; font-size: 10.98px;">
+            <tspan x="0" y="0">p</tspan>
+        </text>
+        <rect x=".25" y="79.18" width="30" height="30"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <line x1=".25" y1="94.18" x2="30.25" y2="94.18"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <line x1=".25" y1="139.18" x2=".25" y2="49.18"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <line x1="30.25" y1="139.18" x2="30.25" y2="49.18"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <line x1="12.35" y1="79.18" x2="12.55" y2="109.18"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <text transform="translate(58.82 104.46) scale(.94 1)"
+            style="font-family: DengXian, DengXian; font-size: 10.98px;">
+            <tspan x="0" y="0">4</tspan>
+        </text>
+        <text transform="translate(75.78 104.46) scale(.94 1)"
+            style="font-family: DengXian, DengXian; font-size: 10.98px;">
+            <tspan x="0" y="0">x</tspan>
+        </text>
+        <text transform="translate(59.04 120.41) scale(.94 1)"
+            style="font-family: DengXian, DengXian; font-size: 10.98px;">
+            <tspan x="0" y="0">4</tspan>
+        </text>
+        <text transform="translate(74.97 118.49) scale(.94 1)"
+            style="font-family: DengXian, DengXian; font-size: 10.98px;">
+            <tspan x="0" y="0">y</tspan>
+        </text>
+        <rect x="56.04" y="94.18" width="30" height="30"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <line x1="56.04" y1="109.18" x2="86.04" y2="109.18"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <line x1="68.13" y1="94.18" x2="68.33" y2="124.18"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <g>
+            <line x1="33.1" y1="101.76" x2="50.24" y2="104.71"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+            <polygon points="48.54 106.3 49.63 104.61 49.17 102.65 53.18 105.22 48.54 106.3" />
+        </g>
+        <text transform="translate(138.4 89.46) scale(.94 1)"
+            style="font-family: DengXian, DengXian; font-size: 10.98px;">
+            <tspan x="0" y="0">4</tspan>
+        </text>
+        <text transform="translate(155.36 89.46) scale(.94 1)"
+            style="font-family: DengXian, DengXian; font-size: 10.98px;">
+            <tspan x="0" y="0">a</tspan>
+        </text>
+        <text transform="translate(138.63 105.41) scale(.94 1)"
+            style="font-family: DengXian, DengXian; font-size: 10.98px;">
+            <tspan x="0" y="0">4</tspan>
+        </text>
+        <text transform="translate(150.11 104.46) scale(.94 1)"
+            style="font-family: DengXian, DengXian; font-size: 10.98px;">
+            <tspan x="0" y="0">p.x</tspan>
+        </text>
+        <text transform="translate(138.63 120.34) scale(.94 1)"
+            style="font-family: DengXian, DengXian; font-size: 10.98px;">
+            <tspan x="0" y="0">4</tspan>
+        </text>
+        <text transform="translate(150.11 119.4) scale(.94 1)"
+            style="font-family: DengXian, DengXian; font-size: 10.98px;">
+            <tspan x="0" y="0">p.y</tspan>
+        </text>
+        <rect x="135.62" y="79.18" width="30" height="45"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <line x1="135.62" y1="94.18" x2="165.62" y2="94.18"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <line x1="135.92" y1="109.53" x2="165.92" y2="109.53"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <line x1="135.62" y1="139.18" x2="135.62" y2="49.18"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <line x1="165.62" y1="139.18" x2="165.62" y2="49.18"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <line x1="147.72" y1="79.18" x2="147.92" y2="124.18"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <line x1="101.98" y1="180" x2="101.98" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <text transform="translate(30.25 31.2)" style="font-family: SimSun, SimSun; font-size: 12px;">
+            <tspan x="0" y="0">优化前</tspan>
+        </text>
+        <text transform="translate(138.86 31.2)" style="font-family: SimSun, SimSun; font-size: 12px;">
+            <tspan x="0" y="0">优化后</tspan>
+        </text>
+    </svg>
+    <p>如果一个对象被赋给全局变量、闭包引用、返回，则说明这个变量作用域逃离了声明时候的作用域。并且如果变量的引用被赋给了另外一个对象，则同时需要分析持有这个变量的对象是否逃逸。我们可以绘制一张连通图进行分析：</p>
+    <div class="code-area">
+        <div><span class="key-word">class</span><span class="class-name"> Point</span> {</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="key-word">int</span><span class="variable"> x</span>;</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="key-word">int</span><span class="variable"> y</span>;</div>
+        <div>}</div>
+        <div><span class="key-word">class</span><span class="class-name"> Wrapper</span> {</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="key-word">Point</span><span class="variable"> point</span>;</div>
+        <div>}</div>
+        <div><span class="key-word">void</span><span> fun</span> ( ) {</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="key-word">Point</span> p = <span class="key-word">new </span><span
+                class="class-name">Point</span> ( ) ; </div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="key-word">Wrapper</span> wrapper = <span class="key-word">new
+            </span><span class="class-name">Wrapper</span> ( ) ; </div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="variable">wrapper</span>.point= p ;</div>
+        <div>}</div>
+    </div>
+    <svg style="width: 300px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 106.71 46.36">
+        <ellipse cx="29.21" cy="30.74" rx="28.71" ry="15.12" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <text transform="translate(8.21 35.05)" style="font-family: SimSun, SimSun; font-size: 12px;">
+            <tspan x="0" y="0">wrapper</tspan>
+        </text>
+        <text transform="translate(90.64 10.31)" style="font-family: SimSun, SimSun; font-size: 12px;">
+            <tspan x="0" y="0">p</tspan>
+        </text>
+        <ellipse cx="93.31" cy="7.88" rx="12.89" ry="6.69" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <g>
+            <line x1="57.08" y1="19.77" x2="76.09" y2="12.88"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+            <polygon points="75.4 15.1 75.51 13.09 74.14 11.62 78.9 11.86 75.4 15.1" />
+        </g>
+    </svg>
+    <p>我们最终判断p是否逃逸时，需要同时分析p和wrapper。而分析wapper时，只要分析他自己就够了</p>
     <h2>基于栈的机器(jvm)和基于寄存器的机器</h2>
     <p>这里我先抄龙书上面的一段话：</p>
     <blockquote>
@@ -6209,15 +6352,71 @@ FRAME SAME           <span class="comment">//变量栈、运算栈都和上一�
     </div>
     <p>可以看到，基于栈的代码生成规则比较简单，我们不用关心实际运算时变量到底应该分配到那个寄存器，每次执行完一条完整的赋值语句，栈会自动平衡。而下面要说的基于寄存器的机器直接就是高难度开局。</p>
     <h2>寄存器分配</h2>
-    <p>一个NPC问题：图着色</p>
+    <p>一个NPC问题：图着色问题，如果给我们一个无向图G，要求任意两个连通的顶点之间不能有相同颜色，请问最少需要多少种颜色。</p>
+    <svg style="width: 200px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 51.6 47.94">
+        <line x1="13.11" y1="26.51" x2="26.28" y2="36.03"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <line x1="13.59" y1="9.65" x2="13.11" y2="26.51"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <line x1="28.78" y1="11.34" x2="26.28" y2="36.03"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <line x1="39.87" y1="23.34" x2="28.78" y2="11.34"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <line x1="13.11" y1="26.51" x2="28.78" y2="11.34"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
+        <circle cx="13.11" cy="26.51" r="2.5" style="fill: #009245;" />
+        <circle cx="28.78" cy="11.34" r="2.5" style="fill: red;" />
+        <circle cx="39.87" cy="23.34" r="2.5" style="fill: #009245;" />
+        <circle cx="13.59" cy="9.65" r="2.5" style="fill: blue;" />
+        <text transform="translate(8.93 4.85)" style="font-family: DengXian, DengXian; font-size: 6px;">
+            <tspan x="0" y="0">V1</tspan>
+        </text>
+        <text transform="translate(0 30.5)" style="font-family: DengXian, DengXian; font-size: 6px;">
+            <tspan x="0" y="0">V3</tspan>
+        </text>
+        <text transform="translate(32.08 8.84)" style="font-family: DengXian, DengXian; font-size: 6px;">
+            <tspan x="0" y="0">V2</tspan>
+        </text>
+        <text transform="translate(44.77 27.53)" style="font-family: DengXian, DengXian; font-size: 6px;">
+            <tspan x="0" y="0">V4</tspan>
+        </text>
+        <text transform="translate(22.27 46.42)" style="font-family: DengXian, DengXian; font-size: 6px;">
+            <tspan x="0" y="0">V5</tspan>
+        </text>
+        <circle cx="26.28" cy="36.03" r="2.5" style="fill: blue;" />
+    </svg>
+    <p>可以看到上面这个图最少需要3种颜色才能保证任意连通的两个顶点颜色不同。通常来说我们可以在给定的图G&lt;V,E&gt;中寻找出一个最大完全子图<math>
+            <msub>
+                <mi>G</mi>
+                <mn>s</mn>
+            </msub>
+        </math>，设<math>
+            <msub>
+                <mi>G</mi>
+                <mn>s</mn>
+            </msub>
+        </math>每个顶点的度数(有向图中就是指入射到该顶点的边数，所以也有出度和入度的概念)为m，则我们需要m种颜色才能对图进行染色。遗憾的是没有多项式时间算法解决这个问题。</p>
+    <h3>图着色问题到寄存器分配的关联</h3>
+    <p>一个经典的RS触发器用CMOS工艺制作需要6个晶体管，而用DRAM则只需要一个晶体管和一个电容，内存存放一个bit的成本远远低于寄存器，但是只能在内存充电的时候读取一次数据，速度又远远低于寄存器。所以很自然的希望把当前执行的代码片段中使用到的变量放到寄存器上，不使用的变量放到内存中。
+    </p>
+    <p>假设我们有这样的中间代码</p>
+    <div class="code-area">
+        xxxxxxx
+    </div>
+    <p>看看龙虎鲸三本书对寄存器冲突图的描述。</p>
     <h2>Jazelle</h2>
     <h2>GC</h2>
     <p>一个NPC问题：有向图的可达性</p>
     <h2>解释执行、AOT、JIT</h2>
+    <p>JIT分支预测、理论上JIT可以做更极致的优化</p>
     <p>阿巴阿巴阿巴</p>
     <h1>完!</h1>
 </body>
 <style>
+    .class-name {
+        color: #dc552e;
+    }
+
     .code-area {
         counter-reset: code_line_number 0;
         background-color: #f2f2f2;
