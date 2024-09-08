@@ -6352,7 +6352,7 @@ FRAME SAME           <span class="comment">//变量栈、运算栈都和上一�
     </div>
     <p>可以看到，基于栈的代码生成规则比较简单，我们不用关心实际运算时变量到底应该分配到那个寄存器，每次执行完一条完整的赋值语句，栈会自动平衡。而下面要说的基于寄存器的机器直接就是高难度开局。</p>
     <h2>寄存器分配</h2>
-    <p>一个NPC问题：图着色问题，如果给我们一个无向图G，要求任意两个连通的顶点之间不能有相同颜色，请问最少需要多少种颜色。</p>
+    <p>一个NPC问题：图着色问题，如果给我们一个无向图G，要求任意两个连通的顶点之间不能有相同颜色，最少需要多少种颜色才可以给图中所有顶点上色。</p>
     <svg style="width: 200px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 51.6 47.94">
         <line x1="13.11" y1="26.51" x2="26.28" y2="36.03"
             style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .5px;" />
@@ -6397,19 +6397,203 @@ FRAME SAME           <span class="comment">//变量栈、运算栈都和上一�
             </msub>
         </math>每个顶点的度数(有向图中就是指入射到该顶点的边数，所以也有出度和入度的概念)为m，则我们需要m种颜色才能对图进行染色。遗憾的是没有多项式时间算法解决这个问题。</p>
     <h3>图着色问题到寄存器分配的关联</h3>
-    <p>一个经典的RS触发器用CMOS工艺制作需要6个晶体管，而用DRAM则只需要一个晶体管和一个电容，内存存放一个bit的成本远远低于寄存器，但是只能在内存充电的时候读取一次数据，速度又远远低于寄存器。所以很自然的希望把当前执行的代码片段中使用到的变量放到寄存器上，不使用的变量放到内存中。
+    <p>一个经典的RS触发器用CMOS工艺制作需要6个晶体管，而用DRAM则只需要一个晶体管和一个电容，内存存放一个bit的成本远远低于寄存器，但是只能在内存充电的时候读取一次数据，速度又远远低于寄存器。所以很自然的希望把当前执行的代码片段中使用到的变量放到寄存器上，不使用的变量放到内存中。但是寄存器的数量是有限的，比如经典的x86处理器8086只有14个寄存器，去掉一些用作特殊用途的寄存器之后就只有4个通用寄存器，就算是一些risc几十个通用寄存器，我们也不可能把所有的变量全部存放到寄存器中，这时候就需要分析当前的代码片段最少需要多少个寄存器存放变量。
     </p>
-    <p>假设我们有这样的中间代码</p>
+    <p>龙虎鲸三本书对寄存器冲突图的描述都类似:"对于任意两个结点，如果一个结点在另一个被定值的地方是活跃(live)的，那么这两个结点之间就有一条边。"如果从SSA的角度来看，变量被定值就是该变量第一次被使用。简单来说就是当某个变量在某个时刻t活跃时(或者说该变量在某个位置、某条指令是活跃的)，他会和所有在t时刻活跃的其他变量产生寄存器冲突。
+    </p>
+    <p>假设我们有这样的一个基本块</p>
     <div class="code-area">
-        xxxxxxx
+        <div><span class="line-number"></span><math>
+                <msub>
+                    <mi>a</mi>
+                    <mn>0</mn>
+                </msub>
+                <mo>=</mo>
+                <mn>1</mn>
+            </math></div>
+        <div><span class="line-number"></span><math>
+                <mi>b</mi>
+                <mo>=</mo>
+                <mn>2</mn>
+            </math></div>
+        <div><span class="line-number"></span><math>
+                <mi>c</mi>
+                <mo>=</mo>
+                <msub>
+                    <mi>a</mi>
+                    <mn>0</mn>
+                </msub>
+                <mo>+</mo>
+                <mi>b</mi>
+            </math></div>
+        <div><span class="line-number"></span><math>
+                <msub>
+                    <mi>a</mi>
+                    <mn>1</mn>
+                </msub>
+                <mo>=</mo>
+                <mi>c</mi>
+                <mo>+</mo>
+                <mi>b</mi>
+            </math></div>
     </div>
-    <p>龙虎鲸三本书对寄存器冲突图的描述都类似:"对于任意两个结点，如果一个结点在另一个被定值的地方是活跃的，那么这两个结点之间就有一条边。"如果从SSA的角度来看，一个变量被定值就是该变量第一次被使用</p>
+    <p>我们可以扫描一次代码就得到各个变量的生存期：</p>
+    <svg style="width: 300px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 157.82 79.27">
+        <text transform="translate(0 9.7)" style="font-family: DengXian, DengXian;">
+            <tspan x="0" y="0" style="font-size: 12px;">a</tspan>
+            <tspan x="6.01" y="0" style="font-size: 7px;">0</tspan>
+        </text>
+        <text transform="translate(0 25.7)" style="font-family: DengXian, DengXian; font-size: 12px;">
+            <tspan x="0" y="0">b</tspan>
+        </text>
+        <text transform="translate(0 41.7)" style="font-family: DengXian, DengXian; font-size: 12px;">
+            <tspan x="0" y="0">c</tspan>
+        </text>
+        <text transform="translate(0 57.7)" style="font-family: DengXian, DengXian;">
+            <tspan x="0" y="0" style="font-size: 12px;">a</tspan>
+            <tspan x="6.01" y="0" style="font-size: 7px;">1</tspan>
+        </text>
+        <text transform="translate(27.95 76.23)" style="font-family: DengXian, DengXian;">
+            <tspan x="0" y="0" style="font-size: 12px;">t</tspan>
+            <tspan x="3.81" y="0" style="font-size: 7px;">1</tspan>
+        </text>
+        <text transform="translate(63.95 76.23)" style="font-family: DengXian, DengXian;">
+            <tspan x="0" y="0" style="font-size: 12px;">t</tspan>
+            <tspan x="3.81" y="0" style="font-size: 7px;">2</tspan>
+        </text>
+        <text transform="translate(99.95 76.23)" style="font-family: DengXian, DengXian;">
+            <tspan x="0" y="0" style="font-size: 12px;">t</tspan>
+            <tspan x="3.81" y="0" style="font-size: 7px;">3</tspan>
+        </text>
+        <text transform="translate(135.95 76.23)" style="font-family: DengXian, DengXian;">
+            <tspan x="0" y="0" style="font-size: 12px;">t</tspan>
+            <tspan x="3.81" y="0" style="font-size: 7px;">4</tspan>
+        </text>
+        <polygon points="85.7 .37 49.7 .37 13.7 .37 13.7 12.37 49.7 12.37 85.7 12.37 121.7 12.37 121.7 .37 85.7 .37"
+            style="fill: gray; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <rect x="121.7" y=".37" width="36" height="12"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <rect x="49.7" y="32.37" width="36" height="12"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <polygon points="121.7 32.37 85.7 32.37 85.7 44.37 121.7 44.37 157.7 44.37 157.7 32.37 121.7 32.37"
+            style="fill: gray; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <rect x="13.7" y="32.37" width="36" height="12"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <rect x="49.7" y="48.37" width="36" height="12"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <rect x="85.7" y="48.37" width="36" height="12"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <rect x="121.7" y="48.37" width="36" height="12"
+            style="fill: gray; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <rect x="13.7" y="48.37" width="36" height="12"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <polygon
+            points="121.7 16.37 85.7 16.37 49.7 16.37 49.7 28.37 85.7 28.37 121.7 28.37 157.7 28.37 157.7 16.37 121.7 16.37"
+            style="fill: gray; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <rect x="13.7" y="16.37" width="36" height="12"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+    </svg>
+    <p>然后就可以得到一个寄存器冲突图：</p>
+    <svg style="width: 200px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 67.94 57.86">
+        <circle cx="4.85" cy="16.22" r="2.5" style="stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <text transform="translate(0 10.68)" style="font-family: DengXian, DengXian;">
+            <tspan x="0" y="0" style="font-size: 12px;">a</tspan>
+            <tspan x="6.01" y="0" style="font-size: 7px;">0</tspan>
+        </text>
+        <circle cx="33.6" cy="15.24" r="2.5" style="stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <text transform="translate(30.15 9.7)" style="font-family: DengXian, DengXian; font-size: 12px;">
+            <tspan x="0" y="0">b</tspan>
+        </text>
+        <circle cx="18.91" cy="43.55" r="2.5" style="stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <text transform="translate(14.57 54.82)" style="font-family: DengXian, DengXian; font-size: 12px;">
+            <tspan x="0" y="0">c</tspan>
+        </text>
+        <circle cx="53.84" cy="42.57" r="2.5" style="stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <text transform="translate(58.24 50.75)" style="font-family: DengXian, DengXian;">
+            <tspan x="0" y="0" style="font-size: 12px;">a</tspan>
+            <tspan x="6.01" y="0" style="font-size: 7px;">1</tspan>
+        </text>
+        <line x1="4.85" y1="16.22" x2="18.91" y2="43.55"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <line x1="33.6" y1="15.24" x2="4.85" y2="16.22"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <line x1="18.91" y1="43.55" x2="33.6" y2="15.24"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <line x1="53.84" y1="42.57" x2="18.91" y2="43.55"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+        <line x1="33.6" y1="15.24" x2="53.84" y2="42.57"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: .25px;" />
+    </svg>
+    <p>可以发现我们只需要3个寄存器就可以对上面代码片段中的所有代码进行寄存器分配，如果我们是把程序编译到arm上面，我们可以这样分配寄存器：</p>
+    <svg style="width: 200px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 77.11 92.66">
+        <line x1="20" y1="21.69" x2="55.59" y2="24.26" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <line x1="65.59" y1="34.26" x2="67.11" y2="59.92" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <line x1="57.11" y1="71.23" x2="22.13" y2="69.92" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <line x1="10" y1="32.74" x2="12.13" y2="58.39" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <line x1="19.23" y1="61.35" x2="58.64" y2="31.44" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <g>
+            <text transform="translate(5.15 9.7)" style="font-family: DengXian, DengXian;">
+                <tspan x="0" y="0" style="font-size: 12px;">a</tspan>
+                <tspan x="6.01" y="0" style="font-size: 7px;">0</tspan>
+            </text>
+            <g>
+                <circle cx="10" cy="22.74" r="10" style="fill: red;" />
+                <text transform="translate(3.38 26.06)" style="font-family: DengXian, DengXian; font-size: 12px;">
+                    <tspan x="0" y="0">R0</tspan>
+                </text>
+            </g>
+        </g>
+        <g>
+            <text transform="translate(62.15 11.22)" style="font-family: DengXian, DengXian; font-size: 12px;">
+                <tspan x="0" y="0">b</tspan>
+            </text>
+            <g>
+                <circle cx="65.59" cy="24.26" r="10" style="fill: lime;" />
+                <text transform="translate(58.97 27.58)" style="font-family: DengXian, DengXian; font-size: 12px;">
+                    <tspan x="0" y="0">R1</tspan>
+                </text>
+            </g>
+        </g>
+        <g>
+            <text transform="translate(9.41 88.09)" style="font-family: DengXian, DengXian; font-size: 12px;">
+                <tspan x="0" y="0">c</tspan>
+            </text>
+            <g>
+                <circle cx="12.13" cy="68.39" r="10" style="fill: blue;" />
+                <text transform="translate(5.51 71.72)" style="font-family: DengXian, DengXian; font-size: 12px;">
+                    <tspan x="0" y="0">R2</tspan>
+                </text>
+            </g>
+        </g>
+        <g>
+            <text transform="translate(62.26 89.62)" style="font-family: DengXian, DengXian;">
+                <tspan x="0" y="0" style="font-size: 12px;">a</tspan>
+                <tspan x="6.01" y="0" style="font-size: 7px;">1</tspan>
+            </text>
+            <g>
+                <circle cx="67.11" cy="69.92" r="10" style="fill: red;" />
+                <text transform="translate(60.49 73.25)" style="font-family: DengXian, DengXian; font-size: 12px;">
+                    <tspan x="0" y="0">R0</tspan>
+                </text>
+            </g>
+        </g>
+    </svg>
+    <p>进而生成这样的机器指令：</p>
+    <div class="code-area">
+        <div><span class="line-number"></span>MOV R0 , #0x01</div>
+        <div><span class="line-number"></span>MOV R1 , #0x02</div>
+        <div><span class="line-number"></span>ADD R2 , R1 , R0</div>
+        <div><span class="line-number"></span>ADD R0 , R1 , R2<span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;//可以看到，原先存放a0的R0寄存器被变量a1使用，因为a0变量已经不活跃(dead)了</span></div>
+    </div>
+    <h3>a </h3>
+    <p>前面已经提过，我们无法使用一个比较快的算法判断</p>
     <h2>Jazelle</h2>
     <h2>GC</h2>
     <p>一个NPC问题：有向图的可达性</p>
     <h2>解释执行、AOT、JIT</h2>
     <p>JIT分支预测、理论上JIT可以做更极致的优化</p>
     <p>阿巴阿巴阿巴</p>
+    <p>编译器后端还有很多优化手段可以使用，这里只列举了一些常用优化技巧</p>
     <h1>完!</h1>
 </body>
 <style>
