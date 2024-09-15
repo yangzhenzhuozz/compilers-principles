@@ -6093,14 +6093,14 @@ FRAME SAME           <span class="comment">//变量栈、运算栈都和上一�
     <h2>逃逸分析</h2>
     <p>很多编程语言都有值类型和引用类型的概念，大部分的编程语言实现都会把值类型分配在栈中，引用类型分配到堆中。比如下面的代码：</p>
     <div class="code-area">
-        <div><span class="key-word">class</span><span class="class-name"> Point</span> {</div>
+        <div><span class="key-word">class</span><span class="type-name"> Point</span> {</div>
         <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="key-word">int</span><span class="variable"> x</span>;</div>
         <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="key-word">int</span><span class="variable"> y</span>;</div>
         <div>}</div>
         <div><span class="key-word">void</span><span> fun</span> ( ) {</div>
         <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="key-word">int</span> a ; <span class="comment">//分配到栈中</span></div>
         <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="key-word">Point</span> p = <span class="key-word">new </span><span
-                class="class-name">Point</span> ( ) ; <span class="comment">//分配到堆中</span></div>
+                class="type-name">Point</span> ( ) ; <span class="comment">//分配到堆中</span></div>
         <div>}</div>
     </div>
     <p>栈空间在程序启动时就会预设好大小，一个函数代码片段退出时会自动清空作用域内的所有变量。如果分析器在分析期间发现一个对象完全不会被外部使用(<em>可以理解成这个对象就是一个彻彻底底的局部变量</em>)，那么在new这个对象的时候，可以直接在栈上预留空间，把变量放在栈中。
@@ -6205,18 +6205,18 @@ FRAME SAME           <span class="comment">//变量栈、运算栈都和上一�
     </svg>
     <p>如果一个对象被赋给全局变量、闭包引用、返回，则说明这个变量作用域逃离了声明时候的作用域。并且如果变量的引用被赋给了另外一个对象，则同时需要分析持有这个变量的对象是否逃逸。我们可以绘制一张连通图进行分析：</p>
     <div class="code-area">
-        <div><span class="key-word">class</span><span class="class-name"> Point</span> {</div>
+        <div><span class="key-word">class</span><span class="type-name"> Point</span> {</div>
         <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="key-word">int</span><span class="variable"> x</span>;</div>
         <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="key-word">int</span><span class="variable"> y</span>;</div>
         <div>}</div>
-        <div><span class="key-word">class</span><span class="class-name"> Wrapper</span> {</div>
+        <div><span class="key-word">class</span><span class="type-name"> Wrapper</span> {</div>
         <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="key-word">Point</span><span class="variable"> point</span>;</div>
         <div>}</div>
         <div><span class="key-word">void</span><span> fun</span> ( ) {</div>
         <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="key-word">Point</span> p = <span class="key-word">new </span><span
-                class="class-name">Point</span> ( ) ; </div>
+                class="type-name">Point</span> ( ) ; </div>
         <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="key-word">Wrapper</span> wrapper = <span class="key-word">new
-            </span><span class="class-name">Wrapper</span> ( ) ; </div>
+            </span><span class="type-name">Wrapper</span> ( ) ; </div>
         <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="variable">wrapper</span>.point= p ;</div>
         <div>}</div>
     </div>
@@ -6583,21 +6583,167 @@ FRAME SAME           <span class="comment">//变量栈、运算栈都和上一�
         <div><span class="line-number"></span>MOV R0 , #0x01</div>
         <div><span class="line-number"></span>MOV R1 , #0x02</div>
         <div><span class="line-number"></span>ADD R2 , R1 , R0</div>
-        <div><span class="line-number"></span>ADD R0 , R1 , R2<span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;//可以看到，原先存放a0的R0寄存器被变量a1使用，因为a0变量已经不活跃(dead)了</span></div>
+        <div><span class="line-number"></span>ADD R0 , R1 , R2<span
+                class="comment">&nbsp;&nbsp;&nbsp;&nbsp;//可以看到，原先存放a0的R0寄存器被变量a1使用，因为a0变量已经不活跃(dead)了</span></div>
     </div>
-    <h3>a </h3>
-    <p>前面已经提过，我们无法使用一个比较快的算法判断</p>
+    <h3>一个经典的图着色算法</h3>
+    <p>判断一个图G是否能进行k着色是非常困难的，所以这里我介绍一个Kempe在1879年发明的着色简化算法。这个算法不能保证分配一定是最优的。假设我们的目标CPU有k个寄存器，我们可以遍历G的每个顶点V，如果V的度小于K，则将V从G中删除，如果最终我们删除掉所有的顶点，则说明这个图G一定是能被K着色的(一个顶点数为N的完全图，每个顶点的度数是N-1)。这时候可以按照我们的删除顺序逆序依次的对顶点着色。
+    </p>
+    <h3>寄存器溢出</h3>
+    <p>如果我们分配过程中发现某个节点不能被分配，可以选择把这个变量放到内存中。因为我们最开始是假设所有变量都放在寄存器中的，所以把不能分配的变量移动到内存中这个动作叫做溢出</p>
+    <p>kempe算法对于一个完全子图的判定会失效，比如上图中变量c对应的顶点度数是3，实际上这个图是可以用3中颜色进行染色的。</p>
+    <h3>其他的图着色算法</h3>
+    <p>因为图着色问题是一个NPC问题，所以只有一个图着色的简化解决方案，除了比较简单的kempe算法之外，还存在着一些其他方法。比如LLVM就内置了四种寄存器分配算法，Basic Register
+        Allocator(基本寄存器分配器)、Fast Register Allocator(快速寄存器分配器‌)、PBQP Register Allocator(‌PBQP寄存器分配器)、Greedy Register
+        Allocator(贪心寄存器分配器)，但是我没来得及看，就不多说了。</p>
+    <h2>Garbage Collection</h2>
+    <p>带GC的编程语言不需要程序员手动释放内存，只管开心的new就行了,不再使用的对象有GC善后。那么垃圾收集器是怎么识别到哪个对象是不会再被使用到的呢？</p>
+    <h3>引用计数</h3>
+    <p>1960年George E. Collins发明了引用计数法标记对象的被引用次数，当一个对象被创建后，每次被引用时都会对其计数器加一，持有者放弃引用该对象时计数器减一，当引用数量为0时表示这个对象可以进行释放。</p>
+    <div class="code-area">
+        <div>{</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="key-word">var</span><span class="variable"> a</span> = <span
+                class="key-word">new</span> <span class="type-name">Point</span>();<span
+                class="comment">&nbsp;&nbsp;&nbsp;&nbsp;//new出来的对象被a引用,计数器+1</span></div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="key-word">var</span><span class="variable"> b</span> = <span
+                class="variable">a</span>;<span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;//该对象又被b引用,计数器+1</span></div>
+        <div>}</div>
+        <div><span>other code...</span><span
+                class="comment">&nbsp;&nbsp;&nbsp;&nbsp;//a、b变量离开作用域，被其引用的对象计数器各-1，可以释放刚才new出来的对象
+            </span></div>
+    </div>
+    <p>引用计数有个缺点是无法解决循环引用，比如下面的代码</p>
+    <div class="code-area">
+        <div><span class="key-word">class</span><span class="type-name"> MyClass</span> {</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="key-word">int</span><span class="variable"> v</span>;</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="type-name">MyClass</span><span class="variable"> ref</span>;</div>
+        <div>}</div>
+        <div><span class="key-word">void</span><span> fun</span> ( ) {</div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="key-word">MyClass</span> p1 = <span class="key-word">new </span><span
+                class="type-name">MyClass</span> ( ) ;<span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;//p1的计数器+1
+            </span></div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="key-word">MyClass</span> p2 = <span class="key-word">new </span><span
+                class="type-name">MyClass</span> ( ) ;<span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;//p2的计数器+1
+            </span> </div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;p1.ref = p2;<span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;//p2的计数器+1
+            </span></div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;p2.ref = p1;<span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;//p1的计数器+1
+            </span></div>
+        <div><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;//t1时刻</span></div>
+        <div>}</div>
+        <div><span class="comment">//t2时刻</span></div>
+        <div><span>other code...</span><span
+                class="comment">&nbsp;&nbsp;&nbsp;&nbsp;//即使p1、p2两个变量离开作用域之后，new出来的两个对象计数器-1之后还是不为0，无法释放
+            </span></div>
+    </div>
+    <h3>可达性分析</h3>
+    <p>我们可以把对象和引用用有向图表示，我们可以从局部变量引用和全局变量引用(java则是从gc_root中开始)判断图中的每个节点(对象)是否可以从程序中访问，凡是不可达的对象都可以被释放。比如这段代码，我们可以分析两个时刻的可达性图直观的看一下这种方式的工作原理。
+    </p>
+    <svg style="width: 500px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 276.66 149.37">
+        <text transform="translate(12 51.95)" style="font-family: SimSun, SimSun; font-size: 12px;">
+            <tspan x="0" y="0">p1</tspan>
+        </text>
+        <text transform="translate(12 73.14)" style="font-family: SimSun, SimSun; font-size: 12px;">
+            <tspan x="0" y="0">p2</tspan>
+        </text>
+        <line x1="7" y1="28.79" x2="7" y2="88.79" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <line x1="28.83" y1="28.79" x2="28.83" y2="88.79" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <line x1="7" y1="40.7" x2="28.83" y2="40.55" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <line x1="7.14" y1="60.59" x2="28.97" y2="60.44" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <line x1="7.27" y1="80.36" x2="29.1" y2="80.21" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <text transform="translate(0 24.78)" style="font-family: SimSun, SimSun; font-size: 9px; font-weight: 300;">
+            <tspan x="0" y="0">局部变量</tspan>
+        </text>
+        <ellipse cx="87.99" cy="43.25" rx="17.7" ry="8.7" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <text transform="translate(80.45 47.01)" style="font-family: SimSun, SimSun; font-size: 12px;">
+            <tspan x="0" y="0">obj</tspan>
+        </text>
+        <ellipse cx="87.99" cy="81.84" rx="17.7" ry="8.7" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <text transform="translate(80.45 85.59)" style="font-family: SimSun, SimSun; font-size: 12px;">
+            <tspan x="0" y="0">obj</tspan>
+        </text>
+        <g>
+            <line x1="31.94" y1="51.95" x2="59.1" y2="46.98" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <polygon points="57 51.13 57.88 47.2 55.67 43.84 64.97 45.9 57 51.13" />
+        </g>
+        <g>
+            <line x1="33.73" y1="72.38" x2="59.05" y2="79.17"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <polygon points="55.38 82.02 57.86 78.85 57.3 74.86 64.82 80.71 55.38 82.02" />
+        </g>
+        <g>
+            <path d="M80.93,53.94c-.92,2.85-1.65,6.93-1.54,10.44"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <polygon points="75.37 62.41 79.33 63.13 82.6 60.77 80.93 70.15 75.37 62.41" />
+        </g>
+        <g>
+            <path d="M94.79,69.56c2.47-2.89,3.04-6.71,2.37-10.15"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <polygon points="101.41 60.79 97.39 60.66 94.5 63.46 94.79 53.94 101.41 60.79" />
+        </g>
+        <text transform="translate(182.47 51.95)" style="font-family: SimSun, SimSun; font-size: 12px;">
+            <tspan x="0" y="0">p1</tspan>
+        </text>
+        <text transform="translate(182.47 73.14)" style="font-family: SimSun, SimSun; font-size: 12px;">
+            <tspan x="0" y="0">p2</tspan>
+        </text>
+        <line x1="177.47" y1="28.79" x2="177.47" y2="88.79" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <line x1="199.3" y1="28.79" x2="199.3" y2="88.79" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <line x1="177.47" y1="40.7" x2="199.3" y2="40.55" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <line x1="177.6" y1="60.59" x2="199.43" y2="60.44" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <line x1="177.74" y1="80.36" x2="199.57" y2="80.21" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <text transform="translate(170.47 24.78)"
+            style="font-family:  SimSun, SimSun; font-size: 9px; font-weight: 300;">
+            <tspan x="0" y="0">局部变量</tspan>
+        </text>
+        <ellipse cx="258.45" cy="43.25" rx="17.7" ry="8.7" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <text transform="translate(250.91 47.01)" style="fill: red; font-family: SimSun, SimSun; font-size: 12px;">
+            <tspan x="0" y="0">obj</tspan>
+        </text>
+        <ellipse cx="258.45" cy="81.84" rx="17.7" ry="8.7" style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+        <text transform="translate(250.91 85.59)" style="fill: red; font-family: SimSun, SimSun; font-size: 12px;">
+            <tspan x="0" y="0">obj</tspan>
+        </text>
+        <g>
+            <path d="M251.39,53.94c-.92,2.85-1.65,6.93-1.54,10.44"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <polygon points="245.84 62.41 249.8 63.13 253.06 60.77 251.39 70.15 245.84 62.41" />
+        </g>
+        <g>
+            <path d="M265.25,69.56c2.47-2.89,3.04-6.71,2.37-10.15"
+                style="fill: none; stroke: #000; stroke-miterlimit: 10;" />
+            <polygon points="271.88 60.79 267.85 60.66 264.97 63.46 265.25 53.94 271.88 60.79" />
+        </g>
+        <line x1="137.48" y1="0" x2="138.67" y2="149.36"
+            style="fill: none; stroke: #000; stroke-miterlimit: 10; stroke-width: 2px;" />
+        <text transform="translate(48.35 112.1)" style="font-family: SimSun, SimSun; font-size: 9px;">
+            <tspan x="0" y="0">t1</tspan>
+        </text>
+        <text transform="translate(218.81 112.1)" style="font-family: SimSun, SimSun; font-size: 9px;">
+            <tspan x="0" y="0">t2</tspan>
+        </text>
+    </svg>
+    <p>可以看到，使用可达性分析总是能准确的识别出那个对象是可以进行释放的。</p>
+    <h1>解释执行</h1>
+    <p>不直接把我们的源码转换成目标机器可以执行的指令序列，而是由一个解释器不停的读取一部分代码片段，然后由解释器执行这个片段。比如可以在构造AST的阶段，每生成一个节点就直接对这个节点进行运算，此时都还没有读取完整个源码文件就已经得到部分程序的运行结果了。大部分的脚本语言都是采用解释执行的方式运行，比如javascript、python等。解释器不需要提前处理完整的源码文件，可以快速的启动用户程序，对于许多需要边调边改的脚本很友好。而且解释器的开发相对简单，时间和BUG都偏少。
+    </p>
+    <h1>运行前编译(ahead of time)</h1>
+    <p>编译器可以使用前面我们提到的种种技术把源码编译成可执行代码，然后由操作系统进行加载运行。但是AOT提前编译要花费很多时间，很多稍微复杂一些的C/C++项目编译一次就要几分钟甚至几十个小时。</p>
+    <h2>即时编译(Just In Time)</h2>
+    <p>我还没想到为什么不把所有的JIT改成AOT</p>
+    <p>JIT分支预测、理论上JIT可以做更极致的优化，为什么AOT之后就不能反射了</p>
+    <h1>AOT和JIT不是水火不容，而是齐头并进</h1>
     <h2>Jazelle</h2>
-    <h2>GC</h2>
-    <p>一个NPC问题：有向图的可达性</p>
-    <h2>解释执行、AOT、JIT</h2>
-    <p>JIT分支预测、理论上JIT可以做更极致的优化</p>
+    <p>javac会把我们写的源码编译成java字节码，如果没有用JIT的话，是由jvm对字节码一条一条的解释执行。但是这种方案对小型嵌入式设备来说就比较慢了，所以有的CPU内置了java硬件加速功能，比如arm
+        CPU可以直接执行大部分的java字节码，这样就不需要JVM来翻译了，以前的诺基亚甚至很多功能机都能玩java游戏就是Jazelle的功劳。但是现在直接执行java字节码的方案不太流行了，因为要支持多套指令集会增加处理器的面积，用AOT把java编译到目标机器或者直接上JVM性价比更高。
+    </p>
+
     <p>阿巴阿巴阿巴</p>
     <p>编译器后端还有很多优化手段可以使用，这里只列举了一些常用优化技巧</p>
     <h1>完!</h1>
 </body>
 <style>
-    .class-name {
+    .type-name {
         color: #dc552e;
     }
 
