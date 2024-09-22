@@ -40,7 +40,7 @@
 <body>
     <p>目前已经实现了编程语言ty,可以上<a href="https://github.com/yangzhenzhuozz/ty">github</a>看看</p>
     <h1>乔姆斯基体系(chomsky hierarchy)</h1>
-    <p>提起编译原理,就不得不先说说文法。</p>
+    <h2>文法。</h2>
     <blockquote>
         <p>文法自然地描述了大多数程序设计语言构造的层次化语法结构</p>
         <footer> <cite>-编译原理(龙书)-p26</cite></footer>
@@ -4978,7 +4978,7 @@
     <p>上面这个文法单单用LR(1)无法分析，会遇到上面说的E+E冲突和if-else冲突，需要设计的时候定义好各个符号的优先级和接合性，实际上主流编程语言都会定义操作符的优先级和结合性，比如Java的，赋值操作符'='的结合性是从右到左，这意味着
         'a = b = c' 会被解释为'a = (b = c)'，而不是(a = b) = c</p>
     <h1>后端</h1>
-    <p>前面讲了这么多前端内容，现在我们开始进入编译器后端知识，编译器前端有很成熟的理论支撑，后端就不同，有很多NP-C问题待解决。不管编译器多厉害，我们都可以写出一些糟糕代码让他无法优化</p>
+    <p>前面讲了这么多前端内容，现在我们开始进入编译器后端知识，编译器前端有很成熟的理论支撑，后端就不同，有一些NPC问题待解决，很容易就能写出一些代码让他无法优化。</p>
     <h2>指令序列的生成</h2>
     <p>我们可以用一种非常简单的算法把AST转换成机器指令，只需后序遍历这棵树，依次生成相关的指令即可，假设我们有这样一段代码：</p>
     <svg style="width: 1100px;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 729.08 677.07">
@@ -6249,7 +6249,7 @@ FRAME SAME           <span class="comment">//变量栈、运算栈都和上一�
     </blockquote>
     <p>通常在基于寄存器的机器上，如果是下面这条中间指令：</p>
     <div class="code-area">
-        <div>a = a + b</div>
+        <div>c = a + b</div>
     </div>
     <p>那么可能会生成这样的机器码(arm处理器)</p>
     <div class="code-area">
@@ -6728,17 +6728,116 @@ FRAME SAME           <span class="comment">//变量栈、运算栈都和上一�
     <p>不直接把我们的源码转换成目标机器可以执行的指令序列，而是由一个解释器不停的读取一部分代码片段，然后由解释器执行这个片段。比如可以在构造AST的阶段，每生成一个节点就直接对这个节点进行运算，此时都还没有读取完整个源码文件就已经可以运行部分代码了，很多脚本都支持从控制台输入一行代码，然后执行一行代码的方式运行程序。大部分的脚本语言都是采用解释执行的方式运行，比如javascript、python等。解释器不需要提前处理完整的源码文件，可以快速的启动用户程序，对于许多需要边调边改的脚本很友好。而且解释器的开发相对简单，时间和BUG都偏少。
     </p>
     <h1>运行前编译(ahead of time)</h1>
-    <p>编译器可以使用前面我们提到的种种技术把源码编译成可执行代码，然后由操作系统进行加载运行。但是AOT提前编译要花费很多时间，很多稍微复杂一些的C/C++项目编译一次就要几分钟甚至几十个小时。当然从工程灵活性来说，AOT相比解释执行更笨重一些。</p>
+    <p>编译器可以使用前面我们提到的种种技术把源码编译成可执行代码，然后由操作系统进行加载运行。但是AOT提前编译要花费很多时间，很多稍微复杂一些的C/C++项目编译一次就要几分钟甚至几十个小时。当然从工程灵活性来说，AOT相比解释执行更笨重一些。
+    </p>
+    <p>而且AOT还会失去运行期间的优化能力，假设我们从外部获取一个参数，比如配置文件读取一个配置项，运行期间永远都不再更改，解释器可以在解释期间使用常量传播技术优化分支。</p>
+    <pre class="code-area"><span class="key-word">function</span> fun(<span class="key-word">int</span> arg){
+    <span class="key-word">if</span>(arg==0){
+        xxxx1
+    }<span class="key-word">else if</span>(arg==1){
+        xxxx2
+    }
+}</pre>
+    <p>假设我们这样调用函数:fun(0),解释器在运行期间就可以把我们的代码优化成</p>
+    <pre class="code-area"><span class="key-word">function</span> fun(<span class="key-word">int</span> arg){
+    xxxx1
+}</pre>
+    <p>节省了一下运行时期的if判断。</p>
     <h2>即时编译(Just In Time)</h2>
-    <p>大多数的脚本语言支持很多动态特性，尤其是eval，这个AOT很难做到，这些特性为开发者提供了非常丰富的能力，但是解释执行又需要很多</p>
-    <p>JIT分支预测、理论上JIT可以做更极致的优化，为什么AOT之后就不能反射了,JIT可以在运行时优化，比如读取配置文件，然后把配置常量传播出去</p>
-    <h1>AOT和JIT不是水火不容，而是齐头并进</h1>
+    <p>大多数的脚本语言支持很多动态特性，尤其是eval，这个AOT很难做到，这些特性为开发者提供了非常丰富的能力，但是解释的时候，往往比较简单的指令需要比较多的解释器指令。比如我们可以用C++这样简单的实现一小部分java字节码解释器。
+    </p>
+    <pre class="code-area">
+<span class = "key-word">struct</span> <span class = "type-name">IR</span>{
+    <span class = "key-word">int</span> <span class = "variable">opCode</span>;
+    <span class = "key-word">int</span> <span class = "variable">opNumber</span>;
+};
+<span class = "type-name">IR</span> irs[] = <span class = "variable">loadIRs</span>();<span class = "comment">//加载java字节码</span>
+<span class = "key-word">int</span> pc = 0;<span class = "comment">//程序计数器</span>
+<span class = "key-word">char</span> calStack[2048];<span class = "comment">//运算栈</span>
+<span class = "key-word">char</span> localStack[2048];<span class = "comment">//局部变量栈</span>
+<span class = "key-word">int</span> calBP = 0;<span class = "comment">//运算栈底指针</span>
+<span class = "key-word">int</span> calSP = 0;<span class = "comment">//运算栈顶指针</span>
+<span class = "key-word">int</span> localBP = 0;<span class = "comment">//变量栈底指针</span>
+<span class = "key-word">int</span> localSP = 0;<span class = "comment">//变量栈顶指针</span>
+<span class = "key-word">for</span>(;;pc++){<span class = "comment">//循环执行指令</span>
+    <span class = "type-name">IR</span> ir = irs[pc];
+    <span class = "key-word">int</span> opNumber;<span class = "comment">//操作数</span>
+    <span class = "key-word">int</span> numb2;<span class = "comment">//双面运算变量1</span>
+    <span class = "key-word">int</span> numb1;<span class = "comment">//双面运算变量2</span>
+    <span class="key-word">switch</span>(ir.opCode){
+        <span class="key-word">case</span> iload:
+            opNumber = ir.opNumber;<span class = "comment">//取出操作数</span>
+            *(<span class = "key-word">int</span>*)(calStack+calSP) = *(<span class = "key-word">int</span>*)(localStack+localBP+opNumber);<span class = "comment">//从局部变量栈取出一个int值放入计算栈中</span>
+            calSP += sizeof(<span class = "key-word">int</span>);<span class = "comment">//计算栈顶指针增长</span>
+            <span class="key-word">break</span>;
+        <span class="key-word">case</span> iadd:
+            numb2 = *(<span class = "key-word">int</span>*)(calStack+calSP);<span class = "comment">//从计算栈顶取出一个int</span>
+            numb1 = *(<span class = "key-word">int</span>*)(calStack+calSP-sizeof(<span class = "key-word">int</span>));<span class = "comment">//从计算栈顶的下方再取出一个int</span>
+            calSP -= sizeof(<span class = "key-word">int</span>)*2;<span class = "comment">//计算栈回退两个int大小</span>
+            *(<span class = "key-word">int</span>*)(calStack+calSP) = numb1+numb2;
+            calSP += sizeof(<span class = "key-word">int</span>);<span class = "comment">//计算栈顶指针增长一个int大小,这里的回退和前面的增长可以结合在一起，减少一些指令</span>
+            <span class="key-word">break</span>;
+        <span class="key-word">case</span> istore:
+            opNumber = ir.opNumber;<span class = "comment">//取出操作数</span>
+            *(<span class = "key-word">int</span>*)(localStack+localBP+opNumber) = *(<span class = "key-word">int</span>*)(calStack+calSP);<span class = "comment">//从计算栈取出一个int值放入局部变量栈中</span>
+            calSP += sizeof(<span class = "key-word">int</span>);<span class = "comment">//计算栈顶指针减小</span>
+            <span class="key-word">break</span>;
+    }
+}</pre>
+    <p>那么"c=a+b"这一行代码，先由javac编译成java字节码</p>
+    <div class="code-area">
+        <div>ILOAD 1</div>
+        <div>ILOAD 2</div>
+        <div>IADD</div>
+        <div>ISTORE 3</div>
+    </div>
+    <p>然后再由解释器解释执行这4条指令，上面解释器的代码用GCC不开优化编译到x64之后,iload分支生成了19条指令,iadd生成了28条指令,istore生成了86条指令，也就是简单的"c=a+b"一共需要执行19*2+28+20=86条指令才能得到结果。而如果用我们前面所介绍的优化技术，我们可以直接把指令优化成这样的汇编
+    </p>
+    <div class="code-area">
+        <div>mov eax,[0]</div>
+        <div>mov ebx,[4]</div>
+        <div>add eax,ebx</div>
+        <div>mov [8],eax</div>
+    </div>
+    <p>效率提升了21.5倍，如果我们又想要解释器的动态特性和运行时的优化能力，这时候就可以上JIT了，我们在程序运行期间，动态的把程序当前执行的一部分源码(或者是AST、JAVA字节码等)翻译成当前CPU的汇编指令，然后直接由CPU执行即可。比如我们在源码中遇到用户用了"eval"，那么对于这一部分代码就使用解释执行，而其他不需要用到动态特性或者解释器本身才能提供的功能时，我们就可以把这部分代码使用各种优化技术翻译成CPU可以直接执行的指令。
+    </p>
+    <h2>JIT技术-动态生成可执行代码(IOS禁用JIT的原理)</h2>
+    <p>一段数据到底是"数据"还是"指令"是取决于我们怎么使用的，比如上面"c=a+b"生成的4条x86汇编指令在内存中长这样:"66 A1 00 00 66 8B 1E 04 00 66 01 D8 66 A3 08
+        00"。如果我们就把这些东西当成数据来使用，那他就是16个字符，或者4个int，如果我们把它当成x86 CPU的指令，那他就长这样：</p>
+    <table>
+        <tbody>
+            <tr>
+                <td>66A10000</td>
+                <td>mov eax,[0x0]</td>
+            </tr>
+            <tr>
+                <td>668B1E0400</td>
+                <td>mov ebx,[0x4]</td>
+            </tr>
+            <tr>
+                <td>6601D8</td>
+                <td>add eax,ebx</td>
+            </tr>
+            <tr>
+                <td>66A30800</td>
+                <td>mov [0x8],eax</td>
+            </tr>
+        </tbody>
+    </table>
+    <p>现代CPU都对数据和代码做了区分，一个内存页有专用的标识位标记这段内存存放的是数据还是指令。所以我们只要经过下面这几个步骤就可以成功执行刚刚JIT生成的代码了</p>
+    <ol>
+        <li>申请一个内存页</li>
+        <li>把刚刚的这16个字节放进内存页中</li>
+        <li>把这一页内存的可执行标记打开</li>
+        <li>将CPU的PC寄存器(x86叫做IP寄存器)指向这页内存中我们放指令的起始位置</li>
+    </ol>
+    <p>经过这些步骤，CPU就能执行刚刚生成的代码了。IOS禁止应用程序将数据内存改为可执行内存，从而杜绝了JIT的可能。</p>
+    <p>因为JIT的种种便利性，目前编译器技术更偏向JIT。很多流行的编程语言都对AOT支持不够好，比如java、C#等。</p>
     <h2>Jazelle</h2>
     <p>javac会把我们写的源码编译成java字节码，如果没有用JIT的话，是由jvm对字节码一条一条的解释执行。但是这种方案对小型嵌入式设备来说就比较慢了，所以有的CPU内置了java硬件加速功能，比如arm
-        CPU可以直接执行大部分的java字节码，这样就不需要JVM来翻译了，以前的诺基亚甚至很多功能机都能玩java游戏就是Jazelle的功劳。但是现在直接执行java字节码的方案不太流行了，因为要支持多套指令集会增加处理器的面积，用AOT把java编译到目标机器或者直接上JVM性价比更高。
+        CPU可以直接执行大部分的java字节码，这样就不需要JVM来翻译了，以前的诺基亚甚至很多功能机都能玩java游戏就是Jazelle的功劳。但是现在直接执行java字节码的方案不太流行了，因为要支持多套指令集会增加处理器的面积，用JIT或者AOT甚至解释执行的性价比更高。
     </p>
-
-    <p>阿巴阿巴阿巴</p>
+    <p>阿巴阿巴</p>
     <p>编译器后端还有很多优化手段可以使用，这里只列举了一些常用优化技巧</p>
     <h1>完!</h1>
 </body>
